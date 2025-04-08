@@ -27,7 +27,7 @@ const ProductFeaturesSection: React.FC = () => {
             Experience a companion that's designed to support your emotional wellbeing with cutting-edge AI technology.
           </p>
           <p className="mt-2 text-sm text-nimira-500">
-            Try the interactive demo below! (Note: Demo mode activates if API is unavailable)
+            Try the interactive demo below with GPT-4o technology!
           </p>
         </div>
         

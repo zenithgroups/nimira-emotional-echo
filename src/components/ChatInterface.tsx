@@ -1,10 +1,11 @@
 
 import React, { useState, useRef, useEffect } from "react";
-import { MessageCircle, Send } from "lucide-react";
+import { MessageCircle, Send, RefreshCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface Message {
   role: "user" | "assistant";
@@ -18,8 +19,11 @@ const ChatInterface: React.FC = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [fallbackMode, setFallbackMode] = useState(false);
+  const [isRetrying, setIsRetrying] = useState(false);
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const apiUrl = "https://api.sree.shop/chat";
+  const apiKey = "ddc-beta-dhxdvl9jah-YWwkA3J4DLOCoIwfJjMLxqKAUKtw2UWbBee";
 
   // Scroll to bottom when messages update
   useEffect(() => {
@@ -29,6 +33,43 @@ const ChatInterface: React.FC = () => {
     }
   }, [messages]);
 
+  // Test API connection on initial load
+  useEffect(() => {
+    checkApiConnection();
+  }, []);
+
+  const checkApiConnection = async () => {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      
+      const response = await fetch(apiUrl, {
+        method: "HEAD",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+        },
+        signal: controller.signal
+      });
+      
+      clearTimeout(timeoutId);
+      
+      if (response.ok) {
+        setFallbackMode(false);
+      } else {
+        setFallbackMode(true);
+      }
+    } catch (error) {
+      console.error("API connection check failed:", error);
+      setFallbackMode(true);
+    }
+  };
+
+  const retryApiConnection = async () => {
+    setIsRetrying(true);
+    await checkApiConnection();
+    setIsRetrying(false);
+  };
+
   const sendMessage = async () => {
     if (input.trim() === "" || isLoading) return;
     
@@ -37,7 +78,6 @@ const ChatInterface: React.FC = () => {
     setInput("");
     setIsLoading(true);
 
-    // If we're in fallback mode, simulate responses
     if (fallbackMode) {
       simulateFallbackResponse(userMessage.content);
       return;
@@ -46,10 +86,13 @@ const ChatInterface: React.FC = () => {
     try {
       console.log("Sending request to API...");
       
-      const response = await fetch("https://api.sree.shop/chat", {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
-          "Authorization": "Bearer ddc-beta-dhxdvl9jah-YWwkA3J4DLOCoIwfJjMLxqKAUKtw2UWbBee",
+          "Authorization": `Bearer ${apiKey}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -62,8 +105,11 @@ const ChatInterface: React.FC = () => {
             ...messages.map(msg => ({ role: msg.role, content: msg.content })),
             { role: userMessage.role, content: userMessage.content }
           ]
-        })
+        }),
+        signal: controller.signal
       });
+      
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
@@ -76,17 +122,30 @@ const ChatInterface: React.FC = () => {
         ...prev, 
         { role: "assistant", content: assistantMessage }
       ]);
+      
+      if (fallbackMode) {
+        setFallbackMode(false);
+        toast({
+          title: "API Connection Restored",
+          description: "Successfully connected to Nimira's AI. Enjoy your conversation!",
+        });
+      }
     } catch (error) {
       console.error("Error sending message:", error);
-      toast({
-        title: "API Connection Issue",
-        description: "Switched to demo mode due to API connection issues. Responses are simulated.",
-        variant: "destructive",
-      });
       
-      // Switch to fallback mode and generate simulated response
+      // Only show toast if we're not already in fallback mode
+      if (!fallbackMode) {
+        toast({
+          title: "API Connection Issue",
+          description: "Temporarily using demo mode. Will auto-reconnect when API is available.",
+          variant: "destructive",
+        });
+      }
+      
       setFallbackMode(true);
       simulateFallbackResponse(userMessage.content);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -123,7 +182,7 @@ const ChatInterface: React.FC = () => {
         <div>
           <h3 className="font-medium">Nimira AI</h3>
           <p className="text-xs text-gray-500">
-            {fallbackMode ? "Demo Mode" : "Online now"}
+            {fallbackMode ? "Demo Mode (API Unavailable)" : "Online - GPT-4o Powered"}
           </p>
         </div>
         {fallbackMode && (
@@ -131,14 +190,31 @@ const ChatInterface: React.FC = () => {
             <Button 
               variant="outline" 
               size="sm"
-              className="text-xs"
-              onClick={() => setFallbackMode(false)}
+              className="text-xs flex items-center gap-1"
+              onClick={retryApiConnection}
+              disabled={isRetrying}
             >
-              Try API Again
+              {isRetrying ? (
+                <>
+                  <RefreshCw size={14} className="animate-spin" /> Connecting...
+                </>
+              ) : (
+                <>
+                  <RefreshCw size={14} /> Try API Again
+                </>
+              )}
             </Button>
           </div>
         )}
       </div>
+
+      {fallbackMode && (
+        <Alert className="m-2 py-2 bg-yellow-50 border-yellow-200">
+          <AlertDescription className="text-xs text-yellow-800">
+            Currently using demo mode with pre-programmed responses. Click "Try API Again" to reconnect.
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Messages container */}
       <ScrollArea className="flex-1 p-4 overflow-y-auto" ref={scrollAreaRef}>
@@ -152,7 +228,7 @@ const ChatInterface: React.FC = () => {
                 className={`max-w-[80%] p-3 rounded-2xl ${
                   message.role === "user" 
                     ? "bg-white border border-gray-100 shadow-sm rounded-br-none ml-auto" 
-                    : "bg-nimira-100/50 rounded-bl-none"
+                    : `${fallbackMode ? "bg-gray-100/70" : "bg-nimira-100/50"} rounded-bl-none`
                 }`}
               >
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -183,7 +259,7 @@ const ChatInterface: React.FC = () => {
           className="relative flex items-end gap-2"
         >
           <Textarea
-            placeholder="Type a message..."
+            placeholder={fallbackMode ? "Demo mode active. Type to test interface..." : "Type a message..."}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             className="w-full min-h-[44px] max-h-[120px] resize-none bg-gray-50 border border-gray-100 rounded-xl pr-12"
@@ -212,4 +288,3 @@ const ChatInterface: React.FC = () => {
 };
 
 export default ChatInterface;
-
