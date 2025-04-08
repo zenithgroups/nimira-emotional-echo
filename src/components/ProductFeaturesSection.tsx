@@ -1,3 +1,4 @@
+
 import React from "react";
 import { MessageSquare, Book, Smile, Mic, Shield } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -24,6 +25,9 @@ const ProductFeaturesSection: React.FC = () => {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Advanced Features</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Experience a companion that's designed to support your emotional wellbeing with cutting-edge AI technology.
+          </p>
+          <p className="mt-2 text-sm text-nimira-500">
+            Try the interactive demo below! (Note: Demo mode activates if API is unavailable)
           </p>
         </div>
         

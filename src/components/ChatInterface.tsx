@@ -4,6 +4,7 @@ import { MessageCircle, Send } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
 
 interface Message {
   role: "user" | "assistant";
@@ -16,6 +17,7 @@ const ChatInterface: React.FC = () => {
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [fallbackMode, setFallbackMode] = useState(false);
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -35,7 +37,15 @@ const ChatInterface: React.FC = () => {
     setInput("");
     setIsLoading(true);
 
+    // If we're in fallback mode, simulate responses
+    if (fallbackMode) {
+      simulateFallbackResponse(userMessage.content);
+      return;
+    }
+
     try {
+      console.log("Sending request to API...");
+      
       const response = await fetch("https://api.sree.shop/chat", {
         method: "POST",
         headers: {
@@ -69,18 +79,38 @@ const ChatInterface: React.FC = () => {
     } catch (error) {
       console.error("Error sending message:", error);
       toast({
-        title: "Error",
-        description: "Failed to get a response. Please try again.",
+        title: "API Connection Issue",
+        description: "Switched to demo mode due to API connection issues. Responses are simulated.",
         variant: "destructive",
       });
       
-      setMessages(prev => [
-        ...prev, 
-        { role: "assistant", content: "I'm sorry, I encountered an error while processing your message. Please try again in a moment." }
-      ]);
-    } finally {
-      setIsLoading(false);
+      // Switch to fallback mode and generate simulated response
+      setFallbackMode(true);
+      simulateFallbackResponse(userMessage.content);
     }
+  };
+
+  // Fallback response simulator
+  const simulateFallbackResponse = (userInput: string) => {
+    setTimeout(() => {
+      const fallbackResponses = [
+        "I understand how you're feeling. Would you like to tell me more about that?",
+        "That's interesting. How does that make you feel?",
+        "I'm here for you. Let's explore that thought together.",
+        "Thank you for sharing that with me. What would help you feel better right now?",
+        "I appreciate you opening up. Is there anything specific you'd like to talk about today?"
+      ];
+      
+      // Simple response selection based on input length to seem somewhat responsive
+      const responseIndex = Math.floor(userInput.length % fallbackResponses.length);
+      
+      setMessages(prev => [
+        ...prev,
+        { role: "assistant", content: fallbackResponses[responseIndex] }
+      ]);
+      
+      setIsLoading(false);
+    }, 1500); // Simulate thinking time
   };
 
   return (
@@ -92,8 +122,22 @@ const ChatInterface: React.FC = () => {
         </div>
         <div>
           <h3 className="font-medium">Nimira AI</h3>
-          <p className="text-xs text-gray-500">Online now</p>
+          <p className="text-xs text-gray-500">
+            {fallbackMode ? "Demo Mode" : "Online now"}
+          </p>
         </div>
+        {fallbackMode && (
+          <div className="ml-auto">
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="text-xs"
+              onClick={() => setFallbackMode(false)}
+            >
+              Try API Again
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Messages container */}
@@ -168,3 +212,4 @@ const ChatInterface: React.FC = () => {
 };
 
 export default ChatInterface;
+
