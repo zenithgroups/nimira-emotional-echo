@@ -1,7 +1,7 @@
-
 import React from "react";
 import { MessageSquare, Book, Smile, Mic, Shield } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import ChatInterface from "./ChatInterface";
 
 const ProductFeaturesSection: React.FC = () => {
   const { toast } = useToast();
@@ -28,24 +28,11 @@ const ProductFeaturesSection: React.FC = () => {
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Features Image/Visualization */}
+          {/* Interactive Chat Interface */}
           <div className="order-2 lg:order-1">
-            <div className="glass h-full flex items-center justify-center p-8">
-              <div 
-                className="w-full max-w-md h-[500px] bg-gradient-to-br from-nimira-300/20 to-nimira-400/20 rounded-2xl border border-nimira-200/50 flex items-center justify-center cursor-pointer hover:border-nimira-300 transition-all"
-                onClick={() => {
-                  toast({
-                    title: "Nimira Interface",
-                    description: "This is a preview of the Nimira interaction interface. Try the beta for the full experience!",
-                  });
-                }}
-              >
-                <div className="text-center p-4">
-                  <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-nimira-300 to-nimira-400 flex items-center justify-center mb-4">
-                    <span className="text-white text-4xl font-bold">N</span>
-                  </div>
-                  <p className="text-gray-500">Interactive Nimira Interface</p>
-                </div>
+            <div className="glass h-full flex items-center justify-center p-4 md:p-8">
+              <div className="w-full h-[500px]">
+                <ChatInterface />
               </div>
             </div>
           </div>
