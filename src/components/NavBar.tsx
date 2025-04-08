@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,7 +43,12 @@ const NavBar: React.FC = () => {
       <nav className="container-custom flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center">
-          <h1 className="text-2xl font-bold text-nimira-500">Nimira</h1>
+          <button 
+            onClick={() => navigateTo("home")}
+            className="text-2xl font-bold text-nimira-500 hover:text-nimira-400 transition-colors"
+          >
+            Nimira
+          </button>
         </div>
 
         {/* Desktop Navigation */}

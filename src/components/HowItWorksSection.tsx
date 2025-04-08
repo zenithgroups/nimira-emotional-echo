@@ -1,6 +1,7 @@
 
 import React from "react";
 import { MessageCircle, Brain, Heart, Clock } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const features = [
   {
@@ -26,6 +27,20 @@ const features = [
 ];
 
 const HowItWorksSection: React.FC = () => {
+  const { toast } = useToast();
+
+  const handleExploreFeatures = () => {
+    const featuresSection = document.getElementById("features");
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      toast({
+        title: "Navigation",
+        description: "Scrolling to features section.",
+      });
+    }
+  };
+
   return (
     <section id="how-it-works" className="section-spacing bg-gray-50/80 relative">
       {/* Background decorations */}
@@ -44,7 +59,13 @@ const HowItWorksSection: React.FC = () => {
           {features.map((feature, index) => (
             <div 
               key={index} 
-              className="card-feature flex flex-col items-center text-center"
+              className="card-feature flex flex-col items-center text-center cursor-pointer hover:translate-y-[-5px] transition-transform"
+              onClick={() => {
+                toast({
+                  title: feature.title,
+                  description: feature.description,
+                });
+              }}
             >
               <div className="mb-5 p-3 rounded-2xl bg-nimira-100/50">
                 {feature.icon}
@@ -56,7 +77,10 @@ const HowItWorksSection: React.FC = () => {
         </div>
         
         <div className="mt-16 text-center">
-          <button className="gradient-button">
+          <button 
+            onClick={handleExploreFeatures} 
+            className="gradient-button"
+          >
             Explore More Features
           </button>
         </div>

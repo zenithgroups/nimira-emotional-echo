@@ -1,8 +1,18 @@
 
 import React from "react";
 import { MessageSquare, Book, Smile, Mic, Shield } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 const ProductFeaturesSection: React.FC = () => {
+  const { toast } = useToast();
+  
+  const handleFeatureClick = (title: string, description: string) => {
+    toast({
+      title: title,
+      description: description,
+    });
+  };
+
   return (
     <section id="features" className="section-spacing bg-white relative overflow-hidden">
       {/* Background decorations */}
@@ -21,7 +31,15 @@ const ProductFeaturesSection: React.FC = () => {
           {/* Features Image/Visualization */}
           <div className="order-2 lg:order-1">
             <div className="glass h-full flex items-center justify-center p-8">
-              <div className="w-full max-w-md h-[500px] bg-gradient-to-br from-nimira-300/20 to-nimira-400/20 rounded-2xl border border-nimira-200/50 flex items-center justify-center">
+              <div 
+                className="w-full max-w-md h-[500px] bg-gradient-to-br from-nimira-300/20 to-nimira-400/20 rounded-2xl border border-nimira-200/50 flex items-center justify-center cursor-pointer hover:border-nimira-300 transition-all"
+                onClick={() => {
+                  toast({
+                    title: "Nimira Interface",
+                    description: "This is a preview of the Nimira interaction interface. Try the beta for the full experience!",
+                  });
+                }}
+              >
                 <div className="text-center p-4">
                   <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-nimira-300 to-nimira-400 flex items-center justify-center mb-4">
                     <span className="text-white text-4xl font-bold">N</span>
@@ -35,7 +53,10 @@ const ProductFeaturesSection: React.FC = () => {
           {/* Features List */}
           <div className="order-1 lg:order-2">
             <div className="space-y-8">
-              <div className="flex gap-4">
+              <div 
+                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-nimira-100/20 transition-colors"
+                onClick={() => handleFeatureClick("Real-time Chat", "Experience natural, human-like conversations powered by OpenAI's most advanced language model, for meaningful interactions.")}
+              >
                 <div className="shrink-0 w-12 h-12 rounded-xl bg-nimira-100 flex items-center justify-center">
                   <MessageSquare className="h-6 w-6 text-nimira-500" />
                 </div>
@@ -47,7 +68,10 @@ const ProductFeaturesSection: React.FC = () => {
                 </div>
               </div>
               
-              <div className="flex gap-4">
+              <div 
+                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-nimira-100/20 transition-colors"
+                onClick={() => handleFeatureClick("Memory Journaling", "Nimira remembers your past conversations and important life events, creating a digital memory journal that evolves with you.")}
+              >
                 <div className="shrink-0 w-12 h-12 rounded-xl bg-nimira-100 flex items-center justify-center">
                   <Book className="h-6 w-6 text-nimira-500" />
                 </div>
@@ -59,7 +83,10 @@ const ProductFeaturesSection: React.FC = () => {
                 </div>
               </div>
               
-              <div className="flex gap-4">
+              <div 
+                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-nimira-100/20 transition-colors"
+                onClick={() => handleFeatureClick("Daily Mood Check-ins", "Regular emotion tracking and personalized insights to help you understand patterns in your emotional wellbeing.")}
+              >
                 <div className="shrink-0 w-12 h-12 rounded-xl bg-nimira-100 flex items-center justify-center">
                   <Smile className="h-6 w-6 text-nimira-500" />
                 </div>
@@ -71,7 +98,10 @@ const ProductFeaturesSection: React.FC = () => {
                 </div>
               </div>
               
-              <div className="flex gap-4">
+              <div 
+                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-nimira-100/20 transition-colors"
+                onClick={() => handleFeatureClick("Voice Interaction", "Coming soon: Talk directly to Nimira with natural voice conversations for an even more personal connection.")}
+              >
                 <div className="shrink-0 w-12 h-12 rounded-xl bg-nimira-100 flex items-center justify-center">
                   <Mic className="h-6 w-6 text-nimira-500" />
                 </div>
@@ -83,7 +113,10 @@ const ProductFeaturesSection: React.FC = () => {
                 </div>
               </div>
               
-              <div className="flex gap-4">
+              <div 
+                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-nimira-100/20 transition-colors"
+                onClick={() => handleFeatureClick("Security & Privacy", "Your conversations with Nimira are encrypted and private, with transparent data practices and user control.")}
+              >
                 <div className="shrink-0 w-12 h-12 rounded-xl bg-nimira-100 flex items-center justify-center">
                   <Shield className="h-6 w-6 text-nimira-500" />
                 </div>

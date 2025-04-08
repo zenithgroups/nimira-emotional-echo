@@ -1,7 +1,24 @@
 
 import React from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const HeroSection: React.FC = () => {
+  const { toast } = useToast();
+  
+  const handleTryFree = () => {
+    toast({
+      title: "Coming soon!",
+      description: "Nimira will be available for free trials in the coming weeks. Join our beta for early access!",
+    });
+  };
+  
+  const handleLearnMore = () => {
+    const featuresSection = document.getElementById("features");
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <section
       id="home"
@@ -27,10 +44,16 @@ const HeroSection: React.FC = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="gradient-button">
+              <button 
+                onClick={handleTryFree}
+                className="gradient-button"
+              >
                 Try Nimira for Free
               </button>
-              <button className="bg-white text-nimira-500 border border-nimira-300/50 hover:border-nimira-400 px-8 py-3 rounded-full transition duration-300 shadow-sm hover:shadow-md">
+              <button 
+                onClick={handleLearnMore}
+                className="bg-white text-nimira-500 border border-nimira-300/50 hover:border-nimira-400 px-8 py-3 rounded-full transition duration-300 shadow-sm hover:shadow-md"
+              >
                 Learn More
               </button>
             </div>
@@ -77,19 +100,28 @@ const HeroSection: React.FC = () => {
                   </div>
                   
                   <div className="pt-4">
-                    <div className="relative">
+                    <form onSubmit={(e) => e.preventDefault()} className="relative">
                       <input
                         type="text"
                         placeholder="Send a message..."
                         className="w-full bg-gray-50 border border-gray-100 rounded-full px-4 py-2 text-sm"
                       />
-                      <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-nimira-400 text-white p-1 rounded-full">
+                      <button 
+                        type="submit"
+                        onClick={() => {
+                          toast({
+                            title: "Chat coming soon",
+                            description: "The full chat experience will be available in the beta release.",
+                          });
+                        }}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-nimira-400 hover:bg-nimira-500 text-white p-1 rounded-full transition-colors"
+                      >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="m22 2-7 20-4-9-9-4Z"></path>
                           <path d="M22 2 11 13"></path>
                         </svg>
                       </button>
-                    </div>
+                    </form>
                   </div>
                 </div>
               </div>
