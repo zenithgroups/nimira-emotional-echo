@@ -14,10 +14,14 @@ const Footer: React.FC = () => {
   };
   
   const handleSocialClick = (platform: string) => {
-    toast({
-      title: `${platform} coming soon`,
-      description: `Follow us on ${platform} for updates about Nimira.`,
-    });
+    if (platform === "Instagram") {
+      window.open("https://www.instagram.com/nimira.ai", "_blank");
+    } else {
+      toast({
+        title: `${platform} coming soon`,
+        description: `Follow us on ${platform} for updates about Nimira.`,
+      });
+    }
   };
   
   const navigateTo = (id: string) => {
@@ -65,6 +69,7 @@ const Footer: React.FC = () => {
               <button 
                 onClick={() => handleSocialClick("Instagram")}
                 className="text-gray-400 hover:text-nimira-400 transition-colors"
+                aria-label="Visit Nimira on Instagram"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
