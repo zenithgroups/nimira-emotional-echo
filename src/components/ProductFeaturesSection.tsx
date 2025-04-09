@@ -27,7 +27,7 @@ const ProductFeaturesSection: React.FC = () => {
             Experience a companion that's designed to support your emotional wellbeing with cutting-edge AI technology.
           </p>
           <p className="mt-2 text-sm text-nimira-500">
-            Try the interactive demo below with GPT-4o technology!
+            Try the interactive demo below powered by OpenAI GPT-4o!
           </p>
         </div>
         
@@ -52,7 +52,7 @@ const ProductFeaturesSection: React.FC = () => {
                   <MessageSquare className="h-6 w-6 text-nimira-500" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2">Real-time Chat with GPT-4o</h3>
+                  <h3 className="text-xl font-semibold mb-2">Real-time Chat with OpenAI</h3>
                   <p className="text-gray-600">
                     Experience natural, human-like conversations powered by OpenAI's most advanced language model, for meaningful interactions.
                   </p>

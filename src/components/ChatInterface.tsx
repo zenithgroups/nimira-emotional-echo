@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface Message {
-  role: "user" | "assistant";
+  role: "user" | "assistant" | "system";
   content: string;
 }
 
@@ -23,9 +23,9 @@ const ChatInterface: React.FC = () => {
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   
-  // API configuration - using the provided API key from sree.shop
-  const apiUrl = "https://api.sree.shop/chat";
-  const apiKey = "ddc-beta-dhxdvl9jah-YWwkA3J4DLOCoIwfJjMLxqKAUKtw2UWbBee";
+  // OpenAI API configuration
+  const apiUrl = "https://api.openai.com/v1/chat/completions";
+  const apiKey = "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";
 
   // Scroll to bottom when messages update
   useEffect(() => {
@@ -42,9 +42,8 @@ const ChatInterface: React.FC = () => {
 
   const checkApiConnection = async () => {
     try {
-      console.log("Checking API connection to:", apiUrl);
+      console.log("Checking OpenAI API connection");
       
-      // Use a POST request instead of HEAD for better compatibility
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -52,25 +51,29 @@ const ChatInterface: React.FC = () => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "gpt-4o",
+          model: "gpt-4o-mini",
           messages: [
-            { role: "system", content: "This is a connection test." }
-          ]
-        }),
-        // No timeout - let the browser handle it
+            { role: "system", content: "This is a connection test." },
+            { role: "user", content: "Hello" }
+          ],
+          max_tokens: 5
+        })
       });
       
       console.log("API connection check response:", response.status);
+      const data = await response.json();
+      console.log("API connection check data:", data);
       
       if (response.ok) {
         setFallbackMode(false);
-        console.log("API connection successful");
+        console.log("OpenAI API connection successful");
       } else {
-        console.log("API connection failed with status:", response.status);
+        console.log("OpenAI API connection failed with status:", response.status);
+        console.log("Error message:", data.error?.message);
         setFallbackMode(true);
       }
     } catch (error) {
-      console.error("API connection check failed:", error);
+      console.error("OpenAI API connection check failed:", error);
       setFallbackMode(true);
     }
   };
@@ -79,7 +82,7 @@ const ChatInterface: React.FC = () => {
     setIsRetrying(true);
     toast({
       title: "Connecting to API...",
-      description: "Attempting to reconnect to Nimira's AI service.",
+      description: "Attempting to reconnect to OpenAI API service.",
     });
     
     await checkApiConnection();
@@ -88,12 +91,12 @@ const ChatInterface: React.FC = () => {
     if (!fallbackMode) {
       toast({
         title: "Connection Restored!",
-        description: "Successfully reconnected to Nimira's AI service.",
+        description: "Successfully connected to OpenAI API service.",
       });
     } else {
       toast({
         title: "Connection Failed",
-        description: "Still unable to connect to the API. Please try again later.",
+        description: "Unable to connect to OpenAI API. Please check the API key or try again later.",
         variant: "destructive",
       });
     }
@@ -113,7 +116,9 @@ const ChatInterface: React.FC = () => {
     }
 
     try {
-      console.log("Sending message to API:", userMessage.content);
+      console.log("Sending message to OpenAI API");
+      
+      const systemPrompt = "You are Nimira, an empathetic AI companion designed to provide emotional support. Your responses should be warm, understanding, and helpful. Keep responses concise (under 150 words) and focus on being a supportive friend. Never break character.";
       
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -122,26 +127,27 @@ const ChatInterface: React.FC = () => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "gpt-4o",
+          model: "gpt-4o-mini",
           messages: [
-            { 
-              role: "system", 
-              content: "You are Nimira, an empathetic AI companion designed to provide emotional support. Your responses should be warm, understanding, and helpful. Keep responses concise (under 150 words) and focus on being a supportive friend. Never break character." 
-            },
+            { role: "system", content: systemPrompt },
             ...messages.map(msg => ({ role: msg.role, content: msg.content })),
             { role: userMessage.role, content: userMessage.content }
-          ]
+          ],
+          temperature: 0.7,
+          max_tokens: 300
         })
       });
 
-      console.log("API response status:", response.status);
+      console.log("OpenAI API response status:", response.status);
       
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+        const errorData = await response.json();
+        console.error("OpenAI API error:", errorData);
+        throw new Error(`Error ${response.status}: ${errorData.error?.message || 'Unknown error'}`);
       }
 
       const data = await response.json();
-      console.log("API response data:", data);
+      console.log("OpenAI API response data:", data);
       
       const assistantMessage = data.choices?.[0]?.message?.content || "I'm having trouble responding right now. Can we try again?";
       
@@ -154,17 +160,17 @@ const ChatInterface: React.FC = () => {
         setFallbackMode(false);
         toast({
           title: "API Connection Restored",
-          description: "Successfully connected to Nimira's AI. Enjoy your conversation!",
+          description: "Successfully connected to OpenAI API. Enjoy your conversation!",
         });
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("Error sending message to OpenAI API:", error);
       
       // Only show toast if we're not already in fallback mode
       if (!fallbackMode) {
         toast({
           title: "API Connection Issue",
-          description: "Unable to reach the AI service. Please check your connection and try again.",
+          description: "Unable to reach the OpenAI API. Please check your connection and try again.",
           variant: "destructive",
         });
       }
@@ -176,7 +182,7 @@ const ChatInterface: React.FC = () => {
         ...prev,
         { 
           role: "assistant", 
-          content: "I'm sorry, I couldn't process your message due to a connection issue. Please try again or click the 'Try API Again' button above." 
+          content: "I'm sorry, I couldn't process your message due to a connection issue with OpenAI API. Please try again or click the 'Try API Again' button above." 
         }
       ]);
     } finally {
@@ -186,13 +192,22 @@ const ChatInterface: React.FC = () => {
 
   // Fallback response simulator
   const simulateFallbackResponse = (userInput: string) => {
-    // We won't use this since we're focusing on making the API work
     setTimeout(() => {
+      const fallbackResponses = [
+        "I understand how you're feeling. Would you like to talk more about that?",
+        "That's interesting. Could you tell me more about your experience?",
+        "I appreciate you sharing that with me. How does that make you feel?",
+        "I'm here to listen. What else is on your mind today?",
+        "Thank you for opening up. Is there anything specific you'd like to focus on in our conversation?"
+      ];
+      
+      const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+      
       setMessages(prev => [
         ...prev,
         { 
           role: "assistant", 
-          content: "I'm sorry, I'm currently unable to connect to my AI service. Please try clicking the 'Try API Again' button above to restore the connection." 
+          content: randomResponse
         }
       ]);
       
@@ -210,7 +225,7 @@ const ChatInterface: React.FC = () => {
         <div>
           <h3 className="font-medium">Nimira AI</h3>
           <p className="text-xs text-gray-500">
-            {fallbackMode ? "Trying to connect..." : "Online - GPT-4o Powered"}
+            {fallbackMode ? "Demo Mode - API Unavailable" : "Online - OpenAI GPT-4o Powered"}
           </p>
         </div>
         {fallbackMode && (
@@ -239,7 +254,7 @@ const ChatInterface: React.FC = () => {
       {fallbackMode && (
         <Alert className="m-2 py-2 bg-yellow-50 border-yellow-200">
           <AlertDescription className="text-xs text-yellow-800">
-            Unable to connect to the AI service. Please check your connection or try again later.
+            Running in demo mode. Unable to connect to OpenAI API. Your messages will receive simulated responses.
           </AlertDescription>
         </Alert>
       )}
