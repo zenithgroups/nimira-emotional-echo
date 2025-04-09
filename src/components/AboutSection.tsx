@@ -1,9 +1,6 @@
-
 import React from "react";
-
 const AboutSection: React.FC = () => {
-  return (
-    <section id="about" className="section-spacing bg-white relative">
+  return <section id="about" className="section-spacing bg-white relative">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-nimira-100/30 rounded-bl-full z-0"></div>
       
@@ -32,10 +29,11 @@ const AboutSection: React.FC = () => {
               
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 rounded-full bg-nimira-400/10 flex items-center justify-center">
-                  <span className="text-nimira-500 font-semibold">EA</span>
+                  <span className="text-nimira-500 font-semibold">TR
+                </span>
                 </div>
                 <div>
-                  <p className="font-semibold">Elena Aoki</p>
+                  <p className="font-semibold">Tharun Raj</p>
                   <p className="text-sm text-gray-500">Founder & CEO</p>
                 </div>
               </div>
@@ -78,8 +76,6 @@ const AboutSection: React.FC = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default AboutSection;
