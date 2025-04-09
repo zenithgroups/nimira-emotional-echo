@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -39,7 +39,11 @@ const BetaSignupSection: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          ...values,
+          _subject: "New Nimira Beta Signup",
+          timestamp: new Date().toISOString(),
+        }),
       });
       
       if (response.ok) {
@@ -49,13 +53,17 @@ const BetaSignupSection: React.FC = () => {
         });
         form.reset();
       } else {
-        throw new Error("Something went wrong");
+        // Handle non-OK responses specifically
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Form submission error response:", errorData);
+        
+        throw new Error(errorData.message || "Failed to submit form");
       }
     } catch (error) {
       console.error("Form submission error:", error);
       toast({
         title: "Something went wrong",
-        description: "Please try again later.",
+        description: "Please try again later or contact support at nimiraai@zohomail.in directly.",
         variant: "destructive",
       });
     } finally {
