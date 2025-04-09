@@ -1,27 +1,66 @@
 
 import React, { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const formSchema = z.object({
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters",
+  }),
+  email: z.string().email({
+    message: "Please enter a valid email address",
+  }),
+});
 
 const BetaSignupSection: React.FC = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     setLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      toast({
-        title: "Thank you for joining!",
-        description: "We'll reach out to you soon with early access information.",
+    try {
+      // Using Formspree to send the form data
+      const response = await fetch("https://formspree.io/f/nimiraai@zohomail.in", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
       });
+      
+      if (response.ok) {
+        toast({
+          title: "Thank you for joining!",
+          description: "We'll reach out to you soon with early access information.",
+        });
+        form.reset();
+      } else {
+        throw new Error("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Something went wrong",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
       setLoading(false);
-      setName("");
-      setEmail("");
-    }, 1500);
+    }
   };
 
   return (
@@ -40,56 +79,71 @@ const BetaSignupSection: React.FC = () => {
             </p>
           </div>
           
-          <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-              <input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-nimira-400 focus:ring focus:ring-nimira-300/20 focus:ring-opacity-50 transition-all"
-                placeholder="Your name"
-                required
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="max-w-md mx-auto space-y-6">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="block text-sm font-medium text-gray-700 mb-1">Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-nimira-400 focus:ring focus:ring-nimira-300/20 focus:ring-opacity-50 transition-all"
+                        placeholder="Your name"
+                        disabled={loading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-nimira-400 focus:ring focus:ring-nimira-300/20 focus:ring-opacity-50 transition-all"
-                placeholder="your.email@example.com"
-                required
+              
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="block text-sm font-medium text-gray-700 mb-1">Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="email"
+                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-nimira-400 focus:ring focus:ring-nimira-300/20 focus:ring-opacity-50 transition-all"
+                        placeholder="your.email@example.com"
+                        disabled={loading}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full gradient-button flex items-center justify-center"
-            >
-              {loading ? (
-                <>
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Processing...
-                </>
-              ) : (
-                "Join the Waitlist"
-              )}
-            </button>
-            
-            <p className="text-xs text-center text-gray-500 mt-4">
-              Join thousands in building the future of AI companionship. <br />
-              We'll never share your information with third parties.
-            </p>
-          </form>
+              
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full gradient-button flex items-center justify-center"
+              >
+                {loading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                  </>
+                ) : (
+                  "Join the Waitlist"
+                )}
+              </Button>
+              
+              <p className="text-xs text-center text-gray-500 mt-4">
+                Join thousands in building the future of AI companionship. <br />
+                We'll never share your information with third parties.
+              </p>
+            </form>
+          </Form>
         </div>
       </div>
     </section>
