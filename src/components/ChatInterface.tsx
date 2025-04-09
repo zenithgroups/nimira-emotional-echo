@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
-import { MessageCircle, Send, RefreshCw } from "lucide-react";
+import { Send, RefreshCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -22,6 +22,8 @@ const ChatInterface: React.FC = () => {
   const [isRetrying, setIsRetrying] = useState(false);
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  
+  // API configuration - using the provided API key from sree.shop
   const apiUrl = "https://api.sree.shop/chat";
   const apiKey = "ddc-beta-dhxdvl9jah-YWwkA3J4DLOCoIwfJjMLxqKAUKtw2UWbBee";
 
@@ -40,22 +42,31 @@ const ChatInterface: React.FC = () => {
 
   const checkApiConnection = async () => {
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      console.log("Checking API connection to:", apiUrl);
       
+      // Use a POST request instead of HEAD for better compatibility
       const response = await fetch(apiUrl, {
-        method: "HEAD",
+        method: "POST",
         headers: {
           "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
         },
-        signal: controller.signal
+        body: JSON.stringify({
+          model: "gpt-4o",
+          messages: [
+            { role: "system", content: "This is a connection test." }
+          ]
+        }),
+        // No timeout - let the browser handle it
       });
       
-      clearTimeout(timeoutId);
+      console.log("API connection check response:", response.status);
       
       if (response.ok) {
         setFallbackMode(false);
+        console.log("API connection successful");
       } else {
+        console.log("API connection failed with status:", response.status);
         setFallbackMode(true);
       }
     } catch (error) {
@@ -66,8 +77,26 @@ const ChatInterface: React.FC = () => {
 
   const retryApiConnection = async () => {
     setIsRetrying(true);
+    toast({
+      title: "Connecting to API...",
+      description: "Attempting to reconnect to Nimira's AI service.",
+    });
+    
     await checkApiConnection();
+    
     setIsRetrying(false);
+    if (!fallbackMode) {
+      toast({
+        title: "Connection Restored!",
+        description: "Successfully reconnected to Nimira's AI service.",
+      });
+    } else {
+      toast({
+        title: "Connection Failed",
+        description: "Still unable to connect to the API. Please try again later.",
+        variant: "destructive",
+      });
+    }
   };
 
   const sendMessage = async () => {
@@ -84,10 +113,7 @@ const ChatInterface: React.FC = () => {
     }
 
     try {
-      console.log("Sending request to API...");
-      
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      console.log("Sending message to API:", userMessage.content);
       
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -105,17 +131,18 @@ const ChatInterface: React.FC = () => {
             ...messages.map(msg => ({ role: msg.role, content: msg.content })),
             { role: userMessage.role, content: userMessage.content }
           ]
-        }),
-        signal: controller.signal
+        })
       });
-      
-      clearTimeout(timeoutId);
 
+      console.log("API response status:", response.status);
+      
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
 
       const data = await response.json();
+      console.log("API response data:", data);
+      
       const assistantMessage = data.choices?.[0]?.message?.content || "I'm having trouble responding right now. Can we try again?";
       
       setMessages(prev => [
@@ -137,13 +164,21 @@ const ChatInterface: React.FC = () => {
       if (!fallbackMode) {
         toast({
           title: "API Connection Issue",
-          description: "Temporarily using demo mode. Will auto-reconnect when API is available.",
+          description: "Unable to reach the AI service. Please check your connection and try again.",
           variant: "destructive",
         });
       }
       
       setFallbackMode(true);
-      simulateFallbackResponse(userMessage.content);
+      
+      // Add a response indicating the error
+      setMessages(prev => [
+        ...prev,
+        { 
+          role: "assistant", 
+          content: "I'm sorry, I couldn't process your message due to a connection issue. Please try again or click the 'Try API Again' button above." 
+        }
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -151,25 +186,18 @@ const ChatInterface: React.FC = () => {
 
   // Fallback response simulator
   const simulateFallbackResponse = (userInput: string) => {
+    // We won't use this since we're focusing on making the API work
     setTimeout(() => {
-      const fallbackResponses = [
-        "I understand how you're feeling. Would you like to tell me more about that?",
-        "That's interesting. How does that make you feel?",
-        "I'm here for you. Let's explore that thought together.",
-        "Thank you for sharing that with me. What would help you feel better right now?",
-        "I appreciate you opening up. Is there anything specific you'd like to talk about today?"
-      ];
-      
-      // Simple response selection based on input length to seem somewhat responsive
-      const responseIndex = Math.floor(userInput.length % fallbackResponses.length);
-      
       setMessages(prev => [
         ...prev,
-        { role: "assistant", content: fallbackResponses[responseIndex] }
+        { 
+          role: "assistant", 
+          content: "I'm sorry, I'm currently unable to connect to my AI service. Please try clicking the 'Try API Again' button above to restore the connection." 
+        }
       ]);
       
       setIsLoading(false);
-    }, 1500); // Simulate thinking time
+    }, 1000);
   };
 
   return (
@@ -182,7 +210,7 @@ const ChatInterface: React.FC = () => {
         <div>
           <h3 className="font-medium">Nimira AI</h3>
           <p className="text-xs text-gray-500">
-            {fallbackMode ? "Demo Mode (API Unavailable)" : "Online - GPT-4o Powered"}
+            {fallbackMode ? "Trying to connect..." : "Online - GPT-4o Powered"}
           </p>
         </div>
         {fallbackMode && (
@@ -211,7 +239,7 @@ const ChatInterface: React.FC = () => {
       {fallbackMode && (
         <Alert className="m-2 py-2 bg-yellow-50 border-yellow-200">
           <AlertDescription className="text-xs text-yellow-800">
-            Currently using demo mode with pre-programmed responses. Click "Try API Again" to reconnect.
+            Unable to connect to the AI service. Please check your connection or try again later.
           </AlertDescription>
         </Alert>
       )}
@@ -259,7 +287,7 @@ const ChatInterface: React.FC = () => {
           className="relative flex items-end gap-2"
         >
           <Textarea
-            placeholder={fallbackMode ? "Demo mode active. Type to test interface..." : "Type a message..."}
+            placeholder="Type a message..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             className="w-full min-h-[44px] max-h-[120px] resize-none bg-gray-50 border border-gray-100 rounded-xl pr-12"
