@@ -8,7 +8,7 @@ const HeroSection: React.FC = () => {
   const handleTryFree = () => {
     toast({
       title: "Coming soon!",
-      description: "Nimira will be available for free trials in the coming weeks. Join our beta for early access!",
+      description: "Ruvo will be available for free trials in the coming weeks. Join our beta for early access!",
     });
   };
   
@@ -25,18 +25,18 @@ const HeroSection: React.FC = () => {
       className="min-h-screen flex items-center pt-20 pb-16 relative overflow-hidden"
     >
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-nimira-100 via-white to-nimira-200 opacity-70 z-0"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-ruvo-100 via-white to-ruvo-200 opacity-70 z-0"></div>
       
       {/* Background circle decorations */}
-      <div className="absolute -top-20 -right-20 w-96 h-96 bg-nimira-300/20 rounded-full blur-3xl z-0"></div>
-      <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-nimira-400/20 rounded-full blur-3xl z-0"></div>
+      <div className="absolute -top-20 -right-20 w-96 h-96 bg-ruvo-300/20 rounded-full blur-3xl z-0"></div>
+      <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-ruvo-400/20 rounded-full blur-3xl z-0"></div>
       
       <div className="container-custom relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
               You're never truly alone – <br />
-              <span className="text-gradient">Meet Nimira</span>, your emotional AI companion.
+              <span className="text-gradient">Meet Ruvo</span>, your emotional AI companion.
             </h1>
             
             <p className="text-lg md:text-xl text-gray-700 max-w-xl">
@@ -48,11 +48,11 @@ const HeroSection: React.FC = () => {
                 onClick={handleTryFree}
                 className="gradient-button"
               >
-                Try Nimira for Free
+                Try Ruvo for Free
               </button>
               <button 
                 onClick={handleLearnMore}
-                className="bg-white text-nimira-500 border border-nimira-300/50 hover:border-nimira-400 px-8 py-3 rounded-full transition duration-300 shadow-sm hover:shadow-md"
+                className="bg-white text-ruvo-500 border border-ruvo-300/50 hover:border-ruvo-400 px-8 py-3 rounded-full transition duration-300 shadow-sm hover:shadow-md"
               >
                 Learn More
               </button>
@@ -73,28 +73,28 @@ const HeroSection: React.FC = () => {
           <div className="flex justify-center lg:justify-end">
             <div className="relative w-full max-w-md">
               <div className="glass p-6 rounded-3xl shadow-xl relative overflow-hidden">
-                <div className="absolute -top-6 -right-6 w-24 h-24 bg-nimira-400/30 rounded-full blur-xl z-0"></div>
+                <div className="absolute -top-6 -right-6 w-24 h-24 bg-ruvo-400/30 rounded-full blur-xl z-0"></div>
                 
                 {/* Mock AI interface */}
                 <div className="relative z-10 space-y-6">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-nimira-300 to-nimira-400 flex items-center justify-center text-white font-medium">N</div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-300 to-ruvo-400 flex items-center justify-center text-white font-medium">R</div>
                     <div>
-                      <h3 className="font-medium">Nimira AI</h3>
+                      <h3 className="font-medium">Ruvo AI</h3>
                       <p className="text-xs text-gray-500">Online now</p>
                     </div>
                   </div>
                   
                   <div className="space-y-4">
-                    <div className="bg-nimira-100/50 rounded-2xl rounded-bl-none p-3 max-w-xs">
-                      <p className="text-sm">Hello! I'm Nimira. I'm here to listen and support you. How are you feeling today?</p>
+                    <div className="bg-ruvo-100/50 rounded-2xl rounded-bl-none p-3 max-w-xs">
+                      <p className="text-sm">Hello! I'm Ruvo. I'm here to listen and support you. How are you feeling today?</p>
                     </div>
                     
                     <div className="bg-white border border-gray-100 shadow-sm rounded-2xl rounded-br-none p-3 ml-auto max-w-xs">
                       <p className="text-sm">I've been feeling a bit overwhelmed with work lately.</p>
                     </div>
                     
-                    <div className="bg-nimira-100/50 rounded-2xl rounded-bl-none p-3 max-w-xs">
+                    <div className="bg-ruvo-100/50 rounded-2xl rounded-bl-none p-3 max-w-xs">
                       <p className="text-sm">I understand how overwhelming work pressure can be. Let's talk about what's been happening and explore some ways to help you feel more balanced.</p>
                     </div>
                   </div>
@@ -114,7 +114,7 @@ const HeroSection: React.FC = () => {
                             description: "The full chat experience will be available in the beta release.",
                           });
                         }}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-nimira-400 hover:bg-nimira-500 text-white p-1 rounded-full transition-colors"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-ruvo-400 hover:bg-ruvo-500 text-white p-1 rounded-full transition-colors"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                           <path d="m22 2-7 20-4-9-9-4Z"></path>

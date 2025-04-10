@@ -17,8 +17,8 @@ const ProductFeaturesSection: React.FC = () => {
   return (
     <section id="features" className="section-spacing bg-white relative overflow-hidden">
       {/* Background decorations */}
-      <div className="absolute top-40 right-0 w-72 h-72 bg-nimira-200/30 rounded-full blur-3xl z-0"></div>
-      <div className="absolute bottom-20 left-10 w-60 h-60 bg-nimira-300/20 rounded-full blur-3xl z-0"></div>
+      <div className="absolute top-40 right-0 w-72 h-72 bg-ruvo-200/30 rounded-full blur-3xl z-0"></div>
+      <div className="absolute bottom-20 left-10 w-60 h-60 bg-ruvo-300/20 rounded-full blur-3xl z-0"></div>
       
       <div className="container-custom relative z-10">
         <div className="text-center mb-16">
@@ -26,7 +26,7 @@ const ProductFeaturesSection: React.FC = () => {
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Experience a companion that's designed to support your emotional wellbeing with cutting-edge AI technology.
           </p>
-          <p className="mt-2 text-sm text-nimira-500">
+          <p className="mt-2 text-sm text-ruvo-500">
             Try the interactive demo below powered by OpenAI GPT-4o!
           </p>
         </div>
@@ -45,11 +45,11 @@ const ProductFeaturesSection: React.FC = () => {
           <div className="order-1 lg:order-2">
             <div className="space-y-8">
               <div 
-                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-nimira-100/20 transition-colors"
+                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-ruvo-100/20 transition-colors"
                 onClick={() => handleFeatureClick("Real-time Chat", "Experience natural, human-like conversations powered by OpenAI's most advanced language model, for meaningful interactions.")}
               >
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-nimira-100 flex items-center justify-center">
-                  <MessageSquare className="h-6 w-6 text-nimira-500" />
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-ruvo-100 flex items-center justify-center">
+                  <MessageSquare className="h-6 w-6 text-ruvo-500" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">Real-time Chat with OpenAI</h3>
@@ -60,26 +60,26 @@ const ProductFeaturesSection: React.FC = () => {
               </div>
               
               <div 
-                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-nimira-100/20 transition-colors"
-                onClick={() => handleFeatureClick("Memory Journaling", "Nimira remembers your past conversations and important life events, creating a digital memory journal that evolves with you.")}
+                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-ruvo-100/20 transition-colors"
+                onClick={() => handleFeatureClick("Memory Journaling", "Ruvo remembers your past conversations and important life events, creating a digital memory journal that evolves with you.")}
               >
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-nimira-100 flex items-center justify-center">
-                  <Book className="h-6 w-6 text-nimira-500" />
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-ruvo-100 flex items-center justify-center">
+                  <Book className="h-6 w-6 text-ruvo-500" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">Memory Journaling</h3>
                   <p className="text-gray-600">
-                    Nimira remembers your past conversations and important life events, creating a digital memory journal that evolves with you.
+                    Ruvo remembers your past conversations and important life events, creating a digital memory journal that evolves with you.
                   </p>
                 </div>
               </div>
               
               <div 
-                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-nimira-100/20 transition-colors"
+                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-ruvo-100/20 transition-colors"
                 onClick={() => handleFeatureClick("Daily Mood Check-ins", "Regular emotion tracking and personalized insights to help you understand patterns in your emotional wellbeing.")}
               >
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-nimira-100 flex items-center justify-center">
-                  <Smile className="h-6 w-6 text-nimira-500" />
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-ruvo-100 flex items-center justify-center">
+                  <Smile className="h-6 w-6 text-ruvo-500" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">Daily Mood Check-ins</h3>
@@ -90,31 +90,31 @@ const ProductFeaturesSection: React.FC = () => {
               </div>
               
               <div 
-                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-nimira-100/20 transition-colors"
-                onClick={() => handleFeatureClick("Voice Interaction", "Coming soon: Talk directly to Nimira with natural voice conversations for an even more personal connection.")}
+                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-ruvo-100/20 transition-colors"
+                onClick={() => handleFeatureClick("Voice Interaction", "Coming soon: Talk directly to Ruvo with natural voice conversations for an even more personal connection.")}
               >
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-nimira-100 flex items-center justify-center">
-                  <Mic className="h-6 w-6 text-nimira-500" />
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-ruvo-100 flex items-center justify-center">
+                  <Mic className="h-6 w-6 text-ruvo-500" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">Voice Interaction</h3>
                   <p className="text-gray-600">
-                    Coming soon: Talk directly to Nimira with natural voice conversations for an even more personal connection.
+                    Coming soon: Talk directly to Ruvo with natural voice conversations for an even more personal connection.
                   </p>
                 </div>
               </div>
               
               <div 
-                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-nimira-100/20 transition-colors"
-                onClick={() => handleFeatureClick("Security & Privacy", "Your conversations with Nimira are encrypted and private, with transparent data practices and user control.")}
+                className="flex gap-4 cursor-pointer p-3 rounded-xl hover:bg-ruvo-100/20 transition-colors"
+                onClick={() => handleFeatureClick("Security & Privacy", "Your conversations with Ruvo are encrypted and private, with transparent data practices and user control.")}
               >
-                <div className="shrink-0 w-12 h-12 rounded-xl bg-nimira-100 flex items-center justify-center">
-                  <Shield className="h-6 w-6 text-nimira-500" />
+                <div className="shrink-0 w-12 h-12 rounded-xl bg-ruvo-100 flex items-center justify-center">
+                  <Shield className="h-6 w-6 text-ruvo-500" />
                 </div>
                 <div>
                   <h3 className="text-xl font-semibold mb-2">Secure, Private by Design</h3>
                   <p className="text-gray-600">
-                    Your conversations with Nimira are encrypted and private, with transparent data practices and user control.
+                    Your conversations with Ruvo are encrypted and private, with transparent data practices and user control.
                   </p>
                 </div>
               </div>

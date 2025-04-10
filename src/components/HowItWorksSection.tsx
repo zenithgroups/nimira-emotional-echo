@@ -5,24 +5,24 @@ import { useToast } from "@/components/ui/use-toast";
 
 const features = [
   {
-    icon: <MessageCircle className="h-8 w-8 text-nimira-400" />,
-    title: "Talk to Nimira 24/7",
+    icon: <MessageCircle className="h-8 w-8 text-ruvo-400" />,
+    title: "Talk to Ruvo 24/7",
     description: "Your AI companion is available anytime you need someone to talk to, offering support day and night."
   },
   {
-    icon: <Brain className="h-8 w-8 text-nimira-400" />,
+    icon: <Brain className="h-8 w-8 text-ruvo-400" />,
     title: "Stores Meaningful Memories",
-    description: "Nimira remembers your important moments, preferences, and conversations to provide personalized support."
+    description: "Ruvo remembers your important moments, preferences, and conversations to provide personalized support."
   },
   {
-    icon: <Heart className="h-8 w-8 text-nimira-400" />,
+    icon: <Heart className="h-8 w-8 text-ruvo-400" />,
     title: "Offers Emotional Comfort",
     description: "Designed to provide empathetic responses and emotional support when you need it most."
   },
   {
-    icon: <Clock className="h-8 w-8 text-nimira-400" />,
+    icon: <Clock className="h-8 w-8 text-ruvo-400" />,
     title: "AI That Learns You Over Time",
-    description: "The more you interact with Nimira, the better it understands your needs, preferences, and communication style."
+    description: "The more you interact with Ruvo, the better it understands your needs, preferences, and communication style."
   }
 ];
 
@@ -49,7 +49,7 @@ const HowItWorksSection: React.FC = () => {
       
       <div className="container-custom relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">How Nimira Works</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">How Ruvo Works</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Experience the power of emotional AI designed to support your well-being through intelligent, empathetic interaction.
           </p>
@@ -67,7 +67,7 @@ const HowItWorksSection: React.FC = () => {
                 });
               }}
             >
-              <div className="mb-5 p-3 rounded-2xl bg-nimira-100/50">
+              <div className="mb-5 p-3 rounded-2xl bg-ruvo-100/50">
                 {feature.icon}
               </div>
               <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>

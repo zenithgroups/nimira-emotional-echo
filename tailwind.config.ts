@@ -53,7 +53,7 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
         },
-        nimira: {
+        ruvo: {
           100: '#E5DEFF',
           200: '#D3E4FD',
           300: '#D6BCFA',

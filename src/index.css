@@ -56,11 +56,11 @@
   }
 
   .gradient-bg {
-    @apply bg-gradient-to-br from-nimira-400 via-nimira-500 to-nimira-300 bg-size-200 animate-gradient-flow;
+    @apply bg-gradient-to-br from-ruvo-400 via-ruvo-500 to-ruvo-300 bg-size-200 animate-gradient-flow;
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-nimira-400 to-nimira-300 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-ruvo-400 to-ruvo-300 bg-clip-text text-transparent;
   }
 }
 
@@ -74,7 +74,7 @@
   }
 
   .gradient-button {
-    @apply bg-gradient-to-r from-nimira-400 to-nimira-300 hover:from-nimira-300 hover:to-nimira-400 text-white font-medium rounded-full px-6 py-2.5 sm:px-8 sm:py-3 transition duration-300 shadow-md hover:shadow-lg text-sm sm:text-base;
+    @apply bg-gradient-to-r from-ruvo-400 to-ruvo-300 hover:from-ruvo-300 hover:to-ruvo-400 text-white font-medium rounded-full px-6 py-2.5 sm:px-8 sm:py-3 transition duration-300 shadow-md hover:shadow-lg text-sm sm:text-base;
   }
 
   .bg-size-200 {
@@ -82,7 +82,7 @@
   }
 
   .card-feature {
-    @apply bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-4 sm:p-6 border border-nimira-200/50 transition-all duration-300 hover:shadow-xl hover:border-nimira-300/50;
+    @apply bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-4 sm:p-6 border border-ruvo-200/50 transition-all duration-300 hover:shadow-xl hover:border-ruvo-300/50;
   }
 
   /* Mobile optimized text classes */

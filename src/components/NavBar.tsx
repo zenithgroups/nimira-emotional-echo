@@ -45,9 +45,9 @@ const NavBar: React.FC = () => {
         <div className="flex items-center">
           <button 
             onClick={() => navigateTo("home")}
-            className="text-2xl font-bold text-nimira-500 hover:text-nimira-400 transition-colors"
+            className="text-2xl font-bold text-ruvo-500 hover:text-ruvo-400 transition-colors"
           >
-            Nimira
+            Ruvo
           </button>
         </div>
 
@@ -56,7 +56,7 @@ const NavBar: React.FC = () => {
           <li>
             <button
               onClick={() => navigateTo("home")}
-              className="text-foreground hover:text-nimira-400 transition-colors"
+              className="text-foreground hover:text-ruvo-400 transition-colors"
             >
               Home
             </button>
@@ -64,7 +64,7 @@ const NavBar: React.FC = () => {
           <li>
             <button
               onClick={() => navigateTo("features")}
-              className="text-foreground hover:text-nimira-400 transition-colors"
+              className="text-foreground hover:text-ruvo-400 transition-colors"
             >
               Features
             </button>
@@ -72,7 +72,7 @@ const NavBar: React.FC = () => {
           <li>
             <button
               onClick={() => navigateTo("about")}
-              className="text-foreground hover:text-nimira-400 transition-colors"
+              className="text-foreground hover:text-ruvo-400 transition-colors"
             >
               About
             </button>
@@ -90,7 +90,7 @@ const NavBar: React.FC = () => {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-foreground hover:text-nimira-400 transition-colors"
+          className="md:hidden text-foreground hover:text-ruvo-400 transition-colors"
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -103,7 +103,7 @@ const NavBar: React.FC = () => {
             <li>
               <button
                 onClick={() => navigateTo("home")}
-                className="block w-full text-left text-foreground hover:text-nimira-400 transition-colors py-2"
+                className="block w-full text-left text-foreground hover:text-ruvo-400 transition-colors py-2"
               >
                 Home
               </button>
@@ -111,7 +111,7 @@ const NavBar: React.FC = () => {
             <li>
               <button
                 onClick={() => navigateTo("features")}
-                className="block w-full text-left text-foreground hover:text-nimira-400 transition-colors py-2"
+                className="block w-full text-left text-foreground hover:text-ruvo-400 transition-colors py-2"
               >
                 Features
               </button>
@@ -119,7 +119,7 @@ const NavBar: React.FC = () => {
             <li>
               <button
                 onClick={() => navigateTo("about")}
-                className="block w-full text-left text-foreground hover:text-nimira-400 transition-colors py-2"
+                className="block w-full text-left text-foreground hover:text-ruvo-400 transition-colors py-2"
               >
                 About
               </button>
