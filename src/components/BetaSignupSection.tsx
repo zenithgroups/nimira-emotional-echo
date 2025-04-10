@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
@@ -33,8 +34,10 @@ const BetaSignupSection: React.FC = () => {
     setLoading(true);
     
     try {
+      console.log("Submitting form with values:", values);
+      
       // Insert the beta signup data into Supabase
-      const { error } = await supabase
+      const { error, data } = await supabase
         .from('beta_signups')
         .insert([
           { 
@@ -43,6 +46,8 @@ const BetaSignupSection: React.FC = () => {
             created_at: new Date().toISOString()
           }
         ]);
+      
+      console.log("Supabase response:", { error, data });
       
       if (error) {
         console.error("Supabase error:", error);
@@ -54,11 +59,21 @@ const BetaSignupSection: React.FC = () => {
         description: "We'll reach out to you soon with early access information.",
       });
       form.reset();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Form submission error:", error);
+      
+      // More specific error message
+      let errorMessage = "Please try again later.";
+      
+      if (error.message && error.message.includes("duplicate")) {
+        errorMessage = "This email has already been registered.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Something went wrong",
-        description: "Please try again later or contact support at info@ruvoai.com directly.",
+        description: `${errorMessage} If the issue persists, contact support at info@ruvoai.com directly.`,
         variant: "destructive",
       });
     } finally {
