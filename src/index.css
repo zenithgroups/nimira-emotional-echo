@@ -44,6 +44,7 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+    -webkit-text-size-adjust: 100%;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -69,11 +70,11 @@
   }
 
   .section-spacing {
-    @apply py-16 md:py-24;
+    @apply py-12 md:py-24;
   }
 
   .gradient-button {
-    @apply bg-gradient-to-r from-nimira-400 to-nimira-300 hover:from-nimira-300 hover:to-nimira-400 text-white font-medium rounded-full px-8 py-3 transition duration-300 shadow-md hover:shadow-lg;
+    @apply bg-gradient-to-r from-nimira-400 to-nimira-300 hover:from-nimira-300 hover:to-nimira-400 text-white font-medium rounded-full px-6 py-2.5 sm:px-8 sm:py-3 transition duration-300 shadow-md hover:shadow-lg text-sm sm:text-base;
   }
 
   .bg-size-200 {
@@ -81,6 +82,54 @@
   }
 
   .card-feature {
-    @apply bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-6 border border-nimira-200/50 transition-all duration-300 hover:shadow-xl hover:border-nimira-300/50;
+    @apply bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-4 sm:p-6 border border-nimira-200/50 transition-all duration-300 hover:shadow-xl hover:border-nimira-300/50;
+  }
+
+  /* Mobile optimized text classes */
+  .mobile-text-base {
+    @apply text-base sm:text-lg;
+  }
+  
+  .mobile-text-sm {
+    @apply text-sm sm:text-base;
+  }
+  
+  .mobile-heading-1 {
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight;
+  }
+  
+  .mobile-heading-2 {
+    @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4;
+  }
+  
+  .mobile-heading-3 {
+    @apply text-xl sm:text-2xl font-semibold mb-2 sm:mb-3;
+  }
+}
+
+/* Mobile optimization */
+@media screen and (max-width: 640px) {
+  .glass {
+    @apply p-4 rounded-xl;
+  }
+  
+  p {
+    @apply text-base;
+  }
+  
+  h1 {
+    @apply text-3xl;
+  }
+  
+  h2 {
+    @apply text-2xl;
+  }
+  
+  h3 {
+    @apply text-xl;
+  }
+  
+  .section-spacing {
+    @apply py-10;
   }
 }
