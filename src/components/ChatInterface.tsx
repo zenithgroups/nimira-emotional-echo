@@ -182,7 +182,7 @@ const ChatInterface: React.FC = () => {
       <div className="flex items-center gap-3 p-4 border-b border-nimira-200/30 bg-white/50 backdrop-blur-sm">
         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-nimira-300 to-nimira-400 flex items-center justify-center text-white font-medium bg-indigo-500">R</div>
         <div>
-          <h3 className="font-medium">Nimira AI</h3>
+          <h3 className="font-medium">Ruvo AI</h3>
           <p className="text-xs text-gray-500">
             {fallbackMode ? "Demo Mode - Service Unavailable" : "Online - OpenAI GPT-4o Powered"}
           </p>
