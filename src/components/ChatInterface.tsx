@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { Send, RefreshCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -23,11 +22,9 @@ const ChatInterface: React.FC = () => {
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   
-  // OpenAI API configuration
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
 
-  // Scroll to bottom when messages update
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current;
@@ -35,7 +32,6 @@ const ChatInterface: React.FC = () => {
     }
   }, [messages]);
 
-  // Test API connection on initial load
   useEffect(() => {
     checkApiConnection();
   }, []);
@@ -81,8 +77,8 @@ const ChatInterface: React.FC = () => {
   const retryApiConnection = async () => {
     setIsRetrying(true);
     toast({
-      title: "Connecting to API...",
-      description: "Attempting to reconnect to OpenAI API service.",
+      title: "Connecting...",
+      description: "Attempting to reconnect to the service.",
     });
     
     await checkApiConnection();
@@ -91,12 +87,12 @@ const ChatInterface: React.FC = () => {
     if (!fallbackMode) {
       toast({
         title: "Connection Restored!",
-        description: "Successfully connected to OpenAI API service.",
+        description: "Successfully reconnected to the service.",
       });
     } else {
       toast({
         title: "Connection Failed",
-        description: "Unable to connect to OpenAI API. Please check the API key or try again later.",
+        description: "Unable to connect. Please try again later.",
         variant: "destructive",
       });
     }
@@ -166,23 +162,21 @@ const ChatInterface: React.FC = () => {
     } catch (error) {
       console.error("Error sending message to OpenAI API:", error);
       
-      // Only show toast if we're not already in fallback mode
       if (!fallbackMode) {
         toast({
-          title: "API Connection Issue",
-          description: "Unable to reach the OpenAI API. Please check your connection and try again.",
+          title: "Connection Issue",
+          description: "Can't chat more due to limit. Please try again later.",
           variant: "destructive",
         });
       }
       
       setFallbackMode(true);
       
-      // Add a response indicating the error
       setMessages(prev => [
         ...prev,
         { 
           role: "assistant", 
-          content: "I'm sorry, I couldn't process your message due to a connection issue with OpenAI API. Please try again or click the 'Try API Again' button above." 
+          content: "I'm sorry, I can't chat more due to limit. Please try again later or click the 'Retry' button above." 
         }
       ]);
     } finally {
@@ -190,7 +184,6 @@ const ChatInterface: React.FC = () => {
     }
   };
 
-  // Fallback response simulator
   const simulateFallbackResponse = (userInput: string) => {
     setTimeout(() => {
       const fallbackResponses = [
@@ -217,7 +210,6 @@ const ChatInterface: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full w-full relative overflow-hidden rounded-2xl border border-nimira-200/50 bg-gradient-to-br from-nimira-300/10 to-nimira-400/10 transition-all hover:border-nimira-300">
-      {/* Chat header */}
       <div className="flex items-center gap-3 p-4 border-b border-nimira-200/30 bg-white/50 backdrop-blur-sm">
         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-nimira-300 to-nimira-400 flex items-center justify-center text-white font-medium">
           N
@@ -225,7 +217,7 @@ const ChatInterface: React.FC = () => {
         <div>
           <h3 className="font-medium">Nimira AI</h3>
           <p className="text-xs text-gray-500">
-            {fallbackMode ? "Demo Mode - API Unavailable" : "Online - OpenAI GPT-4o Powered"}
+            {fallbackMode ? "Demo Mode - Service Unavailable" : "Online - OpenAI GPT-4o Powered"}
           </p>
         </div>
         {fallbackMode && (
@@ -243,7 +235,7 @@ const ChatInterface: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <RefreshCw size={14} /> Try API Again
+                  <RefreshCw size={14} /> Retry
                 </>
               )}
             </Button>
@@ -254,12 +246,11 @@ const ChatInterface: React.FC = () => {
       {fallbackMode && (
         <Alert className="m-2 py-2 bg-yellow-50 border-yellow-200">
           <AlertDescription className="text-xs text-yellow-800">
-            Running in demo mode. Unable to connect to OpenAI API. Your messages will receive simulated responses.
+            Running in demo mode. Can't chat more due to limit. Your messages will receive simulated responses.
           </AlertDescription>
         </Alert>
       )}
 
-      {/* Messages container */}
       <ScrollArea className="flex-1 p-4 overflow-y-auto" ref={scrollAreaRef}>
         <div className="flex flex-col gap-4">
           {messages.map((message, index) => (
@@ -292,7 +283,6 @@ const ChatInterface: React.FC = () => {
         </div>
       </ScrollArea>
 
-      {/* Message input */}
       <div className="p-4 border-t border-nimira-200/30 bg-white/50 backdrop-blur-sm">
         <form 
           onSubmit={(e) => {
