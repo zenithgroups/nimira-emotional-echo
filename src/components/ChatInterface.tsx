@@ -5,34 +5,40 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+
 interface Message {
   role: "user" | "assistant" | "system";
   content: string;
 }
+
 const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([{
     role: "assistant",
-    content: "Hello! I'm Nimira. I'm here to listen and support you. How are you feeling today?"
+    content: "Hello! I'm Ruvo. I'm here to listen and support you. How are you feeling today?"
   }]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [fallbackMode, setFallbackMode] = useState(false);
   const [isRetrying, setIsRetrying] = useState(false);
+  
   const {
     toast
   } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
+
   useEffect(() => {
     if (scrollAreaRef.current) {
       const scrollContainer = scrollAreaRef.current;
       scrollContainer.scrollTop = scrollContainer.scrollHeight;
     }
   }, [messages]);
+
   useEffect(() => {
     checkApiConnection();
   }, []);
+
   const checkApiConnection = async () => {
     try {
       console.log("Checking OpenAI API connection");
@@ -70,6 +76,7 @@ const ChatInterface: React.FC = () => {
       setFallbackMode(true);
     }
   };
+
   const retryApiConnection = async () => {
     setIsRetrying(true);
     toast({
@@ -91,6 +98,7 @@ const ChatInterface: React.FC = () => {
       });
     }
   };
+
   const sendMessage = async () => {
     if (input.trim() === "" || isLoading) return;
     const userMessage = {
@@ -100,13 +108,15 @@ const ChatInterface: React.FC = () => {
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
+    
     if (fallbackMode) {
       simulateFallbackResponse(userMessage.content);
       return;
     }
+    
     try {
       console.log("Sending message to OpenAI API");
-      const systemPrompt = "You are Nimira, an empathetic AI companion designed to provide emotional support. Your responses should be warm, understanding, and helpful. Keep responses concise (under 150 words) and focus on being a supportive friend. Never break character.";
+      const systemPrompt = "You are Ruvo, an empathetic AI companion designed to provide emotional support. Your responses should be warm, understanding, and helpful. Keep responses concise (under 150 words) and focus on being a supportive friend. Never break character.";
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -161,12 +171,13 @@ const ChatInterface: React.FC = () => {
       setFallbackMode(true);
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: "I'm sorry, I can't chat more due to limit. Please try again later or click the 'Retry' button above."
+        content: "I'm sorry, I can't chat more due to limit. Please try again later."
       }]);
     } finally {
       setIsLoading(false);
     }
   };
+
   const simulateFallbackResponse = (userInput: string) => {
     setTimeout(() => {
       const fallbackResponses = ["I understand how you're feeling. Would you like to talk more about that?", "That's interesting. Could you tell me more about your experience?", "I appreciate you sharing that with me. How does that make you feel?", "I'm here to listen. What else is on your mind today?", "Thank you for opening up. Is there anything specific you'd like to focus on in our conversation?"];
@@ -178,9 +189,10 @@ const ChatInterface: React.FC = () => {
       setIsLoading(false);
     }, 1000);
   };
-  return <div className="flex flex-col h-full w-full relative overflow-hidden rounded-2xl border border-nimira-200/50 bg-gradient-to-br from-nimira-300/10 to-nimira-400/10 transition-all hover:border-nimira-300">
-      <div className="flex items-center gap-3 p-4 border-b border-nimira-200/30 bg-white/50 backdrop-blur-sm">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-nimira-300 to-nimira-400 flex items-center justify-center text-white font-medium bg-indigo-500">R</div>
+
+  return <div className="flex flex-col h-full w-full relative overflow-hidden rounded-2xl border border-ruvo-200/50 bg-gradient-to-br from-ruvo-300/10 to-ruvo-400/10 transition-all hover:border-ruvo-300">
+      <div className="flex items-center gap-3 p-4 border-b border-ruvo-200/30 bg-white/50 backdrop-blur-sm">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-300 to-ruvo-400 flex items-center justify-center text-white font-medium bg-indigo-500">R</div>
         <div>
           <h3 className="font-medium">Ruvo AI</h3>
           <p className="text-xs text-gray-500">
@@ -207,18 +219,18 @@ const ChatInterface: React.FC = () => {
       <ScrollArea className="flex-1 p-4 overflow-y-auto" ref={scrollAreaRef}>
         <div className="flex flex-col gap-4">
           {messages.map((message, index) => <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[80%] p-3 rounded-2xl ${message.role === "user" ? "bg-white border border-gray-100 shadow-sm rounded-br-none ml-auto" : `${fallbackMode ? "bg-gray-100/70" : "bg-nimira-100/50"} rounded-bl-none`}`}>
+              <div className={`max-w-[80%] p-3 rounded-2xl ${message.role === "user" ? "bg-white border border-gray-100 shadow-sm rounded-br-none ml-auto" : `${fallbackMode ? "bg-gray-100/70" : "bg-ruvo-100/50"} rounded-bl-none`}`}>
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
               </div>
             </div>)}
           {isLoading && <div className="flex justify-start">
-              <div className="max-w-[80%] p-3 rounded-2xl bg-nimira-100/50 rounded-bl-none">
+              <div className="max-w-[80%] p-3 rounded-2xl bg-ruvo-100/50 rounded-bl-none">
                 <div className="flex gap-1 items-center">
-                  <div className="w-2 h-2 rounded-full bg-nimira-400 animate-pulse"></div>
-                  <div className="w-2 h-2 rounded-full bg-nimira-400 animate-pulse" style={{
+                  <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse"></div>
+                  <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse" style={{
                 animationDelay: "0.2s"
               }}></div>
-                  <div className="w-2 h-2 rounded-full bg-nimira-400 animate-pulse" style={{
+                  <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse" style={{
                 animationDelay: "0.4s"
               }}></div>
                 </div>
@@ -227,7 +239,7 @@ const ChatInterface: React.FC = () => {
         </div>
       </ScrollArea>
 
-      <div className="p-4 border-t border-nimira-200/30 bg-white/50 backdrop-blur-sm">
+      <div className="p-4 border-t border-ruvo-200/30 bg-white/50 backdrop-blur-sm">
         <form onSubmit={e => {
         e.preventDefault();
         sendMessage();
@@ -238,11 +250,12 @@ const ChatInterface: React.FC = () => {
             sendMessage();
           }
         }} />
-          <button type="submit" className={`absolute right-2 bottom-2 p-2 rounded-full transition-colors ${isLoading || input.trim() === "" ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-nimira-400 hover:bg-nimira-500 text-white"}`} disabled={isLoading || input.trim() === ""}>
+          <button type="submit" className={`absolute right-2 bottom-2 p-2 rounded-full transition-colors ${isLoading || input.trim() === "" ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-ruvo-400 hover:bg-ruvo-500 text-white"}`} disabled={isLoading || input.trim() === ""}>
             <Send size={16} />
           </button>
         </form>
       </div>
     </div>;
 };
+
 export default ChatInterface;
