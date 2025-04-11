@@ -36,13 +36,13 @@ const BetaSignupSection: React.FC = () => {
     try {
       console.log("Submitting form with values:", values);
       
-      // Insert the beta signup data into Supabase
+      // Insert the beta signup data into Supabase without providing the created_at field
+      // Let Supabase handle the timestamp with the default value defined in the database
       const { error, data } = await supabase
         .from('beta_signups')
         .insert({
           name: values.name,
           email: values.email,
-          created_at: new Date().toISOString(),
         });
       
       console.log("Supabase response:", { error, data });
