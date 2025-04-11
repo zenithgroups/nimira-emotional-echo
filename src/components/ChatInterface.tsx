@@ -1,10 +1,12 @@
+
 import React, { useState, useRef, useEffect } from "react";
-import { Send, RefreshCw } from "lucide-react";
+import { Send, RefreshCw, Mic, Volume2, VolumeX } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -21,12 +23,68 @@ const ChatInterface: React.FC = () => {
   const [fallbackMode, setFallbackMode] = useState(false);
   const [isRetrying, setIsRetrying] = useState(false);
   
-  const {
-    toast
-  } = useToast();
+  // Voice states
+  const [isListening, setIsListening] = useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [speechRecognitionSupported, setSpeechRecognitionSupported] = useState(false);
+  const [speechSynthesisSupported, setSpeechSynthesisSupported] = useState(false);
+  
+  // Voice services refs
+  const speechRecognition = useRef<SpeechRecognitionService | null>(null);
+  const speechSynthesis = useRef<SpeechSynthesisService | null>(null);
+  
+  const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
+
+  // Initialize voice services
+  useEffect(() => {
+    // Initialize speech recognition
+    speechRecognition.current = new SpeechRecognitionService({
+      onSpeechStart: () => setIsListening(true),
+      onSpeechEnd: () => setIsListening(false),
+      onResult: (text) => {
+        setInput(prev => prev + text);
+      },
+      onError: (error) => {
+        console.error("Speech recognition error:", error);
+        setIsListening(false);
+        toast({
+          title: "Voice Recognition Error",
+          description: `Error: ${error}. Please try again.`,
+          variant: "destructive",
+        });
+      }
+    });
+    
+    // Initialize speech synthesis
+    speechSynthesis.current = new SpeechSynthesisService();
+    
+    // Check if speech recognition and synthesis are supported
+    const recognitionSupported = speechRecognition.current.isRecognitionSupported();
+    const synthesisSupported = speechSynthesis.current.isSynthesisSupported();
+    
+    setSpeechRecognitionSupported(recognitionSupported);
+    setSpeechSynthesisSupported(synthesisSupported);
+    
+    if (!recognitionSupported || !synthesisSupported) {
+      toast({
+        title: "Voice Features Limited",
+        description: `Some voice features are not supported in your browser. ${!recognitionSupported ? 'Voice input not available.' : ''} ${!synthesisSupported ? 'Voice output not available.' : ''}`,
+      });
+    }
+    
+    return () => {
+      // Cleanup
+      if (speechRecognition.current) {
+        speechRecognition.current.stop();
+      }
+      if (speechSynthesis.current) {
+        speechSynthesis.current.stop();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (scrollAreaRef.current) {
@@ -99,6 +157,44 @@ const ChatInterface: React.FC = () => {
     }
   };
 
+  const toggleListening = () => {
+    if (!speechRecognitionSupported) {
+      toast({
+        title: "Speech Recognition Not Supported",
+        description: "Your browser doesn't support voice input. Please use text input instead.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (isListening) {
+      speechRecognition.current?.stop();
+      setIsListening(false);
+    } else {
+      const started = speechRecognition.current?.start();
+      if (!started) {
+        toast({
+          title: "Voice Input Error",
+          description: "Failed to start voice recognition. Please try again.",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+  
+  const toggleVoiceOutput = () => {
+    setVoiceEnabled(!voiceEnabled);
+    toast({
+      title: voiceEnabled ? "Voice Output Disabled" : "Voice Output Enabled",
+      description: voiceEnabled ? "Responses will not be read aloud." : "Responses will be read aloud."
+    });
+  };
+
+  const speakMessage = (text: string) => {
+    if (!voiceEnabled || !speechSynthesisSupported) return;
+    speechSynthesis.current?.speak(text);
+  };
+
   const sendMessage = async () => {
     if (input.trim() === "" || isLoading) return;
     const userMessage = {
@@ -108,6 +204,14 @@ const ChatInterface: React.FC = () => {
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
+    
+    // Stop listening if active
+    if (isListening) {
+      speechRecognition.current?.stop();
+    }
+    
+    // Stop any ongoing speech
+    speechSynthesis.current?.stop();
     
     if (fallbackMode) {
       simulateFallbackResponse(userMessage.content);
@@ -152,6 +256,10 @@ const ChatInterface: React.FC = () => {
         role: "assistant",
         content: assistantMessage
       }]);
+      
+      // Speak the assistant's response
+      speakMessage(assistantMessage);
+      
       if (fallbackMode) {
         setFallbackMode(false);
         toast({
@@ -169,10 +277,14 @@ const ChatInterface: React.FC = () => {
         });
       }
       setFallbackMode(true);
+      const errorMessage = "I'm sorry, I can't chat more due to limit. Please try again later.";
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: "I'm sorry, I can't chat more due to limit. Please try again later."
+        content: errorMessage
       }]);
+      
+      // Speak the error message
+      speakMessage(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -186,6 +298,10 @@ const ChatInterface: React.FC = () => {
         role: "assistant",
         content: randomResponse
       }]);
+      
+      // Speak the response
+      speakMessage(randomResponse);
+      
       setIsLoading(false);
     }, 1000);
   };
@@ -199,60 +315,117 @@ const ChatInterface: React.FC = () => {
             {fallbackMode ? "Demo Mode - Service Unavailable" : "Online - OpenAI GPT-4o Powered"}
           </p>
         </div>
-        {fallbackMode && <div className="ml-auto">
-            <Button variant="outline" size="sm" className="text-xs flex items-center gap-1" onClick={retryApiConnection} disabled={isRetrying}>
-              {isRetrying ? <>
-                  <RefreshCw size={14} className="animate-spin" /> Connecting...
-                </> : <>
-                  <RefreshCw size={14} /> Retry
-                </>}
+        <div className="flex gap-2 ml-auto">
+          {speechSynthesisSupported && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs flex items-center gap-1" 
+              onClick={toggleVoiceOutput}
+              title={voiceEnabled ? "Disable voice output" : "Enable voice output"}
+            >
+              {voiceEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
             </Button>
-          </div>}
+          )}
+          
+          {fallbackMode && (
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs flex items-center gap-1" 
+              onClick={retryApiConnection} 
+              disabled={isRetrying}
+            >
+              {isRetrying ? (
+                <>
+                  <RefreshCw size={14} className="animate-spin" /> Connecting...
+                </>
+              ) : (
+                <>
+                  <RefreshCw size={14} /> Retry
+                </>
+              )}
+            </Button>
+          )}
+        </div>
       </div>
 
-      {fallbackMode && <Alert className="m-2 py-2 bg-yellow-50 border-yellow-200">
+      {fallbackMode && (
+        <Alert className="m-2 py-2 bg-yellow-50 border-yellow-200">
           <AlertDescription className="text-xs text-yellow-800">
             Running in demo mode. Can't chat more due to limit. Your messages will receive simulated responses.
           </AlertDescription>
-        </Alert>}
+        </Alert>
+      )}
 
       <ScrollArea className="flex-1 p-4 overflow-y-auto" ref={scrollAreaRef}>
         <div className="flex flex-col gap-4">
-          {messages.map((message, index) => <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
+          {messages.map((message, index) => (
+            <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
               <div className={`max-w-[80%] p-3 rounded-2xl ${message.role === "user" ? "bg-white border border-gray-100 shadow-sm rounded-br-none ml-auto" : `${fallbackMode ? "bg-gray-100/70" : "bg-ruvo-100/50"} rounded-bl-none`}`}>
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
               </div>
-            </div>)}
-          {isLoading && <div className="flex justify-start">
+            </div>
+          ))}
+          {isLoading && (
+            <div className="flex justify-start">
               <div className="max-w-[80%] p-3 rounded-2xl bg-ruvo-100/50 rounded-bl-none">
                 <div className="flex gap-1 items-center">
                   <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse"></div>
                   <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse" style={{
-                animationDelay: "0.2s"
-              }}></div>
+                    animationDelay: "0.2s"
+                  }}></div>
                   <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse" style={{
-                animationDelay: "0.4s"
-              }}></div>
+                    animationDelay: "0.4s"
+                  }}></div>
                 </div>
               </div>
-            </div>}
+            </div>
+          )}
         </div>
       </ScrollArea>
 
       <div className="p-4 border-t border-ruvo-200/30 bg-white/50 backdrop-blur-sm">
-        <form onSubmit={e => {
-        e.preventDefault();
-        sendMessage();
-      }} className="relative flex items-end gap-2">
-          <Textarea placeholder="Type a message..." value={input} onChange={e => setInput(e.target.value)} className="w-full min-h-[44px] max-h-[120px] resize-none bg-gray-50 border border-gray-100 rounded-xl pr-12" onKeyDown={e => {
-          if (e.key === "Enter" && !e.shiftKey) {
+        <form 
+          onSubmit={e => {
             e.preventDefault();
             sendMessage();
-          }
-        }} />
-          <button type="submit" className={`absolute right-2 bottom-2 p-2 rounded-full transition-colors ${isLoading || input.trim() === "" ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-ruvo-400 hover:bg-ruvo-500 text-white"}`} disabled={isLoading || input.trim() === ""}>
-            <Send size={16} />
-          </button>
+          }} 
+          className="relative flex items-end gap-2"
+        >
+          <Textarea 
+            placeholder="Type a message..." 
+            value={input} 
+            onChange={e => setInput(e.target.value)} 
+            className="w-full min-h-[44px] max-h-[120px] resize-none bg-gray-50 border border-gray-100 rounded-xl pr-12" 
+            onKeyDown={e => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+              }
+            }} 
+          />
+          
+          <div className="absolute right-2 bottom-2 flex gap-1">
+            {speechRecognitionSupported && (
+              <button 
+                type="button" 
+                className={`p-2 rounded-full transition-colors ${isListening ? "bg-ruvo-500 text-white" : "bg-gray-200 text-gray-500 hover:bg-gray-300"}`}
+                onClick={toggleListening}
+                title={isListening ? "Stop listening" : "Start voice input"}
+              >
+                <Mic size={16} className={isListening ? "animate-pulse" : ""} />
+              </button>
+            )}
+            
+            <button 
+              type="submit" 
+              className={`p-2 rounded-full transition-colors ${isLoading || input.trim() === "" ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-ruvo-400 hover:bg-ruvo-500 text-white"}`} 
+              disabled={isLoading || input.trim() === ""}
+            >
+              <Send size={16} />
+            </button>
+          </div>
         </form>
       </div>
     </div>;
