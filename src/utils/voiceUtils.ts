@@ -134,24 +134,35 @@ export class SpeechSynthesisService {
     // Handle the case when voices are already loaded
     const populateVoices = () => {
       const voices = this.synth.getVoices();
+      
+      // Create voice options with agent-like names based on voice characteristics
       this.availableVoices = voices
         .filter(voice => voice.lang.includes('en'))
-        .map(voice => ({
-          name: `${voice.name} (${voice.lang})`,
-          voiceObj: voice
-        }));
+        .map((voice, index) => {
+          // Create agent-like names based on voice characteristics
+          let agentName = '';
+          
+          if (voice.name.toLowerCase().includes('female') || 
+              voice.name.toLowerCase().includes('woman') || 
+              voice.name.toLowerCase().includes('girl')) {
+            // Female voices
+            const femaleNames = ["Sophia", "Nova", "Emma", "Olivia", "Harper", "Aria", "Maya", "Zoe"];
+            agentName = femaleNames[index % femaleNames.length];
+          } else {
+            // Male voices
+            const maleNames = ["Max", "Atlas", "Ethan", "Jack", "Leo", "Owen", "Theo", "Kai"];
+            agentName = maleNames[index % maleNames.length];
+          }
+          
+          return {
+            name: `${agentName} (Agent ${index + 1})`,
+            voiceObj: voice
+          };
+        });
 
-      // Default to a female voice if available
-      const femaleVoice = voices.find(voice => 
-        (voice.name.includes('female') || voice.name.includes('Female') || 
-         voice.name.includes('girl') || voice.name.includes('Girl')) && 
-        voice.lang.includes('en')
-      );
-      
-      if (femaleVoice) {
-        this.voice = femaleVoice;
-      } else {
-        this.voice = voices.find(voice => voice.lang.includes('en')) || voices[0];
+      // Select a default voice
+      if (this.availableVoices.length > 0) {
+        this.voice = this.availableVoices[0].voiceObj;
       }
     };
 

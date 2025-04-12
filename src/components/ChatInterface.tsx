@@ -364,7 +364,7 @@ const ChatInterface: React.FC = () => {
               <PopoverContent className="w-80 p-4">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-semibold">Voice Output</h4>
+                    <h4 className="font-semibold">Voice Agent</h4>
                     <Button 
                       variant="outline" 
                       size="sm"
@@ -376,7 +376,7 @@ const ChatInterface: React.FC = () => {
                   
                   {voiceEnabled && (
                     <div className="space-y-3">
-                      <h5 className="text-sm font-medium">Select Voice</h5>
+                      <h5 className="text-sm font-medium">Select Your Voice Agent</h5>
                       <RadioGroup value={String(selectedVoiceIndex)} onValueChange={(value) => changeVoice(parseInt(value))}>
                         <div className="space-y-2 max-h-60 overflow-y-auto">
                           {availableVoices.map((voice, index) => (
@@ -392,8 +392,10 @@ const ChatInterface: React.FC = () => {
                                 size="sm" 
                                 onClick={() => playVoiceSample(index)}
                                 title="Play sample"
+                                className="flex items-center gap-1"
                               >
                                 <PlayCircle size={14} />
+                                <span className="text-xs">Sample</span>
                               </Button>
                             </div>
                           ))}
