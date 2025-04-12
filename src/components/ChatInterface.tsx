@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import { Send, RefreshCw, Mic, Volume2, VolumeX, ChevronDown, PlayCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -9,13 +10,22 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { SpeechRecognitionService, SpeechSynthesisService, VoiceOption } from "@/utils/voiceUtils";
+import { ElevenLabsService, ELEVEN_LABS_VOICES } from "@/utils/elevenLabsUtils";
 
 interface Message {
   role: "user" | "assistant" | "system";
   content: string;
 }
 
-const ChatInterface: React.FC = () => {
+interface ChatInterfaceProps {
+  elevenLabsService?: ElevenLabsService;
+  selectedVoiceIndex?: number;
+}
+
+const ChatInterface: React.FC<ChatInterfaceProps> = ({
+  elevenLabsService,
+  selectedVoiceIndex = 0
+}) => {
   const [messages, setMessages] = useState<Message[]>([{
     role: "assistant",
     content: "Hello! I'm Ruvo. I'm here to listen and support you. How are you feeling today?"
@@ -29,9 +39,9 @@ const ChatInterface: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [speechRecognitionSupported, setSpeechRecognitionSupported] = useState(false);
-  const [speechSynthesisSupported, setSpeechSynthesisSupported] = useState(false);
+  const [usePremiumVoices, setUsePremiumVoices] = useState(!!elevenLabsService?.isServiceReady());
   const [availableVoices, setAvailableVoices] = useState<VoiceOption[]>([]);
-  const [selectedVoiceIndex, setSelectedVoiceIndex] = useState(0);
+  const [currentVoiceIndex, setCurrentVoiceIndex] = useState(selectedVoiceIndex);
   const [voicePopoverOpen, setVoicePopoverOpen] = useState(false);
   
   // Voice services refs
@@ -42,6 +52,16 @@ const ChatInterface: React.FC = () => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
+
+  // Track if ElevenLabs becomes available
+  useEffect(() => {
+    if (elevenLabsService?.isServiceReady()) {
+      setUsePremiumVoices(true);
+      if (selectedVoiceIndex !== currentVoiceIndex) {
+        setCurrentVoiceIndex(selectedVoiceIndex);
+      }
+    }
+  }, [elevenLabsService, selectedVoiceIndex]);
 
   // Initialize voice services
   useEffect(() => {
@@ -68,15 +88,13 @@ const ChatInterface: React.FC = () => {
     
     // Check if speech recognition and synthesis are supported
     const recognitionSupported = speechRecognition.current.isRecognitionSupported();
-    const synthesisSupported = speechSynthesis.current.isSynthesisSupported();
     
     setSpeechRecognitionSupported(recognitionSupported);
-    setSpeechSynthesisSupported(synthesisSupported);
     
-    if (!recognitionSupported || !synthesisSupported) {
+    if (!recognitionSupported) {
       toast({
         title: "Voice Features Limited",
-        description: `Some voice features are not supported in your browser. ${!recognitionSupported ? 'Voice input not available.' : ''} ${!synthesisSupported ? 'Voice output not available.' : ''}`,
+        description: "Voice input is not supported in your browser.",
       });
     }
     
@@ -171,16 +189,27 @@ const ChatInterface: React.FC = () => {
   };
 
   const playVoiceSample = (index: number) => {
-    if (speechSynthesis.current) {
+    if (usePremiumVoices && elevenLabsService) {
+      elevenLabsService.speakSample(index);
+    } else if (speechSynthesis.current) {
       speechSynthesis.current.speakSample(index);
     }
   };
 
   const changeVoice = (index: number) => {
-    if (speechSynthesis.current) {
+    if (usePremiumVoices && elevenLabsService) {
+      const success = elevenLabsService.setVoiceByIndex(index);
+      if (success) {
+        setCurrentVoiceIndex(index);
+        toast({
+          title: "Voice Changed",
+          description: `Voice set to ${ELEVEN_LABS_VOICES[index].name}`
+        });
+      }
+    } else if (speechSynthesis.current) {
       const success = speechSynthesis.current.setVoiceByIndex(index);
       if (success) {
-        setSelectedVoiceIndex(index);
+        setCurrentVoiceIndex(index);
         toast({
           title: "Voice Changed",
           description: `Voice set to ${availableVoices[index].name}`
@@ -222,9 +251,33 @@ const ChatInterface: React.FC = () => {
     });
   };
 
-  const speakMessage = (text: string) => {
-    if (!voiceEnabled || !speechSynthesisSupported) return;
-    speechSynthesis.current?.speak(text);
+  const toggleVoiceProvider = () => {
+    if (!elevenLabsService?.isServiceReady()) {
+      toast({
+        title: "Premium Voices Unavailable",
+        description: "Please set your ElevenLabs API key in the voice features section.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    setUsePremiumVoices(!usePremiumVoices);
+    toast({
+      title: !usePremiumVoices ? "Premium Voices Enabled" : "Standard Voices Enabled",
+      description: !usePremiumVoices 
+        ? "Now using ElevenLabs premium voices." 
+        : "Now using standard browser voices."
+    });
+  };
+
+  const speakMessage = async (text: string) => {
+    if (!voiceEnabled) return;
+    
+    if (usePremiumVoices && elevenLabsService?.isServiceReady()) {
+      await elevenLabsService.speak(text);
+    } else if (speechSynthesis.current) {
+      speechSynthesis.current.speak(text);
+    }
   };
 
   const sendMessage = async () => {
@@ -345,26 +398,36 @@ const ChatInterface: React.FC = () => {
           <h3 className="font-medium">Ruvo AI</h3>
           <p className="text-xs text-gray-500">
             {fallbackMode ? "Demo Mode - Service Unavailable" : "Online - OpenAI GPT-4o Powered"}
+            {usePremiumVoices && elevenLabsService?.isServiceReady() && " · Premium Voice"}
           </p>
         </div>
         <div className="flex gap-2 ml-auto">
-          {speechSynthesisSupported && (
-            <Popover open={voicePopoverOpen} onOpenChange={setVoicePopoverOpen}>
-              <PopoverTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="text-xs flex items-center gap-1" 
-                  title="Voice settings"
-                >
-                  {voiceEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
-                  <ChevronDown size={12} />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 p-4">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-semibold">Voice Agent</h4>
+          <Popover open={voicePopoverOpen} onOpenChange={setVoicePopoverOpen}>
+            <PopoverTrigger asChild>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="text-xs flex items-center gap-1" 
+                title="Voice settings"
+              >
+                {voiceEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
+                <ChevronDown size={12} />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-semibold">Voice Agent</h4>
+                  <div className="flex gap-2">
+                    {elevenLabsService?.isServiceReady() && (
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={toggleVoiceProvider}
+                      >
+                        {usePremiumVoices ? "Use Standard" : "Use Premium"}
+                      </Button>
+                    )}
                     <Button 
                       variant="outline" 
                       size="sm"
@@ -373,13 +436,43 @@ const ChatInterface: React.FC = () => {
                       {voiceEnabled ? "Disable" : "Enable"}
                     </Button>
                   </div>
-                  
-                  {voiceEnabled && (
-                    <div className="space-y-3">
-                      <h5 className="text-sm font-medium">Select Your Voice Agent</h5>
-                      <RadioGroup value={String(selectedVoiceIndex)} onValueChange={(value) => changeVoice(parseInt(value))}>
-                        <div className="space-y-2 max-h-60 overflow-y-auto">
-                          {availableVoices.map((voice, index) => (
+                </div>
+                
+                {voiceEnabled && (
+                  <div className="space-y-3">
+                    <h5 className="text-sm font-medium">
+                      {usePremiumVoices && elevenLabsService?.isServiceReady() 
+                        ? "Select Premium Voice (ElevenLabs)" 
+                        : "Select Voice"}
+                    </h5>
+                    
+                    <RadioGroup 
+                      value={String(currentVoiceIndex)} 
+                      onValueChange={(value) => changeVoice(parseInt(value))}
+                    >
+                      <div className="space-y-2 max-h-60 overflow-y-auto">
+                        {usePremiumVoices && elevenLabsService?.isServiceReady() 
+                          ? ELEVEN_LABS_VOICES.map((voice, index) => (
+                            <div key={voice.voice_id} className="flex items-center justify-between space-x-2">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value={String(index)} id={`voice-${index}`} />
+                                <Label htmlFor={`voice-${index}`} className="text-sm cursor-pointer">
+                                  {voice.name} <span className="text-xs text-gray-500">({voice.gender})</span>
+                                </Label>
+                              </div>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => playVoiceSample(index)}
+                                title="Play sample"
+                                className="flex items-center gap-1"
+                              >
+                                <PlayCircle size={14} />
+                                <span className="text-xs">Sample</span>
+                              </Button>
+                            </div>
+                          ))
+                          : availableVoices.map((voice, index) => (
                             <div key={index} className="flex items-center justify-between space-x-2">
                               <div className="flex items-center space-x-2">
                                 <RadioGroupItem value={String(index)} id={`voice-${index}`} />
@@ -398,15 +491,21 @@ const ChatInterface: React.FC = () => {
                                 <span className="text-xs">Sample</span>
                               </Button>
                             </div>
-                          ))}
-                        </div>
-                      </RadioGroup>
-                    </div>
-                  )}
-                </div>
-              </PopoverContent>
-            </Popover>
-          )}
+                          ))
+                        }
+                      </div>
+                    </RadioGroup>
+                  </div>
+                )}
+                
+                {!elevenLabsService?.isServiceReady() && (
+                  <div className="mt-4 p-2 bg-yellow-50 rounded text-xs text-yellow-800">
+                    Want significantly better voices? Try our premium voice selection in the features section.
+                  </div>
+                )}
+              </div>
+            </PopoverContent>
+          </Popover>
           
           {fallbackMode && (
             <Button 
