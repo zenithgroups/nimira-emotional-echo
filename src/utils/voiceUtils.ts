@@ -135,32 +135,90 @@ export class SpeechSynthesisService {
     const populateVoices = () => {
       const voices = this.synth.getVoices();
       
-      // Create voice options with agent-like names and ensure each voice is unique
-      // We'll match different voices to different agent names to ensure variety
+      // Filter out only English voices that we can use
       const englishVoices = voices.filter(voice => voice.lang.includes('en'));
       
-      this.availableVoices = englishVoices.map((voice, index) => {
-        // Determine gender-appropriate name based on voice characteristics
-        let agentName = '';
+      // Create an array to store our voice agents
+      const voiceAgents: VoiceOption[] = [];
+      
+      // Process each voice to create distinctive voice agents
+      if (englishVoices.length > 0) {
+        // Separate voices by gender characteristics for better variety
+        const femaleVoices = englishVoices.filter(voice => 
+          voice.name.toLowerCase().includes('female') || 
+          voice.name.toLowerCase().includes('woman') ||
+          voice.name.toLowerCase().includes('girl') ||
+          // Some voice APIs use different naming patterns
+          voice.name.includes('Samantha') ||
+          voice.name.includes('Victoria') ||
+          voice.name.includes('Karen') ||
+          voice.name.includes('Moira') ||
+          voice.name.includes('Tessa')
+        );
         
-        if (voice.name.toLowerCase().includes('female') || 
-            voice.name.toLowerCase().includes('woman') || 
-            voice.name.toLowerCase().includes('girl')) {
-          // Female voices
-          const femaleNames = ["Sophia", "Nova", "Emma", "Olivia", "Harper", "Aria", "Maya", "Zoe"];
-          agentName = femaleNames[index % femaleNames.length];
-        } else {
-          // Male voices
-          const maleNames = ["Max", "Atlas", "Ethan", "Jack", "Leo", "Owen", "Theo", "Kai"];
-          agentName = maleNames[index % maleNames.length];
+        const maleVoices = englishVoices.filter(voice => 
+          !femaleVoices.includes(voice)
+        );
+        
+        // Female agent names
+        const femaleNames = ["Sophia", "Nova", "Emma", "Olivia", "Harper", "Aria", "Maya", "Zoe"];
+        
+        // Male agent names
+        const maleNames = ["Max", "Atlas", "Ethan", "Jack", "Leo", "Owen", "Theo", "Kai"];
+        
+        // Process female voices first
+        femaleVoices.forEach((voice, index) => {
+          if (index < femaleNames.length) {
+            voiceAgents.push({
+              name: `${femaleNames[index]} (Female Agent)`,
+              voiceObj: voice
+            });
+          }
+        });
+        
+        // Process male voices
+        maleVoices.forEach((voice, index) => {
+          if (index < maleNames.length) {
+            voiceAgents.push({
+              name: `${maleNames[index]} (Male Agent)`,
+              voiceObj: voice
+            });
+          }
+        });
+        
+        // If we didn't get enough voices, add remaining voices with generic names
+        if (voiceAgents.length < 4) {
+          englishVoices.forEach((voice, index) => {
+            if (!voiceAgents.some(agent => agent.voiceObj === voice)) {
+              voiceAgents.push({
+                name: `Voice Agent ${index + 1}`,
+                voiceObj: voice
+              });
+            }
+          });
         }
-        
-        return {
-          name: `${agentName} (Agent ${index + 1})`,
-          voiceObj: voice
-        };
-      });
-
+      }
+      
+      // If we still don't have any voices, use the original approach as fallback
+      if (voiceAgents.length === 0) {
+        englishVoices.forEach((voice, index) => {
+          const isFemaleSounding = voice.name.toLowerCase().includes('female') || 
+            voice.name.toLowerCase().includes('woman');
+          
+          const agentName = isFemaleSounding ? 
+            ["Sophia", "Nova", "Emma", "Olivia"][index % 4] : 
+            ["Max", "Atlas", "Ethan", "Jack"][index % 4];
+            
+          voiceAgents.push({
+            name: `${agentName} (Agent ${index + 1})`,
+            voiceObj: voice
+          });
+        });
+      }
+      
+      // Save our voice agents
+      this.availableVoices = voiceAgents;
+      
       // Select a default voice
       if (this.availableVoices.length > 0) {
         this.voice = this.availableVoices[0].voiceObj;
@@ -174,9 +232,16 @@ export class SpeechSynthesisService {
 
     // Try initial population - works for Firefox
     populateVoices();
+    
+    // As a fallback, try again after a short delay
+    setTimeout(populateVoices, 1000);
   }
 
   public getVoices(): VoiceOption[] {
+    if (this.availableVoices.length === 0 && this.isSupported) {
+      // Try to reload voices if they weren't loaded initially
+      this.loadVoices();
+    }
     return this.availableVoices;
   }
 
@@ -214,7 +279,9 @@ export class SpeechSynthesisService {
 
   public speakSample(voiceIndex: number) {
     if (this.setVoiceByIndex(voiceIndex)) {
-      this.speak("Hello, this is a sample of my voice.");
+      const voice = this.availableVoices[voiceIndex];
+      const name = voice.name.split(" ")[0]; // Get just the first name
+      this.speak(`Hello, I'm ${name}. How can I help you today?`);
       return true;
     }
     return false;
