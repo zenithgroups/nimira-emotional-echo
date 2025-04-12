@@ -135,30 +135,31 @@ export class SpeechSynthesisService {
     const populateVoices = () => {
       const voices = this.synth.getVoices();
       
-      // Create voice options with agent-like names based on voice characteristics
-      this.availableVoices = voices
-        .filter(voice => voice.lang.includes('en'))
-        .map((voice, index) => {
-          // Create agent-like names based on voice characteristics
-          let agentName = '';
-          
-          if (voice.name.toLowerCase().includes('female') || 
-              voice.name.toLowerCase().includes('woman') || 
-              voice.name.toLowerCase().includes('girl')) {
-            // Female voices
-            const femaleNames = ["Sophia", "Nova", "Emma", "Olivia", "Harper", "Aria", "Maya", "Zoe"];
-            agentName = femaleNames[index % femaleNames.length];
-          } else {
-            // Male voices
-            const maleNames = ["Max", "Atlas", "Ethan", "Jack", "Leo", "Owen", "Theo", "Kai"];
-            agentName = maleNames[index % maleNames.length];
-          }
-          
-          return {
-            name: `${agentName} (Agent ${index + 1})`,
-            voiceObj: voice
-          };
-        });
+      // Create voice options with agent-like names and ensure each voice is unique
+      // We'll match different voices to different agent names to ensure variety
+      const englishVoices = voices.filter(voice => voice.lang.includes('en'));
+      
+      this.availableVoices = englishVoices.map((voice, index) => {
+        // Determine gender-appropriate name based on voice characteristics
+        let agentName = '';
+        
+        if (voice.name.toLowerCase().includes('female') || 
+            voice.name.toLowerCase().includes('woman') || 
+            voice.name.toLowerCase().includes('girl')) {
+          // Female voices
+          const femaleNames = ["Sophia", "Nova", "Emma", "Olivia", "Harper", "Aria", "Maya", "Zoe"];
+          agentName = femaleNames[index % femaleNames.length];
+        } else {
+          // Male voices
+          const maleNames = ["Max", "Atlas", "Ethan", "Jack", "Leo", "Owen", "Theo", "Kai"];
+          agentName = maleNames[index % maleNames.length];
+        }
+        
+        return {
+          name: `${agentName} (Agent ${index + 1})`,
+          voiceObj: voice
+        };
+      });
 
       // Select a default voice
       if (this.availableVoices.length > 0) {
