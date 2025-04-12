@@ -8,6 +8,11 @@ export interface VoiceOptions {
   onError?: (error: string) => void;
 }
 
+export interface VoiceOption {
+  name: string;
+  voiceObj: SpeechSynthesisVoice | null;
+}
+
 // Speech recognition implementation
 export class SpeechRecognitionService {
   private recognition: any = null; // Using any to avoid type issues
@@ -115,31 +120,60 @@ export class SpeechSynthesisService {
   private synth: SpeechSynthesis;
   private voice: SpeechSynthesisVoice | null = null;
   private isSupported: boolean;
+  private availableVoices: VoiceOption[] = [];
 
   constructor() {
     this.isSupported = 'speechSynthesis' in window;
     this.synth = window.speechSynthesis;
-    this.setVoice();
+    this.loadVoices();
   }
 
-  private setVoice() {
+  private loadVoices() {
     if (!this.isSupported) return;
 
-    // Wait for voices to be loaded
-    setTimeout(() => {
+    // Handle the case when voices are already loaded
+    const populateVoices = () => {
       const voices = this.synth.getVoices();
-      // Try to find a female voice in English
-      this.voice = voices.find(voice => 
+      this.availableVoices = voices
+        .filter(voice => voice.lang.includes('en'))
+        .map(voice => ({
+          name: `${voice.name} (${voice.lang})`,
+          voiceObj: voice
+        }));
+
+      // Default to a female voice if available
+      const femaleVoice = voices.find(voice => 
         (voice.name.includes('female') || voice.name.includes('Female') || 
          voice.name.includes('girl') || voice.name.includes('Girl')) && 
         voice.lang.includes('en')
       );
       
-      // If no female voice found, use any English voice
-      if (!this.voice) {
+      if (femaleVoice) {
+        this.voice = femaleVoice;
+      } else {
         this.voice = voices.find(voice => voice.lang.includes('en')) || voices[0];
       }
-    }, 100);
+    };
+
+    // Chrome loads voices asynchronously
+    if (this.synth.onvoiceschanged !== undefined) {
+      this.synth.onvoiceschanged = populateVoices;
+    }
+
+    // Try initial population - works for Firefox
+    populateVoices();
+  }
+
+  public getVoices(): VoiceOption[] {
+    return this.availableVoices;
+  }
+
+  public setVoiceByIndex(index: number) {
+    if (index >= 0 && index < this.availableVoices.length) {
+      this.voice = this.availableVoices[index].voiceObj;
+      return true;
+    }
+    return false;
   }
 
   public speak(text: string, rate: number = 1, pitch: number = 1) {
@@ -164,6 +198,14 @@ export class SpeechSynthesisService {
       console.error('Failed to synthesize speech:', error);
       return false;
     }
+  }
+
+  public speakSample(voiceIndex: number) {
+    if (this.setVoiceByIndex(voiceIndex)) {
+      this.speak("Hello, this is a sample of my voice.");
+      return true;
+    }
+    return false;
   }
 
   public stop() {

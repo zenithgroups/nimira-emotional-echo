@@ -1,12 +1,14 @@
-
 import React, { useState, useRef, useEffect } from "react";
-import { Send, RefreshCw, Mic, Volume2, VolumeX } from "lucide-react";
+import { Send, RefreshCw, Mic, Volume2, VolumeX, ChevronDown, PlayCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { SpeechRecognitionService, SpeechSynthesisService, VoiceOption } from "@/utils/voiceUtils";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -28,6 +30,9 @@ const ChatInterface: React.FC = () => {
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [speechRecognitionSupported, setSpeechRecognitionSupported] = useState(false);
   const [speechSynthesisSupported, setSpeechSynthesisSupported] = useState(false);
+  const [availableVoices, setAvailableVoices] = useState<VoiceOption[]>([]);
+  const [selectedVoiceIndex, setSelectedVoiceIndex] = useState(0);
+  const [voicePopoverOpen, setVoicePopoverOpen] = useState(false);
   
   // Voice services refs
   const speechRecognition = useRef<SpeechRecognitionService | null>(null);
@@ -74,6 +79,14 @@ const ChatInterface: React.FC = () => {
         description: `Some voice features are not supported in your browser. ${!recognitionSupported ? 'Voice input not available.' : ''} ${!synthesisSupported ? 'Voice output not available.' : ''}`,
       });
     }
+    
+    // Load available voices after a short delay to ensure they're loaded
+    setTimeout(() => {
+      if (speechSynthesis.current) {
+        const voices = speechSynthesis.current.getVoices();
+        setAvailableVoices(voices);
+      }
+    }, 500);
     
     return () => {
       // Cleanup
@@ -154,6 +167,25 @@ const ChatInterface: React.FC = () => {
         description: "Unable to connect. Please try again later.",
         variant: "destructive"
       });
+    }
+  };
+
+  const playVoiceSample = (index: number) => {
+    if (speechSynthesis.current) {
+      speechSynthesis.current.speakSample(index);
+    }
+  };
+
+  const changeVoice = (index: number) => {
+    if (speechSynthesis.current) {
+      const success = speechSynthesis.current.setVoiceByIndex(index);
+      if (success) {
+        setSelectedVoiceIndex(index);
+        toast({
+          title: "Voice Changed",
+          description: `Voice set to ${availableVoices[index].name}`
+        });
+      }
     }
   };
 
@@ -317,15 +349,61 @@ const ChatInterface: React.FC = () => {
         </div>
         <div className="flex gap-2 ml-auto">
           {speechSynthesisSupported && (
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="text-xs flex items-center gap-1" 
-              onClick={toggleVoiceOutput}
-              title={voiceEnabled ? "Disable voice output" : "Enable voice output"}
-            >
-              {voiceEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
-            </Button>
+            <Popover open={voicePopoverOpen} onOpenChange={setVoicePopoverOpen}>
+              <PopoverTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="text-xs flex items-center gap-1" 
+                  title="Voice settings"
+                >
+                  {voiceEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
+                  <ChevronDown size={12} />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 p-4">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-semibold">Voice Output</h4>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={toggleVoiceOutput}
+                    >
+                      {voiceEnabled ? "Disable" : "Enable"}
+                    </Button>
+                  </div>
+                  
+                  {voiceEnabled && (
+                    <div className="space-y-3">
+                      <h5 className="text-sm font-medium">Select Voice</h5>
+                      <RadioGroup value={String(selectedVoiceIndex)} onValueChange={(value) => changeVoice(parseInt(value))}>
+                        <div className="space-y-2 max-h-60 overflow-y-auto">
+                          {availableVoices.map((voice, index) => (
+                            <div key={index} className="flex items-center justify-between space-x-2">
+                              <div className="flex items-center space-x-2">
+                                <RadioGroupItem value={String(index)} id={`voice-${index}`} />
+                                <Label htmlFor={`voice-${index}`} className="text-sm cursor-pointer">
+                                  {voice.name}
+                                </Label>
+                              </div>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                onClick={() => playVoiceSample(index)}
+                                title="Play sample"
+                              >
+                                <PlayCircle size={14} />
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  )}
+                </div>
+              </PopoverContent>
+            </Popover>
           )}
           
           {fallbackMode && (
