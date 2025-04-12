@@ -10,7 +10,7 @@ export interface VoiceOptions {
 
 // Speech recognition implementation
 export class SpeechRecognitionService {
-  private recognition: SpeechRecognition | null = null;
+  private recognition: any = null; // Using any to avoid type issues
   private isSupported: boolean;
   private isListening: boolean = false;
   private options: VoiceOptions = {};
@@ -49,12 +49,12 @@ export class SpeechRecognitionService {
         if (this.options.onSpeechEnd) this.options.onSpeechEnd();
       };
 
-      this.recognition.onerror = (event) => {
+      this.recognition.onerror = (event: any) => {
         if (this.options.onError) this.options.onError(event.error);
         console.error('Speech recognition error:', event.error);
       };
 
-      this.recognition.onresult = (event) => {
+      this.recognition.onresult = (event: any) => {
         let interimTranscript = '';
         let finalTranscript = '';
 
@@ -88,7 +88,7 @@ export class SpeechRecognitionService {
     if (this.isListening) return true;
 
     try {
-      this.recognition!.start();
+      this.recognition.start();
       return true;
     } catch (error) {
       console.error('Failed to start speech recognition:', error);
