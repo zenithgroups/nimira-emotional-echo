@@ -1,3 +1,4 @@
+
 import '../types/speech';
 
 export interface VoiceOptions {
@@ -14,10 +15,11 @@ export class SpeechRecognitionService {
   private isListening: boolean = false;
   private options: VoiceOptions = {};
 
-  constructor(options?: VoiceOptions) {
-    type SpeechRecognitionConstructor = new () => SpeechRecognition;
+  constructor(options?: VoiceOptions) {    
+    // Check if SpeechRecognition is supported in this browser
+    this.isSupported = typeof window !== 'undefined' && 
+      (('SpeechRecognition' in window) || ('webkitSpeechRecognition' in window));
     
-    this.isSupported = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
     if (options) this.options = options;
   }
 
@@ -28,7 +30,10 @@ export class SpeechRecognitionService {
     }
 
     try {
-      const SpeechRecognitionImpl = window.SpeechRecognition || window.webkitSpeechRecognition;
+      // Use the correct way to access SpeechRecognition constructor
+      const SpeechRecognitionImpl = (window as any).SpeechRecognition || 
+        (window as any).webkitSpeechRecognition;
+        
       this.recognition = new SpeechRecognitionImpl();
       this.recognition.continuous = true;
       this.recognition.interimResults = true;
