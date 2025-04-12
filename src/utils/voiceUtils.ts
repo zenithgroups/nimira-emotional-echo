@@ -15,6 +15,8 @@ export class SpeechRecognitionService {
   private options: VoiceOptions = {};
 
   constructor(options?: VoiceOptions) {
+    type SpeechRecognitionConstructor = new () => SpeechRecognition;
+    
     this.isSupported = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
     if (options) this.options = options;
   }
