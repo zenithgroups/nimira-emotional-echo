@@ -1,5 +1,5 @@
 
-import '../types/speech';
+import '../types/speech.d';
 
 export interface VoiceOptions {
   onSpeechStart?: () => void;
