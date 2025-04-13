@@ -1,138 +1,134 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const NavBar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Handle scrolling effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
 
-  // Handle navigation click to scroll to the section
-  const navigateTo = (id: string) => {
+  const scrollToSection = (id: string) => {
+    closeMenu();
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
-      setIsOpen(false);
     }
   };
 
   return (
-    <header
-      className={cn(
-        "fixed w-full top-0 z-50 transition-all duration-300 py-4",
-        scrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent"
-      )}
-    >
-      <nav className="container-custom flex justify-between items-center">
-        {/* Logo */}
+    <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container-custom flex h-16 items-center justify-between">
         <div className="flex items-center">
-          <button 
-            onClick={() => navigateTo("home")}
+          <Link 
+            to="/" 
             className="text-2xl font-bold text-ruvo-500 hover:text-ruvo-400 transition-colors"
+            onClick={() => closeMenu()}
           >
             Ruvo
-          </button>
+          </Link>
         </div>
 
         {/* Desktop Navigation */}
-        <ul className="hidden md:flex space-x-8">
-          <li>
-            <button
-              onClick={() => navigateTo("home")}
-              className="text-foreground hover:text-ruvo-400 transition-colors"
+        <nav className="hidden md:flex items-center gap-6">
+          <button 
+            onClick={() => scrollToSection("home")} 
+            className="text-sm font-medium text-gray-600 hover:text-ruvo-500 transition-colors"
+          >
+            Home
+          </button>
+          <button 
+            onClick={() => scrollToSection("about")} 
+            className="text-sm font-medium text-gray-600 hover:text-ruvo-500 transition-colors"
+          >
+            About
+          </button>
+          <button 
+            onClick={() => scrollToSection("features")} 
+            className="text-sm font-medium text-gray-600 hover:text-ruvo-500 transition-colors"
+          >
+            Features
+          </button>
+          <button 
+            onClick={() => scrollToSection("how-it-works")} 
+            className="text-sm font-medium text-gray-600 hover:text-ruvo-500 transition-colors"
+          >
+            How It Works
+          </button>
+          <Link to="/contact">
+            <Button variant="outline" size="sm" className="ml-2">
+              Contact Us
+            </Button>
+          </Link>
+          <Button size="sm" className="bg-ruvo-500 hover:bg-ruvo-600 text-white">
+            Get Started
+          </Button>
+        </nav>
+
+        {/* Mobile menu button */}
+        <div className="md:hidden">
+          <button 
+            onClick={toggleMenu}
+            className="p-2 rounded-md text-gray-500 hover:text-ruvo-500 hover:bg-gray-100 focus:outline-none"
+          >
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Navigation */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-white border-t border-gray-100">
+          <div className="container-custom py-4 space-y-3">
+            <button 
+              onClick={() => scrollToSection("home")} 
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-ruvo-500"
             >
               Home
             </button>
-          </li>
-          <li>
-            <button
-              onClick={() => navigateTo("features")}
-              className="text-foreground hover:text-ruvo-400 transition-colors"
-            >
-              Features
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => navigateTo("about")}
-              className="text-foreground hover:text-ruvo-400 transition-colors"
+            <button 
+              onClick={() => scrollToSection("about")} 
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-ruvo-500"
             >
               About
             </button>
-          </li>
-          <li>
-            <button
-              onClick={() => navigateTo("join-beta")}
-              className="gradient-button"
+            <button 
+              onClick={() => scrollToSection("features")} 
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-ruvo-500"
             >
-              Join Beta
+              Features
             </button>
-          </li>
-        </ul>
-
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-foreground hover:text-ruvo-400 transition-colors"
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </nav>
-
-      {/* Mobile Navigation */}
-      {isOpen && (
-        <div className="md:hidden bg-white absolute top-full left-0 right-0 shadow-lg py-4 px-4 glass animate-fade-in">
-          <ul className="space-y-4">
-            <li>
-              <button
-                onClick={() => navigateTo("home")}
-                className="block w-full text-left text-foreground hover:text-ruvo-400 transition-colors py-2"
-              >
-                Home
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => navigateTo("features")}
-                className="block w-full text-left text-foreground hover:text-ruvo-400 transition-colors py-2"
-              >
-                Features
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => navigateTo("about")}
-                className="block w-full text-left text-foreground hover:text-ruvo-400 transition-colors py-2"
-              >
-                About
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => navigateTo("join-beta")}
-                className="gradient-button w-full"
-              >
-                Join Beta
-              </button>
-            </li>
-          </ul>
+            <button 
+              onClick={() => scrollToSection("how-it-works")} 
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-ruvo-500"
+            >
+              How It Works
+            </button>
+            <Link 
+              to="/contact" 
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-100 hover:text-ruvo-500"
+              onClick={closeMenu}
+            >
+              Contact Us
+            </Link>
+            <Button 
+              className="w-full bg-ruvo-500 hover:bg-ruvo-600 text-white mt-2" 
+              onClick={closeMenu}
+            >
+              Get Started
+            </Button>
+          </div>
         </div>
       )}
     </header>

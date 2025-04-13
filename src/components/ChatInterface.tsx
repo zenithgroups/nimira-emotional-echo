@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Send, RefreshCw, Mic, Volume2, VolumeX, ChevronDown, PlayCircle, Paperclip } from "lucide-react";
+import { Send, RefreshCw, Mic, Volume2, VolumeX, ChevronDown, PlayCircle, PauseCircle, Paperclip } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -46,6 +46,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const speechRecognition = useRef<SpeechRecognitionService | null>(null);
   const speechSynthesis = useRef<SpeechSynthesisService | null>(null);
   const elevenLabsService = useRef<ElevenLabsService | null>(null);
+  
+  const [playingMessageIndex, setPlayingMessageIndex] = useState<number | null>(null);
   
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -231,7 +233,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   };
 
-  const playMessageVoice = async (text: string) => {
+  const playMessageVoice = async (text: string, messageIndex: number) => {
     if (elevenLabsService.current) {
       await elevenLabsService.current.speak(text);
     } else if (speechSynthesis.current) {
@@ -416,9 +418,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }, 1000);
   };
 
-  return <div className="flex flex-col h-full w-full relative overflow-hidden rounded-2xl border border-ruvo-200/50 bg-gradient-to-br from-slate-100 to-slate-200 transition-all hover:border-ruvo-300">
-      <div className="flex items-center gap-3 p-4 border-b border-ruvo-200/30 bg-white/70 backdrop-blur-sm">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-300 to-ruvo-400 flex items-center justify-center text-white font-medium bg-indigo-500">R</div>
+  return <div className="flex flex-col h-full w-full relative overflow-hidden rounded-2xl border border-ruvo-200/50 bg-gradient-to-br from-slate-50 to-slate-100 transition-all hover:border-ruvo-300 shadow-md">
+      <div className="flex items-center gap-3 p-4 border-b border-ruvo-200/30 bg-white/90 backdrop-blur-sm">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-medium bg-indigo-500">R</div>
         <div>
           <h3 className="font-medium">Ruvo AI</h3>
           <p className="text-xs text-gray-500">
@@ -521,11 +523,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         </Alert>
       )}
 
-      <ScrollArea className="flex-1 p-4 overflow-y-auto bg-white/20" ref={scrollAreaRef}>
+      <ScrollArea className="flex-1 p-4 overflow-y-auto bg-white/40" ref={scrollAreaRef}>
         <div className="flex flex-col gap-4">
           {messages.map((message, index) => (
             <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[80%] p-3 rounded-2xl ${message.role === "user" ? "bg-white border border-gray-100 shadow-sm rounded-br-none ml-auto" : `${fallbackMode ? "bg-slate-100" : "bg-ruvo-100"} rounded-bl-none`}`}>
+              <div className={`max-w-[80%] p-3 rounded-2xl ${message.role === "user" ? "bg-white border border-gray-100 shadow-sm rounded-br-none ml-auto" : `${fallbackMode ? "bg-slate-100" : "bg-ruvo-100"} rounded-bl-none shadow-sm`}`}>
                 {message.fileUrl && (
                   <div className="mb-2">
                     {message.fileUrl.startsWith('blob:') && message.fileName?.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
@@ -555,11 +557,19 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                   <Button 
                     variant="ghost"
                     size="sm"
-                    className="mt-2 h-6 p-0 text-xs text-gray-500 hover:text-ruvo-500"
-                    onClick={() => playMessageVoice(message.content)}
-                    title="Listen"
+                    className="mt-2 h-6 p-0 text-xs text-gray-500 hover:text-ruvo-500 flex items-center gap-1"
+                    onClick={() => playMessageVoice(message.content, index)}
+                    title={playingMessageIndex === index ? "Stop" : "Listen"}
                   >
-                    <Volume2 size={14} className="mr-1" /> Listen
+                    {playingMessageIndex === index ? (
+                      <>
+                        <PauseCircle size={14} className="mr-1" /> Stop
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 size={14} className="mr-1" /> Listen
+                      </>
+                    )}
                   </Button>
                 )}
               </div>
@@ -567,7 +577,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="max-w-[80%] p-3 rounded-2xl bg-ruvo-100 rounded-bl-none">
+              <div className="max-w-[80%] p-3 rounded-2xl bg-ruvo-100 rounded-bl-none shadow-sm">
                 <div className="flex gap-1 items-center">
                   <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse"></div>
                   <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse" style={{
@@ -583,7 +593,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         </div>
       </ScrollArea>
 
-      <div className="p-4 border-t border-ruvo-200/30 bg-white/70 backdrop-blur-sm">
+      <div className="p-4 border-t border-ruvo-200/30 bg-white/90 backdrop-blur-sm">
         <input 
           type="file"
           ref={fileInputRef}
@@ -620,7 +630,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             placeholder="Type a message..." 
             value={input} 
             onChange={e => setInput(e.target.value)} 
-            className="w-full min-h-[44px] max-h-[120px] resize-none bg-gray-50 border border-gray-100 rounded-xl pr-20" 
+            className="w-full min-h-[44px] max-h-[120px] resize-none bg-gray-50 border border-gray-200 rounded-xl pr-20 focus:border-ruvo-300" 
             onKeyDown={e => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
