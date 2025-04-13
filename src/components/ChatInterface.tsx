@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
-import { Send, RefreshCw, Mic, Volume2, VolumeX, ChevronDown, PlayCircle } from "lucide-react";
+import { Send, RefreshCw, Mic, Volume2, VolumeX, ChevronDown, PlayCircle, Paperclip } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -9,21 +9,21 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { SpeechRecognitionService, SpeechSynthesisService, VoiceOption } from "@/utils/voiceUtils";
+import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
 import { ElevenLabsService, ELEVEN_LABS_VOICES } from "@/utils/elevenLabsUtils";
 
 interface Message {
   role: "user" | "assistant" | "system";
   content: string;
+  fileUrl?: string;
+  fileName?: string;
 }
 
 interface ChatInterfaceProps {
-  elevenLabsService?: ElevenLabsService;
   selectedVoiceIndex?: number;
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({
-  elevenLabsService,
   selectedVoiceIndex = 0
 }) => {
   const [messages, setMessages] = useState<Message[]>([{
@@ -39,33 +39,29 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [isListening, setIsListening] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [speechRecognitionSupported, setSpeechRecognitionSupported] = useState(false);
-  const [usePremiumVoices, setUsePremiumVoices] = useState(!!elevenLabsService?.isServiceReady());
-  const [availableVoices, setAvailableVoices] = useState<VoiceOption[]>([]);
   const [currentVoiceIndex, setCurrentVoiceIndex] = useState(selectedVoiceIndex);
   const [voicePopoverOpen, setVoicePopoverOpen] = useState(false);
+  
+  // File upload states
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   
   // Voice services refs
   const speechRecognition = useRef<SpeechRecognitionService | null>(null);
   const speechSynthesis = useRef<SpeechSynthesisService | null>(null);
+  const elevenLabsService = useRef<ElevenLabsService | null>(null);
   
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
 
-  // Track if ElevenLabs becomes available
-  useEffect(() => {
-    if (elevenLabsService?.isServiceReady()) {
-      setUsePremiumVoices(true);
-      if (selectedVoiceIndex !== currentVoiceIndex) {
-        setCurrentVoiceIndex(selectedVoiceIndex);
-      }
-    }
-  }, [elevenLabsService, selectedVoiceIndex]);
-
   // Initialize voice services
   useEffect(() => {
-    // Initialize speech recognition
+    // Initialize ElevenLabs service with the API key
+    elevenLabsService.current = new ElevenLabsService();
+    
+    // Initialize speech recognition as fallback
     speechRecognition.current = new SpeechRecognitionService({
       onSpeechStart: () => setIsListening(true),
       onSpeechEnd: () => setIsListening(false),
@@ -83,28 +79,16 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       }
     });
     
-    // Initialize speech synthesis
+    // Initialize speech synthesis as fallback
     speechSynthesis.current = new SpeechSynthesisService();
     
-    // Check if speech recognition and synthesis are supported
+    // Check if speech recognition is supported
     const recognitionSupported = speechRecognition.current.isRecognitionSupported();
-    
     setSpeechRecognitionSupported(recognitionSupported);
     
-    if (!recognitionSupported) {
-      toast({
-        title: "Voice Features Limited",
-        description: "Voice input is not supported in your browser.",
-      });
+    if (elevenLabsService.current) {
+      elevenLabsService.current.setVoiceByIndex(currentVoiceIndex);
     }
-    
-    // Load available voices after a short delay to ensure they're loaded
-    setTimeout(() => {
-      if (speechSynthesis.current) {
-        const voices = speechSynthesis.current.getVoices();
-        setAvailableVoices(voices);
-      }
-    }, 500);
     
     return () => {
       // Cleanup
@@ -189,16 +173,16 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   };
 
   const playVoiceSample = (index: number) => {
-    if (usePremiumVoices && elevenLabsService) {
-      elevenLabsService.speakSample(index);
+    if (elevenLabsService.current) {
+      elevenLabsService.current.speakSample(index);
     } else if (speechSynthesis.current) {
       speechSynthesis.current.speakSample(index);
     }
   };
 
   const changeVoice = (index: number) => {
-    if (usePremiumVoices && elevenLabsService) {
-      const success = elevenLabsService.setVoiceByIndex(index);
+    if (elevenLabsService.current) {
+      const success = elevenLabsService.current.setVoiceByIndex(index);
       if (success) {
         setCurrentVoiceIndex(index);
         toast({
@@ -210,10 +194,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       const success = speechSynthesis.current.setVoiceByIndex(index);
       if (success) {
         setCurrentVoiceIndex(index);
-        toast({
-          title: "Voice Changed",
-          description: `Voice set to ${availableVoices[index].name}`
-        });
       }
     }
   };
@@ -251,37 +231,90 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     });
   };
 
-  const toggleVoiceProvider = () => {
-    if (!elevenLabsService?.isServiceReady()) {
-      toast({
-        title: "Premium Voices Unavailable",
-        description: "Please set your ElevenLabs API key in the voice features section.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    setUsePremiumVoices(!usePremiumVoices);
-    toast({
-      title: !usePremiumVoices ? "Premium Voices Enabled" : "Standard Voices Enabled",
-      description: !usePremiumVoices 
-        ? "Now using ElevenLabs premium voices." 
-        : "Now using standard browser voices."
-    });
-  };
-
   const speakMessage = async (text: string) => {
     if (!voiceEnabled) return;
     
-    if (usePremiumVoices && elevenLabsService?.isServiceReady()) {
-      await elevenLabsService.speak(text);
+    if (elevenLabsService.current) {
+      await elevenLabsService.current.speak(text);
     } else if (speechSynthesis.current) {
       speechSynthesis.current.speak(text);
     }
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setSelectedFile(e.target.files[0]);
+      toast({
+        title: "File Selected",
+        description: `${e.target.files[0].name} ready to send.`
+      });
+    }
+  };
+
+  const handleFileButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const clearSelectedFile = () => {
+    setSelectedFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleFileSend = async () => {
+    if (!selectedFile) return;
+
+    // Create a file message
+    const fileUrl = URL.createObjectURL(selectedFile);
+    const userMessage: Message = {
+      role: "user",
+      content: input.trim() || `I'm sending you this file: ${selectedFile.name}`,
+      fileUrl,
+      fileName: selectedFile.name
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInput("");
+    setIsLoading(true);
+    clearSelectedFile();
+
+    // For files, we'd typically send them to an API that can process them
+    // For now, we'll handle them with a response that acknowledges the file
+    const fileType = selectedFile.type;
+    let fileDescription = "";
+
+    if (fileType.startsWith("image/")) {
+      fileDescription = "an image";
+    } else if (fileType.startsWith("application/pdf")) {
+      fileDescription = "a PDF document";
+    } else if (fileType.startsWith("text/")) {
+      fileDescription = "a text file";
+    } else {
+      fileDescription = "a file";
+    }
+
+    setTimeout(() => {
+      const assistantMessage = {
+        role: "assistant" as const,
+        content: `I've received ${fileDescription} named "${selectedFile.name}". What would you like me to help you with regarding this file?`
+      };
+      setMessages(prev => [...prev, assistantMessage]);
+      speakMessage(assistantMessage.content);
+      setIsLoading(false);
+    }, 1000);
+  };
+
   const sendMessage = async () => {
-    if (input.trim() === "" || isLoading) return;
+    if ((input.trim() === "" && !selectedFile) || isLoading) return;
+    
+    if (selectedFile) {
+      await handleFileSend();
+      return;
+    }
+
     const userMessage = {
       role: "user" as const,
       content: input.trim()
@@ -296,7 +329,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
     
     // Stop any ongoing speech
-    speechSynthesis.current?.stop();
+    if (speechSynthesis.current) {
+      speechSynthesis.current.stop();
+    }
     
     if (fallbackMode) {
       simulateFallbackResponse(userMessage.content);
@@ -398,7 +433,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <h3 className="font-medium">Ruvo AI</h3>
           <p className="text-xs text-gray-500">
             {fallbackMode ? "Demo Mode - Service Unavailable" : "Online - OpenAI GPT-4o Powered"}
-            {usePremiumVoices && elevenLabsService?.isServiceReady() && " · Premium Voice"}
+            {voiceEnabled && " · Premium Voice"}
           </p>
         </div>
         <div className="flex gap-2 ml-auto">
@@ -419,15 +454,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 <div className="flex items-center justify-between">
                   <h4 className="font-semibold">Voice Agent</h4>
                   <div className="flex gap-2">
-                    {elevenLabsService?.isServiceReady() && (
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={toggleVoiceProvider}
-                      >
-                        {usePremiumVoices ? "Use Standard" : "Use Premium"}
-                      </Button>
-                    )}
                     <Button 
                       variant="outline" 
                       size="sm"
@@ -440,67 +466,35 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 
                 {voiceEnabled && (
                   <div className="space-y-3">
-                    <h5 className="text-sm font-medium">
-                      {usePremiumVoices && elevenLabsService?.isServiceReady() 
-                        ? "Select Premium Voice (ElevenLabs)" 
-                        : "Select Voice"}
-                    </h5>
+                    <h5 className="text-sm font-medium">Select Premium Voice</h5>
                     
                     <RadioGroup 
                       value={String(currentVoiceIndex)} 
                       onValueChange={(value) => changeVoice(parseInt(value))}
                     >
                       <div className="space-y-2 max-h-60 overflow-y-auto">
-                        {usePremiumVoices && elevenLabsService?.isServiceReady() 
-                          ? ELEVEN_LABS_VOICES.map((voice, index) => (
-                            <div key={voice.voice_id} className="flex items-center justify-between space-x-2">
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value={String(index)} id={`voice-${index}`} />
-                                <Label htmlFor={`voice-${index}`} className="text-sm cursor-pointer">
-                                  {voice.name} <span className="text-xs text-gray-500">({voice.gender})</span>
-                                </Label>
-                              </div>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={() => playVoiceSample(index)}
-                                title="Play sample"
-                                className="flex items-center gap-1"
-                              >
-                                <PlayCircle size={14} />
-                                <span className="text-xs">Sample</span>
-                              </Button>
+                        {ELEVEN_LABS_VOICES.map((voice, index) => (
+                          <div key={voice.voice_id} className="flex items-center justify-between space-x-2">
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value={String(index)} id={`voice-${index}`} />
+                              <Label htmlFor={`voice-${index}`} className="text-sm cursor-pointer">
+                                {voice.name} <span className="text-xs text-gray-500">({voice.gender})</span>
+                              </Label>
                             </div>
-                          ))
-                          : availableVoices.map((voice, index) => (
-                            <div key={index} className="flex items-center justify-between space-x-2">
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value={String(index)} id={`voice-${index}`} />
-                                <Label htmlFor={`voice-${index}`} className="text-sm cursor-pointer">
-                                  {voice.name}
-                                </Label>
-                              </div>
-                              <Button 
-                                variant="ghost" 
-                                size="sm" 
-                                onClick={() => playVoiceSample(index)}
-                                title="Play sample"
-                                className="flex items-center gap-1"
-                              >
-                                <PlayCircle size={14} />
-                                <span className="text-xs">Sample</span>
-                              </Button>
-                            </div>
-                          ))
-                        }
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => playVoiceSample(index)}
+                              title="Play sample"
+                              className="flex items-center gap-1"
+                            >
+                              <PlayCircle size={14} />
+                              <span className="text-xs">Sample</span>
+                            </Button>
+                          </div>
+                        ))}
                       </div>
                     </RadioGroup>
-                  </div>
-                )}
-                
-                {!elevenLabsService?.isServiceReady() && (
-                  <div className="mt-4 p-2 bg-yellow-50 rounded text-xs text-yellow-800">
-                    Want significantly better voices? Try our premium voice selection in the features section.
                   </div>
                 )}
               </div>
@@ -542,6 +536,30 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           {messages.map((message, index) => (
             <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
               <div className={`max-w-[80%] p-3 rounded-2xl ${message.role === "user" ? "bg-white border border-gray-100 shadow-sm rounded-br-none ml-auto" : `${fallbackMode ? "bg-gray-100/70" : "bg-ruvo-100/50"} rounded-bl-none`}`}>
+                {message.fileUrl && (
+                  <div className="mb-2">
+                    {message.fileUrl.startsWith('blob:') && message.fileName?.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
+                      <div className="relative">
+                        <img 
+                          src={message.fileUrl} 
+                          alt={message.fileName || "Uploaded file"} 
+                          className="max-w-full rounded-lg max-h-60 object-contain" 
+                        />
+                        <div className="mt-1 text-xs text-gray-500">{message.fileName}</div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-md border border-gray-200">
+                        <div className="w-8 h-8 bg-gray-200 rounded-md flex items-center justify-center">
+                          <Paperclip size={16} className="text-gray-600" />
+                        </div>
+                        <div className="overflow-hidden">
+                          <div className="text-sm font-medium truncate">{message.fileName}</div>
+                          <div className="text-xs text-gray-500">File attachment</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
               </div>
             </div>
@@ -565,6 +583,33 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       </ScrollArea>
 
       <div className="p-4 border-t border-ruvo-200/30 bg-white/50 backdrop-blur-sm">
+        {/* File upload input (hidden) */}
+        <input 
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileUpload}
+          className="hidden"
+          accept="image/*,application/pdf,text/plain"
+        />
+        
+        {/* Selected file indicator */}
+        {selectedFile && (
+          <div className="mb-2 p-2 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Paperclip size={16} className="text-gray-600" />
+              <span className="text-sm truncate max-w-[200px]">{selectedFile.name}</span>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={clearSelectedFile}
+              className="h-6 w-6 p-0 rounded-full"
+            >
+              &times;
+            </Button>
+          </div>
+        )}
+        
         <form 
           onSubmit={e => {
             e.preventDefault();
@@ -576,7 +621,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             placeholder="Type a message..." 
             value={input} 
             onChange={e => setInput(e.target.value)} 
-            className="w-full min-h-[44px] max-h-[120px] resize-none bg-gray-50 border border-gray-100 rounded-xl pr-12" 
+            className="w-full min-h-[44px] max-h-[120px] resize-none bg-gray-50 border border-gray-100 rounded-xl pr-20" 
             onKeyDown={e => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -586,6 +631,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           />
           
           <div className="absolute right-2 bottom-2 flex gap-1">
+            <button 
+              type="button" 
+              className="p-2 rounded-full bg-gray-200 text-gray-500 hover:bg-gray-300 transition-colors"
+              onClick={handleFileButtonClick}
+              title="Upload file"
+            >
+              <Paperclip size={16} />
+            </button>
+            
             {speechRecognitionSupported && (
               <button 
                 type="button" 
@@ -599,8 +653,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             
             <button 
               type="submit" 
-              className={`p-2 rounded-full transition-colors ${isLoading || input.trim() === "" ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-ruvo-400 hover:bg-ruvo-500 text-white"}`} 
-              disabled={isLoading || input.trim() === ""}
+              className={`p-2 rounded-full transition-colors ${(isLoading || (input.trim() === "" && !selectedFile)) ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-ruvo-400 hover:bg-ruvo-500 text-white"}`} 
+              disabled={isLoading || (input.trim() === "" && !selectedFile)}
             >
               <Send size={16} />
             </button>

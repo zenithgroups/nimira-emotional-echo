@@ -21,22 +21,23 @@ export const ELEVEN_LABS_VOICES: ElevenLabsVoiceOption[] = [
   { voice_id: "pFZP5JQG7iQjIQuC4Bku", name: "Lily", gender: "female" },
 ];
 
+// Default API key - can be overridden if needed
+const DEFAULT_API_KEY = "sk_4ad8a41c6eb7a2c0050604676324c08f3ba24a830f9c75cf";
+
 export class ElevenLabsService {
-  private apiKey: string | null = null;
+  private apiKey: string = DEFAULT_API_KEY;
   private selectedVoiceId: string = ELEVEN_LABS_VOICES[0].voice_id;
-  private isReady: boolean = false;
+  private isReady: boolean = true;
 
   constructor(apiKey?: string) {
     if (apiKey) {
       this.apiKey = apiKey;
-      this.isReady = true;
     }
   }
 
   public setApiKey(apiKey: string): boolean {
     if (!apiKey) return false;
     this.apiKey = apiKey;
-    this.isReady = true;
     return true;
   }
 
@@ -70,11 +71,6 @@ export class ElevenLabsService {
   }
 
   public async speak(text: string): Promise<boolean> {
-    if (!this.isReady || !this.apiKey) {
-      console.error('ElevenLabs API key is not set');
-      return false;
-    }
-
     try {
       const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${this.selectedVoiceId}`, {
         method: 'POST',
