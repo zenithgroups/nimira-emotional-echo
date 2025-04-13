@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { Send, RefreshCw, Mic, Volume2, VolumeX, ChevronDown, PlayCircle, Paperclip } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -35,18 +34,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [fallbackMode, setFallbackMode] = useState(false);
   const [isRetrying, setIsRetrying] = useState(false);
   
-  // Voice states
   const [isListening, setIsListening] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [speechRecognitionSupported, setSpeechRecognitionSupported] = useState(false);
   const [currentVoiceIndex, setCurrentVoiceIndex] = useState(selectedVoiceIndex);
   const [voicePopoverOpen, setVoicePopoverOpen] = useState(false);
   
-  // File upload states
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   
-  // Voice services refs
   const speechRecognition = useRef<SpeechRecognitionService | null>(null);
   const speechSynthesis = useRef<SpeechSynthesisService | null>(null);
   const elevenLabsService = useRef<ElevenLabsService | null>(null);
@@ -56,12 +52,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
 
-  // Initialize voice services
   useEffect(() => {
-    // Initialize ElevenLabs service with the API key
     elevenLabsService.current = new ElevenLabsService();
     
-    // Initialize speech recognition as fallback
     speechRecognition.current = new SpeechRecognitionService({
       onSpeechStart: () => setIsListening(true),
       onSpeechEnd: () => setIsListening(false),
@@ -79,10 +72,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       }
     });
     
-    // Initialize speech synthesis as fallback
     speechSynthesis.current = new SpeechSynthesisService();
     
-    // Check if speech recognition is supported
     const recognitionSupported = speechRecognition.current.isRecognitionSupported();
     setSpeechRecognitionSupported(recognitionSupported);
     
@@ -91,7 +82,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
     
     return () => {
-      // Cleanup
       if (speechRecognition.current) {
         speechRecognition.current.stop();
       }
@@ -241,6 +231,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   };
 
+  const playMessageVoice = async (text: string) => {
+    if (elevenLabsService.current) {
+      await elevenLabsService.current.speak(text);
+    } else if (speechSynthesis.current) {
+      speechSynthesis.current.speak(text);
+    }
+  };
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
@@ -267,7 +265,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const handleFileSend = async () => {
     if (!selectedFile) return;
 
-    // Create a file message
     const fileUrl = URL.createObjectURL(selectedFile);
     const userMessage: Message = {
       role: "user",
@@ -281,8 +278,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     setIsLoading(true);
     clearSelectedFile();
 
-    // For files, we'd typically send them to an API that can process them
-    // For now, we'll handle them with a response that acknowledges the file
     const fileType = selectedFile.type;
     let fileDescription = "";
 
@@ -323,12 +318,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     setInput("");
     setIsLoading(true);
     
-    // Stop listening if active
     if (isListening) {
       speechRecognition.current?.stop();
     }
     
-    // Stop any ongoing speech
     if (speechSynthesis.current) {
       speechSynthesis.current.stop();
     }
@@ -377,7 +370,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         content: assistantMessage
       }]);
       
-      // Speak the assistant's response
       speakMessage(assistantMessage);
       
       if (fallbackMode) {
@@ -403,7 +395,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         content: errorMessage
       }]);
       
-      // Speak the error message
       speakMessage(errorMessage);
     } finally {
       setIsLoading(false);
@@ -419,15 +410,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         content: randomResponse
       }]);
       
-      // Speak the response
       speakMessage(randomResponse);
       
       setIsLoading(false);
     }, 1000);
   };
 
-  return <div className="flex flex-col h-full w-full relative overflow-hidden rounded-2xl border border-ruvo-200/50 bg-gradient-to-br from-ruvo-300/10 to-ruvo-400/10 transition-all hover:border-ruvo-300">
-      <div className="flex items-center gap-3 p-4 border-b border-ruvo-200/30 bg-white/50 backdrop-blur-sm">
+  return <div className="flex flex-col h-full w-full relative overflow-hidden rounded-2xl border border-ruvo-200/50 bg-gradient-to-br from-slate-100 to-slate-200 transition-all hover:border-ruvo-300">
+      <div className="flex items-center gap-3 p-4 border-b border-ruvo-200/30 bg-white/70 backdrop-blur-sm">
         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-300 to-ruvo-400 flex items-center justify-center text-white font-medium bg-indigo-500">R</div>
         <div>
           <h3 className="font-medium">Ruvo AI</h3>
@@ -531,11 +521,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         </Alert>
       )}
 
-      <ScrollArea className="flex-1 p-4 overflow-y-auto" ref={scrollAreaRef}>
+      <ScrollArea className="flex-1 p-4 overflow-y-auto bg-white/20" ref={scrollAreaRef}>
         <div className="flex flex-col gap-4">
           {messages.map((message, index) => (
             <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[80%] p-3 rounded-2xl ${message.role === "user" ? "bg-white border border-gray-100 shadow-sm rounded-br-none ml-auto" : `${fallbackMode ? "bg-gray-100/70" : "bg-ruvo-100/50"} rounded-bl-none`}`}>
+              <div className={`max-w-[80%] p-3 rounded-2xl ${message.role === "user" ? "bg-white border border-gray-100 shadow-sm rounded-br-none ml-auto" : `${fallbackMode ? "bg-slate-100" : "bg-ruvo-100"} rounded-bl-none`}`}>
                 {message.fileUrl && (
                   <div className="mb-2">
                     {message.fileUrl.startsWith('blob:') && message.fileName?.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
@@ -561,12 +551,23 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                   </div>
                 )}
                 <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                {message.role === "assistant" && (
+                  <Button 
+                    variant="ghost"
+                    size="sm"
+                    className="mt-2 h-6 p-0 text-xs text-gray-500 hover:text-ruvo-500"
+                    onClick={() => playMessageVoice(message.content)}
+                    title="Listen"
+                  >
+                    <Volume2 size={14} className="mr-1" /> Listen
+                  </Button>
+                )}
               </div>
             </div>
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="max-w-[80%] p-3 rounded-2xl bg-ruvo-100/50 rounded-bl-none">
+              <div className="max-w-[80%] p-3 rounded-2xl bg-ruvo-100 rounded-bl-none">
                 <div className="flex gap-1 items-center">
                   <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse"></div>
                   <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse" style={{
@@ -582,8 +583,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         </div>
       </ScrollArea>
 
-      <div className="p-4 border-t border-ruvo-200/30 bg-white/50 backdrop-blur-sm">
-        {/* File upload input (hidden) */}
+      <div className="p-4 border-t border-ruvo-200/30 bg-white/70 backdrop-blur-sm">
         <input 
           type="file"
           ref={fileInputRef}
@@ -592,7 +592,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           accept="image/*,application/pdf,text/plain"
         />
         
-        {/* Selected file indicator */}
         {selectedFile && (
           <div className="mb-2 p-2 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">

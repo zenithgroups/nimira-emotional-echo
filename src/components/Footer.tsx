@@ -1,17 +1,11 @@
 
 import React from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { Link } from "react-router-dom";
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
   const { toast } = useToast();
-  
-  const handleLinkClick = (title: string) => {
-    toast({
-      title: title,
-      description: `This would navigate to the ${title} page in a production environment.`,
-    });
-  };
   
   const handleSocialClick = (platform: string) => {
     if (platform === "Instagram") {
@@ -83,30 +77,30 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Company</h4>
             <ul className="space-y-2">
-              <li><button onClick={() => navigateTo("about")} className="text-gray-600 hover:text-ruvo-400 transition-colors">About Us</button></li>
-              <li><button onClick={() => handleLinkClick("Careers")} className="text-gray-600 hover:text-ruvo-400 transition-colors">Careers</button></li>
-              <li><button onClick={() => handleLinkClick("Blog")} className="text-gray-600 hover:text-ruvo-400 transition-colors">Blog</button></li>
-              <li><button onClick={() => handleLinkClick("Press")} className="text-gray-600 hover:text-ruvo-400 transition-colors">Press</button></li>
+              <li><Link to="/about" className="text-gray-600 hover:text-ruvo-400 transition-colors">About Us</Link></li>
+              <li><Link to="/careers" className="text-gray-600 hover:text-ruvo-400 transition-colors">Careers</Link></li>
+              <li><Link to="/blog" className="text-gray-600 hover:text-ruvo-400 transition-colors">Blog</Link></li>
+              <li><Link to="/press" className="text-gray-600 hover:text-ruvo-400 transition-colors">Press</Link></li>
             </ul>
           </div>
           
           <div>
             <h4 className="text-lg font-semibold mb-4">Support</h4>
             <ul className="space-y-2">
-              <li><button onClick={() => handleLinkClick("Help Center")} className="text-gray-600 hover:text-ruvo-400 transition-colors">Help Center</button></li>
-              <li><button onClick={() => handleLinkClick("FAQs")} className="text-gray-600 hover:text-ruvo-400 transition-colors">FAQs</button></li>
-              <li><button onClick={() => handleLinkClick("Contact Us")} className="text-gray-600 hover:text-ruvo-400 transition-colors">Contact Us</button></li>
-              <li><button onClick={() => handleLinkClick("Privacy")} className="text-gray-600 hover:text-ruvo-400 transition-colors">Privacy</button></li>
+              <li><Link to="/help" className="text-gray-600 hover:text-ruvo-400 transition-colors">Help Center</Link></li>
+              <li><Link to="/faqs" className="text-gray-600 hover:text-ruvo-400 transition-colors">FAQs</Link></li>
+              <li><Link to="/contact" className="text-gray-600 hover:text-ruvo-400 transition-colors">Contact Us</Link></li>
+              <li><Link to="/privacy" className="text-gray-600 hover:text-ruvo-400 transition-colors">Privacy</Link></li>
             </ul>
           </div>
           
           <div>
             <h4 className="text-lg font-semibold mb-4">Legal</h4>
             <ul className="space-y-2">
-              <li><button onClick={() => handleLinkClick("Terms of Service")} className="text-gray-600 hover:text-ruvo-400 transition-colors">Terms of Service</button></li>
-              <li><button onClick={() => handleLinkClick("Privacy Policy")} className="text-gray-600 hover:text-ruvo-400 transition-colors">Privacy Policy</button></li>
-              <li><button onClick={() => handleLinkClick("Cookie Policy")} className="text-gray-600 hover:text-ruvo-400 transition-colors">Cookie Policy</button></li>
-              <li><button onClick={() => handleLinkClick("Data Processing")} className="text-gray-600 hover:text-ruvo-400 transition-colors">Data Processing</button></li>
+              <li><Link to="/terms" className="text-gray-600 hover:text-ruvo-400 transition-colors">Terms of Service</Link></li>
+              <li><Link to="/privacy-policy" className="text-gray-600 hover:text-ruvo-400 transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/cookies" className="text-gray-600 hover:text-ruvo-400 transition-colors">Cookie Policy</Link></li>
+              <li><Link to="/data-processing" className="text-gray-600 hover:text-ruvo-400 transition-colors">Data Processing</Link></li>
             </ul>
           </div>
         </div>
@@ -116,9 +110,9 @@ const Footer: React.FC = () => {
             <p className="text-gray-500 text-sm">&copy; {currentYear} Ruvo AI. All rights reserved.</p>
             <div className="mt-4 md:mt-0">
               <ul className="flex space-x-6">
-                <li><button onClick={() => handleLinkClick("Privacy Policy")} className="text-gray-500 text-sm hover:text-ruvo-400 transition-colors">Privacy Policy</button></li>
-                <li><button onClick={() => handleLinkClick("Terms of Service")} className="text-gray-500 text-sm hover:text-ruvo-400 transition-colors">Terms of Service</button></li>
-                <li><button onClick={() => handleLinkClick("Contact")} className="text-gray-500 text-sm hover:text-ruvo-400 transition-colors">Contact</button></li>
+                <li><Link to="/privacy-policy" className="text-gray-500 text-sm hover:text-ruvo-400 transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="text-gray-500 text-sm hover:text-ruvo-400 transition-colors">Terms of Service</Link></li>
+                <li><Link to="/contact" className="text-gray-500 text-sm hover:text-ruvo-400 transition-colors">Contact</Link></li>
               </ul>
             </div>
           </div>
