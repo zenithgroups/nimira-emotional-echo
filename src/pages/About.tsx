@@ -41,9 +41,7 @@ Now, it speaks for those who can't.</p>
             </div>
             <div className="bg-gradient-to-br from-ruvo-100 to-ruvo-200 p-6 rounded-2xl">
               <h3 className="font-semibold mb-2 text-ruvo-600">Our Mission</h3>
-              <p className="italic">
-                "To create AI companions that understand human emotions and provide meaningful support, helping people lead happier, more fulfilled lives in the digital age."
-              </p>
+              <p className="italic">Is To create AI companions that don’t just talk — but listen, feel, and truly understand. In a world overflowing with noise, RUVO aims to be the quiet comfort — the digital shoulder to lean on when no one else is around. We’re here to build technology that connects to the heart, offering not just answers, but empathy. Our mission is to help people feel seen, heard, and cared for — so they can lead happier, more emotionally fulfilled lives in this ever-evolving digital age. Because sometimes, even a whisper of comfort can change someone’s whole day.</p>
             </div>
           </div>
         </section>
