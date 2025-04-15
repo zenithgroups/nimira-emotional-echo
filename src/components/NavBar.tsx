@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -33,7 +32,7 @@ const NavBar: React.FC = () => {
             onClick={() => closeMenu()}
           >
             <img 
-              src="/lovable-uploads/1d2277e3-bbda-4692-9284-737d50d6c844.png" 
+              src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
               alt="Ruvo Logo" 
               className="h-8 w-auto mr-2" 
             />
@@ -41,7 +40,6 @@ const NavBar: React.FC = () => {
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
           <button 
             onClick={() => scrollToSection("home")} 
@@ -77,7 +75,6 @@ const NavBar: React.FC = () => {
           </Button>
         </nav>
 
-        {/* Mobile menu button */}
         <div className="md:hidden">
           <button 
             onClick={toggleMenu}
@@ -92,7 +89,6 @@ const NavBar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-100">
           <div className="container-custom py-4 space-y-3">

@@ -33,7 +33,7 @@ const Footer: React.FC = () => {
             <div className="mb-4">
               <Link to="/" className="flex items-center hover:opacity-90 transition-opacity">
                 <img 
-                  src="/lovable-uploads/1d2277e3-bbda-4692-9284-737d50d6c844.png" 
+                  src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
                   alt="Ruvo Logo" 
                   className="h-8 w-auto mr-2" 
                 />
