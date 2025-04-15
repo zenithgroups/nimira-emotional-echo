@@ -29,10 +29,15 @@ const NavBar: React.FC = () => {
         <div className="flex items-center">
           <Link 
             to="/" 
-            className="text-2xl font-bold text-ruvo-500 hover:text-ruvo-400 transition-colors"
+            className="flex items-center hover:opacity-90 transition-opacity"
             onClick={() => closeMenu()}
           >
-            Ruvo
+            <img 
+              src="/lovable-uploads/1d2277e3-bbda-4692-9284-737d50d6c844.png" 
+              alt="Ruvo Logo" 
+              className="h-8 w-auto mr-2" 
+            />
+            <span className="text-2xl font-bold text-ruvo-500 hover:text-ruvo-400 transition-colors">Ruvo</span>
           </Link>
         </div>
 

@@ -19,7 +19,14 @@ const PageLayout: React.FC<PageLayoutProps> = ({
       <NavBar />
       <div className="container-custom py-12 md:py-20">
         <div className="max-w-3xl mx-auto">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-gradient">{title}</h1>
+          <div className="flex items-center gap-3 mb-6">
+            <img 
+              src="/lovable-uploads/1d2277e3-bbda-4692-9284-737d50d6c844.png" 
+              alt="Ruvo Logo" 
+              className="h-10 w-auto" 
+            />
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gradient">{title}</h1>
+          </div>
           {description && <p className="text-lg text-gray-600 mb-8">{description}</p>}
         </div>
         <div className="mt-8">{children}</div>
