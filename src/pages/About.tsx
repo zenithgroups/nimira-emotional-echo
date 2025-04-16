@@ -50,16 +50,7 @@ Now, it speaks for those who can't.</p>
           <h2 className="text-2xl font-bold mb-6">Meet Our Team</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {teamMembers.map((member, index) => <Card key={index}>
-                <CardContent className="pt-6">
-                  <div className="flex flex-col items-center">
-                    <Avatar className="h-24 w-24 mb-4">
-                      <AvatarImage src={member.image} alt={member.name} />
-                      <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                    </Avatar>
-                    <h3 className="font-semibold text-lg">{member.name}</h3>
-                    <p className="text-gray-500 text-sm">{member.role}</p>
-                  </div>
-                </CardContent>
+                
               </Card>)}
           </div>
         </section>
