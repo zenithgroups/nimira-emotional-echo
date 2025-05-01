@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState, RefObject } from "react";
 import { motion } from "framer-motion";
 import "./TrueFocus.css";
@@ -8,6 +9,7 @@ interface TrueFocusProps {
   blurAmount?: number;
   borderColor?: string;
   glowColor?: string;
+  textColor?: string;
   animationDuration?: number;
   pauseBetweenAnimations?: number;
   textClassName?: string;
@@ -26,6 +28,7 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
   blurAmount = 5,
   borderColor = "green",
   glowColor = "rgba(0, 255, 0, 0.6)",
+  textColor = "#7E69AB",
   animationDuration = 0.5,
   pauseBetweenAnimations = 1,
   textClassName = "",
@@ -104,9 +107,11 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
                   : isActive
                   ? `blur(0px)`
                   : `blur(${blurAmount}px)`,
-                transition: `filter ${animationDuration}s ease`,
+                transition: `filter ${animationDuration}s ease, color ${animationDuration}s ease`,
                 "--border-color": borderColor,
                 "--glow-color": glowColor,
+                "--text-color": textColor,
+                color: isActive ? textColor : "inherit",
               } as React.CSSProperties
             }
             onMouseEnter={() => handleMouseEnter(index)}
