@@ -42,8 +42,8 @@ const AboutSection: React.FC = () => {
               </p>
               
               <div className="flex items-center space-x-4 bg-ruvo-100/30 p-4 rounded-xl">
-                <div className="w-12 h-12 rounded-full bg-ruvo-400 flex items-center justify-center shadow-md">
-                  <span className="text-white font-semibold">TR</span>
+                <div className="w-12 h-12 rounded-full bg-ruvo-400 flex items-center justify-center shadow-md overflow-hidden">
+                  <img src="/lovable-uploads/e71e166c-04d8-40d0-a9d1-92b058c6bab9.png" alt="Tharun Raj" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <p className="font-semibold">Tharun Raj</p>
