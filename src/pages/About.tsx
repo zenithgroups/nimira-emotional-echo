@@ -134,7 +134,12 @@ const About = () => {
                   <CardContent className="p-0">
                     <div className="p-6 text-center">
                       <Avatar className="w-24 h-24 mx-auto mb-4 border-2 border-ruvo-200 shadow-md">
-                        <AvatarImage src={member.image} alt={member.name} />
+                        <AvatarImage 
+                          src={member.image} 
+                          alt={member.name}
+                          className="w-full h-full object-cover" 
+                          style={{ objectFit: "cover", objectPosition: "center" }}
+                        />
                         <AvatarFallback className="bg-ruvo-100 text-ruvo-500 text-lg">
                           {member.name.split(' ').map(n => n[0]).join('')}
                         </AvatarFallback>
