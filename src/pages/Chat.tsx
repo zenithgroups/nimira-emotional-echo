@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare, ChevronLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import ChatInterface from "@/components/ChatInterface";
+// Import App.css is already handled in the main.tsx file
 
 const ChatPage: React.FC = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
