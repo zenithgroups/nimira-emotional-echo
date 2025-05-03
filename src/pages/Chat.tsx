@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MessageSquare, ChevronLeft } from "lucide-react";
@@ -8,9 +7,7 @@ import ChatInterface from "@/components/ChatInterface";
 
 const ChatPage: React.FC = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
-  
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-white to-ruvo-50 flex flex-col">
+  return <div className="min-h-screen bg-gradient-to-br from-white to-ruvo-50 flex flex-col">
       {/* Header */}
       <header className="border-b border-gray-200 bg-white shadow-sm">
         <div className="container-custom py-3 flex items-center justify-between">
@@ -36,22 +33,15 @@ const ChatPage: React.FC = () => {
       {/* Main Content */}
       <main className="flex-grow container-custom max-w-4xl mx-auto py-6">
         <div className="mb-6 text-center">
-          <h2 className="text-2xl font-semibold text-ruvo-700">How are you feeling today?</h2>
-          <p className="text-gray-600 mt-2">
-            I'm here to listen, comfort, and support you with whatever you're going through.
-          </p>
+          
+          
         </div>
         
         {/* Chat interface wrapper */}
         <div className="h-[calc(100vh-220px)]">
-          <ChatInterface 
-            selectedVoiceIndex={0} 
-            onSpeakingChange={setIsSpeaking}
-          />
+          <ChatInterface selectedVoiceIndex={0} onSpeakingChange={setIsSpeaking} />
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default ChatPage;
