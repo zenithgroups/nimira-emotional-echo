@@ -1,14 +1,15 @@
+
 #root {
   max-width: 100%;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0;
   text-align: center;
 }
 
 @media (min-width: 768px) {
   #root {
-    max-width: 1280px;
-    padding: 2rem;
+    max-width: 100%;
+    padding: 0;
   }
 }
 
@@ -70,6 +71,10 @@
   opacity: 0.6;
 }
 
+.dark .dot {
+  background-color: #D6BCFA;
+}
+
 .dot:nth-child(1) {
   animation: typing 1.4s infinite;
 }
@@ -95,4 +100,35 @@
     transform: translateY(0);
     opacity: 0.6;
   }
+}
+
+/* Glass morphism effects */
+.glass-light {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+.dark .glass-dark {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(30, 41, 59, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Gradient backgrounds */
+.gradient-light {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(229, 222, 255, 0.8));
+}
+
+.dark .gradient-dark {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
+}
+
+/* Dark mode overrides */
+.dark .text-gradient {
+  background: linear-gradient(to right, #9B87F5, #D6BCFA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

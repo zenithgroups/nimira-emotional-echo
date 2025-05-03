@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -73,6 +74,14 @@ export default {
           'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))'
+        },
+        dark: {
+          100: '#1E293B', // slate-800
+          200: '#0F172A', // slate-900
+          300: '#020617', // slate-950
+          accent: '#334155', // slate-700
+          muted: '#475569', // slate-600
+          border: '#334155', // slate-700
         }
       },
       borderRadius: {
@@ -101,6 +110,11 @@ export default {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
         },
+        'typing': {
+          '0%': { transform: 'translateY(0)', opacity: '0.6' },
+          '50%': { transform: 'translateY(-5px)', opacity: '1' },
+          '100%': { transform: 'translateY(0)', opacity: '0.6' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -108,6 +122,7 @@ export default {
         'fade-in': 'fade-in 0.5s ease-out',
         'fade-out': 'fade-out 0.5s ease-out',
         'gradient-flow': 'gradient-flow 3s ease infinite',
+        'typing': 'typing 1.4s infinite',
       },
       backgroundImage: {
         'hero-gradient': 'linear-gradient(45deg, #9B87F5, #7E69AB, #D3E4FD)',

@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
 import { ElevenLabsService, ELEVEN_LABS_VOICES } from "@/utils/elevenLabsUtils";
 import { getSystemPrompt } from "@/utils/sentimentUtils";
-// Import App.css is already handled in the main.tsx file
+import { cn } from "@/lib/utils";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -23,11 +23,13 @@ interface Message {
 interface ChatInterfaceProps {
   selectedVoiceIndex?: number;
   onSpeakingChange?: (speaking: boolean) => void;
+  darkMode?: boolean;
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({
   selectedVoiceIndex = 0,
-  onSpeakingChange = () => {}
+  onSpeakingChange = () => {},
+  darkMode = false
 }) => {
   const [messages, setMessages] = useState<Message[]>([{
     role: "assistant",
@@ -474,12 +476,29 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }, 1000);
   };
 
-  return <div className="flex flex-col h-full w-full relative overflow-hidden rounded-2xl border border-ruvo-200/50 bg-gradient-to-br from-slate-50 to-slate-100 transition-all hover:border-ruvo-300 shadow-md">
-      <div className="flex items-center gap-3 p-4 border-b border-ruvo-200/30 bg-white/90 backdrop-blur-sm">
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-medium bg-indigo-500">R</div>
+  return (
+    <div className={cn(
+      "flex flex-col h-full w-full relative overflow-hidden",
+      darkMode 
+        ? "bg-gradient-to-br from-slate-800 to-slate-900 text-white" 
+        : "bg-gradient-to-br from-white/40 to-ruvo-50/30 backdrop-blur-sm"
+    )}>
+      <div className={cn(
+        "flex items-center gap-3 p-4 border-b",
+        darkMode 
+          ? "border-slate-700/50 bg-slate-800/30 backdrop-blur-md" 
+          : "border-ruvo-200/20 bg-white/30 backdrop-blur-md"
+      )}>
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-bold">R</div>
         <div>
-          <h3 className="font-medium">Ruvo AI</h3>
-          <p className="text-xs text-gray-500">
+          <h3 className={cn(
+            "font-medium",
+            darkMode ? "text-white" : "text-slate-800"
+          )}>Ruvo AI</h3>
+          <p className={cn(
+            "text-xs",
+            darkMode ? "text-slate-400" : "text-gray-500"
+          )}>
             {fallbackMode ? "Demo Mode - Service Unavailable" : "Online - OpenAI GPT-4o Powered"}
             {voiceEnabled && " · Premium Voice"}
           </p>
@@ -488,24 +507,34 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <Popover open={voicePopoverOpen} onOpenChange={setVoicePopoverOpen}>
             <PopoverTrigger asChild>
               <Button 
-                variant="outline" 
+                variant={darkMode ? "outline" : "outline"} 
                 size="sm" 
-                className="text-xs flex items-center gap-1" 
+                className={cn(
+                  "text-xs flex items-center gap-1",
+                  darkMode ? "border-slate-700 bg-slate-800 hover:bg-slate-700" : ""
+                )}
                 title="Voice settings"
               >
                 {voiceEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
                 <ChevronDown size={12} />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-80 p-4">
+            <PopoverContent className={cn(
+              "w-80 p-4",
+              darkMode ? "bg-slate-800 border-slate-700" : ""
+            )}>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-semibold">Voice Agent</h4>
+                  <h4 className={cn(
+                    "font-semibold",
+                    darkMode ? "text-white" : ""
+                  )}>Voice Agent</h4>
                   <div className="flex gap-2">
                     <Button 
                       variant="outline" 
                       size="sm"
                       onClick={toggleVoiceOutput}
+                      className={darkMode ? "border-slate-700 hover:bg-slate-700" : ""}
                     >
                       {voiceEnabled ? "Disable" : "Enable"}
                     </Button>
@@ -514,7 +543,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 
                 {voiceEnabled && (
                   <div className="space-y-3">
-                    <h5 className="text-sm font-medium">Select Premium Voice</h5>
+                    <h5 className={cn(
+                      "text-sm font-medium",
+                      darkMode ? "text-slate-200" : ""
+                    )}>Select Premium Voice</h5>
                     
                     <RadioGroup 
                       value={String(currentVoiceIndex)} 
@@ -525,8 +557,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                           <div key={voice.voice_id} className="flex items-center justify-between space-x-2">
                             <div className="flex items-center space-x-2">
                               <RadioGroupItem value={String(index)} id={`voice-${index}`} />
-                              <Label htmlFor={`voice-${index}`} className="text-sm cursor-pointer">
-                                {voice.name} <span className="text-xs text-gray-500">({voice.gender})</span>
+                              <Label htmlFor={`voice-${index}`} className={cn(
+                                "text-sm cursor-pointer",
+                                darkMode ? "text-slate-200" : ""
+                              )}>
+                                {voice.name} <span className={cn(
+                                  "text-xs",
+                                  darkMode ? "text-slate-400" : "text-gray-500"
+                                )}>({voice.gender})</span>
                               </Label>
                             </div>
                             <Button 
@@ -534,7 +572,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                               size="sm" 
                               onClick={() => playVoiceSample(index)}
                               title="Play sample"
-                              className="flex items-center gap-1"
+                              className={cn(
+                                "flex items-center gap-1",
+                                darkMode ? "hover:bg-slate-700 text-slate-200" : ""
+                              )}
                             >
                               <PlayCircle size={14} />
                               <span className="text-xs">Sample</span>
@@ -553,7 +594,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             <Button 
               variant="outline" 
               size="sm" 
-              className="text-xs flex items-center gap-1" 
+              className={cn(
+                "text-xs flex items-center gap-1",
+                darkMode ? "border-slate-700 bg-slate-800 hover:bg-slate-700" : ""
+              )}
               onClick={retryApiConnection} 
               disabled={isRetrying}
             >
@@ -572,18 +616,42 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       </div>
 
       {fallbackMode && (
-        <Alert className="m-2 py-2 bg-yellow-50 border-yellow-200">
-          <AlertDescription className="text-xs text-yellow-800">
+        <Alert className={cn(
+          "m-2 py-2",
+          darkMode ? "bg-amber-900/20 border-amber-800/50" : "bg-yellow-50 border-yellow-200"
+        )}>
+          <AlertDescription className={cn(
+            "text-xs",
+            darkMode ? "text-amber-200" : "text-yellow-800"
+          )}>
             Running in demo mode. Can't chat more due to limit. Your messages will receive simulated responses.
           </AlertDescription>
         </Alert>
       )}
 
-      <ScrollArea className="flex-1 p-4 overflow-y-auto bg-white/40" ref={scrollAreaRef}>
-        <div className="flex flex-col gap-4">
+      <ScrollArea className={cn(
+        "flex-1 p-4 overflow-y-auto",
+        darkMode ? "bg-transparent" : "bg-transparent"
+      )} ref={scrollAreaRef}>
+        <div className="flex flex-col gap-4 max-w-3xl mx-auto">
           {messages.map((message, index) => (
             <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={`max-w-[80%] p-3 rounded-2xl ${message.role === "user" ? "bg-white border border-gray-100 shadow-sm rounded-br-none ml-auto" : `${fallbackMode ? "bg-slate-100" : "bg-ruvo-100"} rounded-bl-none shadow-sm`}`}>
+              <div className={cn(
+                "max-w-[80%] p-3 rounded-2xl",
+                message.role === "user" 
+                  ? cn(
+                      "rounded-br-none ml-auto",
+                      darkMode 
+                        ? "bg-ruvo-500/70 text-white border border-ruvo-500/30" 
+                        : "bg-white border border-gray-100 shadow-sm"
+                    )
+                  : cn(
+                      "rounded-bl-none", 
+                      darkMode 
+                        ? "bg-slate-800/70 border border-slate-700/50" 
+                        : `${fallbackMode ? "bg-slate-100" : "bg-ruvo-100/70"} shadow-sm`
+                    )
+              )}>
                 {message.fileUrl && (
                   <div className="mb-2">
                     {message.fileUrl.startsWith('blob:') && message.fileName?.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
@@ -593,27 +661,52 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                           alt={message.fileName || "Uploaded file"} 
                           className="max-w-full rounded-lg max-h-60 object-contain" 
                         />
-                        <div className="mt-1 text-xs text-gray-500">{message.fileName}</div>
+                        <div className={cn(
+                          "mt-1 text-xs",
+                          darkMode ? "text-slate-300" : "text-gray-500"
+                        )}>{message.fileName}</div>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 p-2 bg-gray-50 rounded-md border border-gray-200">
-                        <div className="w-8 h-8 bg-gray-200 rounded-md flex items-center justify-center">
-                          <Paperclip size={16} className="text-gray-600" />
+                      <div className={cn(
+                        "flex items-center gap-2 p-2 rounded-md border",
+                        darkMode 
+                          ? "bg-slate-700/50 border-slate-600" 
+                          : "bg-gray-50 border-gray-200"
+                      )}>
+                        <div className={cn(
+                          "w-8 h-8 rounded-md flex items-center justify-center",
+                          darkMode ? "bg-slate-600" : "bg-gray-200"
+                        )}>
+                          <Paperclip size={16} className={darkMode ? "text-slate-300" : "text-gray-600"} />
                         </div>
                         <div className="overflow-hidden">
-                          <div className="text-sm font-medium truncate">{message.fileName}</div>
-                          <div className="text-xs text-gray-500">File attachment</div>
+                          <div className={cn(
+                            "text-sm font-medium truncate",
+                            darkMode ? "text-slate-200" : ""
+                          )}>{message.fileName}</div>
+                          <div className={cn(
+                            "text-xs",
+                            darkMode ? "text-slate-400" : "text-gray-500"
+                          )}>File attachment</div>
                         </div>
                       </div>
                     )}
                   </div>
                 )}
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                <p className={cn(
+                  "text-sm whitespace-pre-wrap",
+                  darkMode ? (message.role === "user" ? "text-white" : "text-slate-200") : ""
+                )}>{message.content}</p>
                 {message.role === "assistant" && (
                   <Button 
                     variant="ghost"
                     size="sm"
-                    className="mt-2 h-6 p-0 text-xs text-gray-500 hover:text-ruvo-500 flex items-center gap-1"
+                    className={cn(
+                      "mt-2 h-6 p-0 text-xs flex items-center gap-1",
+                      darkMode 
+                        ? "text-slate-400 hover:text-ruvo-300" 
+                        : "text-gray-500 hover:text-ruvo-500"
+                    )}
                     onClick={() => playMessageVoice(message.content, index)}
                     title={playingMessageIndex === index ? "Stop" : "Listen"}
                   >
@@ -633,7 +726,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="max-w-[80%] p-3 rounded-2xl bg-ruvo-100 rounded-bl-none shadow-sm">
+              <div className={cn(
+                "max-w-[80%] p-3 rounded-2xl rounded-bl-none",
+                darkMode 
+                  ? "bg-slate-800/70 border border-slate-700/50" 
+                  : "bg-ruvo-100/70 shadow-sm"
+              )}>
                 <div className="typing-animation">
                   <span className="dot"></span>
                   <span className="dot"></span>
@@ -645,7 +743,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         </div>
       </ScrollArea>
 
-      <div className="p-4 border-t border-ruvo-200/30 bg-white/90 backdrop-blur-sm">
+      <div className={cn(
+        "p-4 border-t",
+        darkMode 
+          ? "border-slate-700/50 bg-slate-800/30 backdrop-blur-md" 
+          : "border-ruvo-200/30 bg-white/30 backdrop-blur-md"
+      )}>
         <input 
           type="file"
           ref={fileInputRef}
@@ -655,16 +758,27 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         />
         
         {selectedFile && (
-          <div className="mb-2 p-2 bg-gray-50 rounded-lg border border-gray-200 flex items-center justify-between">
+          <div className={cn(
+            "mb-2 p-2 rounded-lg border flex items-center justify-between",
+            darkMode 
+              ? "bg-slate-700/50 border-slate-600" 
+              : "bg-gray-50 border-gray-200"
+          )}>
             <div className="flex items-center gap-2">
-              <Paperclip size={16} className="text-gray-600" />
-              <span className="text-sm truncate max-w-[200px]">{selectedFile.name}</span>
+              <Paperclip size={16} className={darkMode ? "text-slate-300" : "text-gray-600"} />
+              <span className={cn(
+                "text-sm truncate max-w-[200px]",
+                darkMode ? "text-slate-200" : ""
+              )}>{selectedFile.name}</span>
             </div>
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={clearSelectedFile}
-              className="h-6 w-6 p-0 rounded-full"
+              className={cn(
+                "h-6 w-6 p-0 rounded-full",
+                darkMode ? "text-slate-300 hover:bg-slate-600" : ""
+              )}
             >
               &times;
             </Button>
@@ -682,7 +796,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             placeholder="Type a message..." 
             value={input} 
             onChange={e => setInput(e.target.value)} 
-            className="w-full min-h-[44px] max-h-[120px] resize-none bg-gray-50 border border-gray-200 rounded-xl pr-20 focus:border-ruvo-300" 
+            className={cn(
+              "w-full min-h-[44px] max-h-[120px] resize-none pr-20 rounded-xl",
+              darkMode 
+                ? "bg-slate-700/70 border-slate-600 focus:border-ruvo-400 text-white placeholder:text-slate-400" 
+                : "bg-white/80 border-gray-200 focus:border-ruvo-300"
+            )}
             onKeyDown={e => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -694,7 +813,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <div className="absolute right-2 bottom-2 flex gap-1">
             <button 
               type="button" 
-              className="p-2 rounded-full bg-gray-200 text-gray-500 hover:bg-gray-300 transition-colors"
+              className={cn(
+                "p-2 rounded-full transition-colors",
+                darkMode 
+                  ? "bg-slate-600 text-slate-300 hover:bg-slate-500" 
+                  : "bg-gray-200 text-gray-500 hover:bg-gray-300"
+              )}
               onClick={handleFileButtonClick}
               title="Upload file"
             >
@@ -704,7 +828,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             {speechRecognitionSupported && (
               <button 
                 type="button" 
-                className={`p-2 rounded-full transition-colors ${isListening ? "bg-ruvo-500 text-white" : "bg-gray-200 text-gray-500 hover:bg-gray-300"}`}
+                className={cn(
+                  "p-2 rounded-full transition-colors",
+                  isListening 
+                    ? "bg-ruvo-500 text-white" 
+                    : (darkMode 
+                      ? "bg-slate-600 text-slate-300 hover:bg-slate-500" 
+                      : "bg-gray-200 text-gray-500 hover:bg-gray-300"
+                    )
+                )}
                 onClick={toggleListening}
                 title={isListening ? "Stop listening" : "Start voice input"}
               >
@@ -714,7 +846,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             
             <button 
               type="submit" 
-              className={`p-2 rounded-full transition-colors ${(isLoading || (input.trim() === "" && !selectedFile)) ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-ruvo-400 hover:bg-ruvo-500 text-white"}`} 
+              className={cn(
+                "p-2 rounded-full transition-colors",
+                (isLoading || (input.trim() === "" && !selectedFile)) 
+                  ? (darkMode 
+                    ? "bg-slate-600 text-slate-400 cursor-not-allowed" 
+                    : "bg-gray-200 text-gray-500 cursor-not-allowed"
+                  )
+                  : "bg-ruvo-400 hover:bg-ruvo-500 text-white"
+              )}
               disabled={isLoading || (input.trim() === "" && !selectedFile)}
             >
               <Send size={16} />
@@ -722,7 +862,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           </div>
         </form>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default ChatInterface;
