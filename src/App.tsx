@@ -18,6 +18,7 @@ import Terms from "./pages/Terms";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Cookies from "./pages/Cookies";
 import DataProcessing from "./pages/DataProcessing";
+import ChatPage from "./pages/Chat";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/chat" element={<ChatPage />} />
           
           {/* Company Pages */}
           <Route path="/about" element={<About />} />

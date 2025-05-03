@@ -1,17 +1,11 @@
+
 import React from "react";
 import { useToast } from "@/components/ui/use-toast";
 import TrueFocus from "./misc/TrueFocus";
+import { Link } from "react-router-dom";
 
 const HeroSection: React.FC = () => {
   const { toast } = useToast();
-
-  const handleTryFree = () => {
-    toast({
-      title: "Coming soon!",
-      description:
-        "Ruvo will be available for free trials in the coming weeks. Join our beta for early access!",
-    });
-  };
 
   const handleLearnMore = () => {
     const featuresSection = document.getElementById("features");
@@ -57,9 +51,9 @@ const HeroSection: React.FC = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <button onClick={handleTryFree} className="gradient-button">
+              <Link to="/chat" className="gradient-button inline-flex items-center justify-center">
                 Try Ruvo for Free
-              </button>
+              </Link>
               <button
                 onClick={handleLearnMore}
                 className="bg-white text-ruvo-500 border border-ruvo-300/50 hover:border-ruvo-400 px-8 py-3 rounded-full transition duration-300 shadow-sm hover:shadow-md"
@@ -141,15 +135,8 @@ const HeroSection: React.FC = () => {
                         placeholder="Send a message..."
                         className="w-full bg-gray-50 border border-gray-100 rounded-full px-4 py-2 text-sm"
                       />
-                      <button
-                        type="submit"
-                        onClick={() => {
-                          toast({
-                            title: "Chat coming soon",
-                            description:
-                              "The full chat experience will be available in the beta release.",
-                          });
-                        }}
+                      <Link
+                        to="/chat"
                         className="absolute right-2 top-1/2 -translate-y-1/2 bg-ruvo-400 hover:bg-ruvo-500 text-white p-1 rounded-full transition-colors"
                       >
                         <svg
@@ -166,7 +153,7 @@ const HeroSection: React.FC = () => {
                           <path d="m22 2-7 20-4-9-9-4Z"></path>
                           <path d="M22 2 11 13"></path>
                         </svg>
-                      </button>
+                      </Link>
                     </form>
                   </div>
                 </div>

@@ -20,10 +20,12 @@ interface Message {
 
 interface ChatInterfaceProps {
   selectedVoiceIndex?: number;
+  onSpeakingChange?: (speaking: boolean) => void;
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({
-  selectedVoiceIndex = 0
+  selectedVoiceIndex = 0,
+  onSpeakingChange = () => {}
 }) => {
   const [messages, setMessages] = useState<Message[]>([{
     role: "assistant",
@@ -226,19 +228,43 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const speakMessage = async (text: string) => {
     if (!voiceEnabled) return;
     
+    // Signal that speaking has started
+    onSpeakingChange(true);
+    
     if (elevenLabsService.current) {
       await elevenLabsService.current.speak(text);
     } else if (speechSynthesis.current) {
       speechSynthesis.current.speak(text);
     }
+    
+    // Signal that speaking has ended
+    onSpeakingChange(false);
   };
 
   const playMessageVoice = async (text: string, messageIndex: number) => {
+    if (playingMessageIndex === messageIndex) {
+      // Stop playing if it's the same message
+      if (elevenLabsService.current) {
+        elevenLabsService.current.stop();
+      } else if (speechSynthesis.current) {
+        speechSynthesis.current.stop();
+      }
+      setPlayingMessageIndex(null);
+      onSpeakingChange(false);
+      return;
+    }
+    
+    setPlayingMessageIndex(messageIndex);
+    onSpeakingChange(true);
+    
     if (elevenLabsService.current) {
       await elevenLabsService.current.speak(text);
     } else if (speechSynthesis.current) {
       speechSynthesis.current.speak(text);
     }
+    
+    setPlayingMessageIndex(null);
+    onSpeakingChange(false);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

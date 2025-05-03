@@ -28,6 +28,7 @@ export class ElevenLabsService {
   private apiKey: string = DEFAULT_API_KEY;
   private selectedVoiceId: string = ELEVEN_LABS_VOICES[0].voice_id;
   private isReady: boolean = true;
+  private currentAudio: HTMLAudioElement | null = null;
 
   constructor(apiKey?: string) {
     if (apiKey) {
@@ -70,7 +71,17 @@ export class ElevenLabsService {
     return this.isReady;
   }
 
+  public stop(): void {
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio = null;
+    }
+  }
+
   public async speak(text: string): Promise<boolean> {
+    // Stop any currently playing audio
+    this.stop();
+    
     try {
       const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${this.selectedVoiceId}`, {
         method: 'POST',
@@ -100,8 +111,11 @@ export class ElevenLabsService {
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
       
+      this.currentAudio = audio;
+      
       audio.onended = () => {
         URL.revokeObjectURL(audioUrl);
+        this.currentAudio = null;
       };
       
       await audio.play();
