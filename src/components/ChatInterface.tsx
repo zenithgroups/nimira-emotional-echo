@@ -633,14 +633,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           {isLoading && (
             <div className="flex justify-start">
               <div className="max-w-[80%] p-3 rounded-2xl bg-ruvo-100 rounded-bl-none shadow-sm">
-                <div className="flex gap-1 items-center">
-                  <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse"></div>
-                  <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse" style={{
-                    animationDelay: "0.2s"
-                  }}></div>
-                  <div className="w-2 h-2 rounded-full bg-ruvo-400 animate-pulse" style={{
-                    animationDelay: "0.4s"
-                  }}></div>
+                <div className="flex items-center">
+                  <div className="typing-animation">
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -725,6 +723,50 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           </div>
         </form>
       </div>
+      
+      <style jsx global>{`
+        .typing-animation {
+          display: flex;
+          align-items: center;
+        }
+        
+        .dot {
+          display: inline-block;
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: #9B87F5;
+          margin: 0 3px;
+          opacity: 0.6;
+        }
+        
+        .dot:nth-child(1) {
+          animation: typing 1.4s infinite;
+        }
+        
+        .dot:nth-child(2) {
+          animation: typing 1.4s infinite 0.2s;
+        }
+        
+        .dot:nth-child(3) {
+          animation: typing 1.4s infinite 0.4s;
+        }
+        
+        @keyframes typing {
+          0% {
+            transform: translateY(0);
+            opacity: 0.6;
+          }
+          50% {
+            transform: translateY(-5px);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(0);
+            opacity: 0.6;
+          }
+        }
+      `}</style>
     </div>;
 };
 
