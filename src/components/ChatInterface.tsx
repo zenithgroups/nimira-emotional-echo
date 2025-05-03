@@ -10,6 +10,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
 import { ElevenLabsService, ELEVEN_LABS_VOICES } from "@/utils/elevenLabsUtils";
+import { getSystemPrompt } from "@/utils/sentimentUtils";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -361,7 +362,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     
     try {
       console.log("Sending message to OpenAI API");
-      const systemPrompt = "You are Ruvo, an empathetic AI companion designed to provide emotional support. Your responses should be warm, understanding, and helpful. Keep responses concise (under 150 words) and focus on being a supportive friend. Never break character.";
+      
+      // Get the appropriate system prompt based on sentiment analysis
+      const systemPrompt = getSystemPrompt(userMessage.content);
+      console.log("Using system prompt based on emotional state:", systemPrompt.substring(0, 50) + "...");
+      
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -384,6 +389,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           max_tokens: 300
         })
       });
+      
       console.log("OpenAI API response status:", response.status);
       if (!response.ok) {
         const errorData = await response.json();
@@ -431,8 +437,31 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   const simulateFallbackResponse = (userInput: string) => {
     setTimeout(() => {
-      const fallbackResponses = ["I understand how you're feeling. Would you like to talk more about that?", "That's interesting. Could you tell me more about your experience?", "I appreciate you sharing that with me. How does that make you feel?", "I'm here to listen. What else is on your mind today?", "Thank you for opening up. Is there anything specific you'd like to focus on in our conversation?"];
+      // Adjust fallback responses to be more in line with emotional support when needed
+      const needsSupport = userInput.toLowerCase().match(/sad|anxious|worried|depressed|upset|angry|hurt|pain|lonely|alone/);
+      
+      let fallbackResponses;
+      
+      if (needsSupport) {
+        fallbackResponses = [
+          "I can sense how difficult this is for you right now. Would you like to take a moment to breathe together? I'm here with you through this.",
+          "Your feelings are completely valid. Thank you for sharing them with me. Would you like to tell me more about what's happening?",
+          "I'm here with you, and I want you to know you're not facing this alone. These emotions are real, and it takes courage to express them.",
+          "Sometimes the weight we carry feels too heavy. But I want you to know that I'm here, listening, and I care about what you're going through.",
+          "Let's take this one moment at a time together. I'm here with you, and I'm not going anywhere. How can I support you right now?"
+        ];
+      } else {
+        fallbackResponses = [
+          "I understand how you're feeling. Would you like to talk more about that?",
+          "That's interesting. Could you tell me more about your experience?",
+          "I appreciate you sharing that with me. How does that make you feel?",
+          "I'm here to listen. What else is on your mind today?",
+          "Thank you for opening up. Is there anything specific you'd like to focus on in our conversation?"
+        ];
+      }
+      
       const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+      
       setMessages(prev => [...prev, {
         role: "assistant",
         content: randomResponse
