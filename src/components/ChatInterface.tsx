@@ -24,12 +24,16 @@ interface ChatInterfaceProps {
   selectedVoiceIndex?: number;
   onSpeakingChange?: (speaking: boolean) => void;
   darkMode?: boolean;
+  activeChat?: string | null;
+  updateChatTitle?: (id: string, title: string, lastMessage?: string) => void;
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({
   selectedVoiceIndex = 0,
   onSpeakingChange = () => {},
-  darkMode = false
+  darkMode = false,
+  activeChat = null,
+  updateChatTitle = () => {}
 }) => {
   const [messages, setMessages] = useState<Message[]>([{
     role: "assistant",
@@ -59,6 +63,39 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
+
+  // Load saved messages for the active chat
+  useEffect(() => {
+    if (activeChat) {
+      const savedMessages = localStorage.getItem(`messages_${activeChat}`);
+      if (savedMessages) {
+        setMessages(JSON.parse(savedMessages));
+      } else {
+        setMessages([{
+          role: "assistant",
+          content: "Hello! I'm Ruvo. I'm here to listen and support you. How are you feeling today?"
+        }]);
+      }
+    }
+  }, [activeChat]);
+
+  // Save messages when they change
+  useEffect(() => {
+    if (activeChat && messages.length > 0) {
+      localStorage.setItem(`messages_${activeChat}`, JSON.stringify(messages));
+      
+      // Update chat title based on first user message
+      const userMessages = messages.filter(msg => msg.role === "user");
+      if (userMessages.length > 0) {
+        const firstUserMessage = userMessages[0].content;
+        const title = firstUserMessage.length > 30 
+          ? firstUserMessage.substring(0, 30) + "..." 
+          : firstUserMessage;
+        
+        updateChatTitle(activeChat, title, messages[messages.length - 1].content);
+      }
+    }
+  }, [messages, activeChat, updateChatTitle]);
 
   useEffect(() => {
     elevenLabsService.current = new ElevenLabsService();

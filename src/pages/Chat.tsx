@@ -1,17 +1,26 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, MessageSquare, Menu, X } from "lucide-react";
+import { Moon, Sun, MessageSquare, Menu, X, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import ChatInterface from "@/components/ChatInterface";
 import { Switch } from "@/components/ui/switch";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 
+interface ChatHistory {
+  id: string;
+  title: string;
+  timestamp: Date;
+  lastMessage?: string;
+}
+
 const ChatPage: React.FC = () => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [chatHistory, setChatHistory] = useState<ChatHistory[]>([]);
+  const [activeChat, setActiveChat] = useState<string | null>(null);
   const isMobile = useIsMobile();
   
   // Auto-close sidebar on mobile
@@ -23,9 +32,70 @@ const ChatPage: React.FC = () => {
     }
   }, [isMobile]);
 
+  // Load chat history from localStorage on mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('chatHistory');
+    const savedDarkMode = localStorage.getItem('darkMode');
+    
+    if (savedHistory) {
+      setChatHistory(JSON.parse(savedHistory));
+    } else {
+      // Initialize with the first chat
+      const initialChat = {
+        id: 'chat_' + Date.now(),
+        title: 'How can I feel better today?',
+        timestamp: new Date(),
+      };
+      setChatHistory([initialChat]);
+      setActiveChat(initialChat.id);
+      localStorage.setItem('chatHistory', JSON.stringify([initialChat]));
+    }
+    
+    if (savedDarkMode) {
+      const isDark = savedDarkMode === 'true';
+      setDarkMode(isDark);
+      if (isDark) {
+        document.documentElement.classList.add("dark");
+      }
+    }
+  }, []);
+
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem('darkMode', String(newDarkMode));
     document.documentElement.classList.toggle("dark");
+  };
+  
+  const createNewChat = () => {
+    const newChat = {
+      id: 'chat_' + Date.now(),
+      title: 'New conversation',
+      timestamp: new Date(),
+    };
+    
+    const updatedHistory = [newChat, ...chatHistory];
+    setChatHistory(updatedHistory);
+    setActiveChat(newChat.id);
+    localStorage.setItem('chatHistory', JSON.stringify(updatedHistory));
+    
+    // Reload the page to reset the chat interface
+    window.location.reload();
+  };
+  
+  const selectChat = (chatId: string) => {
+    setActiveChat(chatId);
+    // In a real app, you would load the messages for this chat here
+  };
+  
+  const updateChatTitle = (id: string, title: string, lastMessage?: string) => {
+    const updatedHistory = chatHistory.map(chat => 
+      chat.id === id 
+        ? { ...chat, title, lastMessage, timestamp: new Date() } 
+        : chat
+    );
+    setChatHistory(updatedHistory);
+    localStorage.setItem('chatHistory', JSON.stringify(updatedHistory));
   };
 
   return (
@@ -72,15 +142,15 @@ const ChatPage: React.FC = () => {
             variant={darkMode ? "outline" : "default"}
             className={cn(
               "mb-6 w-full justify-start",
-              darkMode ? "border-slate-700 hover:bg-slate-800" : ""
+              darkMode ? "border-slate-700 hover:bg-slate-800 text-white" : ""
             )}
-            onClick={() => window.location.reload()}
+            onClick={createNewChat}
           >
-            <MessageSquare size={18} className="mr-2" />
+            <Plus size={18} className="mr-2" />
             New Chat
           </Button>
           
-          {/* Chat history list - these would be dynamic in a real app */}
+          {/* Chat history list */}
           <div className="flex-grow overflow-y-auto mb-4">
             <h2 className={cn(
               "text-sm uppercase mb-2",
@@ -88,17 +158,18 @@ const ChatPage: React.FC = () => {
             )}>Recent Chats</h2>
             
             <div className="space-y-1">
-              {["How can I feel better today?", "I'm feeling anxious", "Help me relax"].map((title, i) => (
+              {chatHistory.map((chat, i) => (
                 <div 
-                  key={i}
+                  key={chat.id}
                   className={cn(
                     "p-2 rounded-lg text-sm cursor-pointer transition-colors truncate",
-                    i === 0 
+                    chat.id === activeChat
                       ? (darkMode ? "bg-slate-800" : "bg-ruvo-100") 
                       : (darkMode ? "hover:bg-slate-800" : "hover:bg-ruvo-50")
                   )}
+                  onClick={() => selectChat(chat.id)}
                 >
-                  {title}
+                  {chat.title}
                 </div>
               ))}
             </div>
@@ -158,6 +229,8 @@ const ChatPage: React.FC = () => {
             selectedVoiceIndex={0} 
             onSpeakingChange={setIsSpeaking} 
             darkMode={darkMode}
+            updateChatTitle={updateChatTitle}
+            activeChat={activeChat}
           />
         </div>
       </main>
