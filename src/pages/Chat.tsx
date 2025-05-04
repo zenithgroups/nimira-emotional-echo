@@ -43,7 +43,7 @@ const ChatPage: React.FC = () => {
       // Initialize with the first chat
       const initialChat = {
         id: 'chat_' + Date.now(),
-        title: 'How can I feel better today?',
+        title: 'New conversation',
         timestamp: new Date(),
       };
       setChatHistory([initialChat]);
@@ -79,8 +79,8 @@ const ChatPage: React.FC = () => {
     setActiveChat(newChat.id);
     localStorage.setItem('chatHistory', JSON.stringify(updatedHistory));
     
-    // Reload the page to reset the chat interface
-    window.location.reload();
+    // Remove messages for this chat session
+    localStorage.removeItem(`messages_${newChat.id}`);
   };
   
   const selectChat = (chatId: string) => {
@@ -130,9 +130,9 @@ const ChatPage: React.FC = () => {
         <div className="p-4 flex flex-col h-full">
           {/* Logo and branding */}
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-bold font-mono text-xl">R</div>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-pixel-light text-xl">R</div>
             <h1 className={cn(
-              "text-2xl font-bold font-mono tracking-wider",
+              "text-2xl font-bold font-pixel",
               darkMode ? "text-white" : "text-ruvo-600"
             )}>Ruvo</h1>
           </div>
@@ -141,8 +141,8 @@ const ChatPage: React.FC = () => {
           <Button 
             variant={darkMode ? "outline" : "default"}
             className={cn(
-              "mb-6 w-full justify-start",
-              darkMode ? "border-slate-700 hover:bg-slate-800 text-white" : ""
+              "mb-6 w-full justify-start transition-all duration-300",
+              darkMode ? "border-slate-700 hover:bg-slate-800 text-white bg-slate-800/80" : ""
             )}
             onClick={createNewChat}
           >
@@ -162,14 +162,21 @@ const ChatPage: React.FC = () => {
                 <div 
                   key={chat.id}
                   className={cn(
-                    "p-2 rounded-lg text-sm cursor-pointer transition-colors truncate",
+                    "p-2 rounded-lg text-sm cursor-pointer transition-all duration-300",
                     chat.id === activeChat
                       ? (darkMode ? "bg-slate-800" : "bg-ruvo-100") 
                       : (darkMode ? "hover:bg-slate-800" : "hover:bg-ruvo-50")
                   )}
                   onClick={() => selectChat(chat.id)}
                 >
-                  {chat.title}
+                  <div className="truncate">{chat.title}</div>
+                  {chat.lastMessage && (
+                    <div className="text-xs text-slate-400 truncate mt-1">
+                      {chat.lastMessage?.length > 30 
+                        ? chat.lastMessage.substring(0, 30) + "..." 
+                        : chat.lastMessage}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

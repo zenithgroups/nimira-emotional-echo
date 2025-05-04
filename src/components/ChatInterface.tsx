@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
 import { ElevenLabsService, ELEVEN_LABS_VOICES } from "@/utils/elevenLabsUtils";
-import { getSystemPrompt } from "@/utils/sentimentUtils";
+import { getSystemPrompt, detectEmotion } from "@/utils/sentimentUtils";
 import { cn } from "@/lib/utils";
 
 // Import refactored components 
@@ -61,6 +61,26 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
 
+  // Helper function to generate intelligent chat titles based on emotional content
+  const generateChatTitle = (userMessage: string): string => {
+    const emotion = detectEmotion(userMessage);
+    
+    if (emotion === "sad") {
+      return "Feeling down today";
+    } else if (emotion === "anxious") {
+      return "Managing anxiety";
+    } else if (emotion === "angry") {
+      return "Processing frustration";
+    } else if (emotion === "heartbroken") {
+      return "Healing heartache";
+    } else if (userMessage.length <= 20) {
+      return userMessage;
+    } else {
+      // Create a summarized version of longer messages
+      return userMessage.slice(0, 20) + "...";
+    }
+  };
+
   // Load saved messages for the active chat
   useEffect(() => {
     if (activeChat) {
@@ -85,11 +105,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       const userMessages = messages.filter(msg => msg.role === "user");
       if (userMessages.length > 0) {
         const firstUserMessage = userMessages[0].content;
-        const title = firstUserMessage.length > 30 
-          ? firstUserMessage.substring(0, 30) + "..." 
-          : firstUserMessage;
+        const intelligentTitle = generateChatTitle(firstUserMessage);
         
-        updateChatTitle(activeChat, title, messages[messages.length - 1].content);
+        updateChatTitle(activeChat, intelligentTitle, messages[messages.length - 1].content);
       }
     }
   }, [messages, activeChat, updateChatTitle]);

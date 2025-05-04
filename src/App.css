@@ -13,6 +13,7 @@
   }
 }
 
+/* Logo animations */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -51,8 +52,50 @@
   }
 }
 
-.read-the-docs {
-  color: #888;
+/* Pixelated text animation */
+@keyframes pixel-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px) scale(0.97);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0) scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.pixel-animate-in {
+  animation: pixel-in 0.5s ease-out forwards;
+}
+
+/* Enhanced transition for chat elements */
+.chat-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.chat-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.chat-exit {
+  opacity: 1;
+}
+
+.chat-exit-active {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 300ms, transform 300ms;
 }
 
 /* Typing animation for chat */
@@ -132,3 +175,19 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* Pixelated text gradient */
+.pixel-text-gradient {
+  background: linear-gradient(to right, #9B87F5, #D6BCFA);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Modern transitions for UI elements */
+.transition-smooth {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+

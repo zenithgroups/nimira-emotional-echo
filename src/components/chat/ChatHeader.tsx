@@ -39,10 +39,10 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         ? "border-slate-700/50 bg-slate-800/30 backdrop-blur-md" 
         : "border-ruvo-200/20 bg-white/30 backdrop-blur-md"
     )}>
-      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-bold">R</div>
+      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-bold font-pixel-light">R</div>
       <div>
         <h3 className={cn(
-          "font-mono tracking-wider",
+          "font-pixel text-sm",
           darkMode ? "text-white" : "text-slate-800"
         )}>Ruvo AI</h3>
         <p className={cn(
