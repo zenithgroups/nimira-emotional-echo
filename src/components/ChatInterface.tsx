@@ -1,17 +1,16 @@
+
 import React, { useState, useRef, useEffect } from "react";
-import { Send, RefreshCw, Mic, Volume2, VolumeX, ChevronDown, PlayCircle, PauseCircle, Paperclip } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
 import { ElevenLabsService, ELEVEN_LABS_VOICES } from "@/utils/elevenLabsUtils";
 import { getSystemPrompt } from "@/utils/sentimentUtils";
 import { cn } from "@/lib/utils";
+
+// Import refactored components 
+import { ChatHeader } from "./chat/ChatHeader";
+import { ChatMessageList } from "./chat/ChatMessageList"; 
+import { ChatInputForm } from "./chat/ChatInputForm";
+import { ConnectionAlert } from "./chat/ConnectionAlert";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -60,7 +59,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [playingMessageIndex, setPlayingMessageIndex] = useState<number | null>(null);
   
   const { toast } = useToast();
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
 
@@ -97,6 +95,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   }, [messages, activeChat, updateChatTitle]);
 
+  // Initialize voice services
   useEffect(() => {
     elevenLabsService.current = new ElevenLabsService();
     
@@ -136,13 +135,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    if (scrollAreaRef.current) {
-      const scrollContainer = scrollAreaRef.current;
-      scrollContainer.scrollTop = scrollContainer.scrollHeight;
-    }
-  }, [messages]);
-
+  // Check API connection on load
   useEffect(() => {
     checkApiConnection();
   }, []);
@@ -371,6 +364,44 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }, 1000);
   };
 
+  const simulateFallbackResponse = (userInput: string) => {
+    setTimeout(() => {
+      // Adjust fallback responses to be more in line with emotional support when needed
+      const needsSupport = userInput.toLowerCase().match(/sad|anxious|worried|depressed|upset|angry|hurt|pain|lonely|alone/);
+      
+      let fallbackResponses;
+      
+      if (needsSupport) {
+        fallbackResponses = [
+          "I can sense how difficult this is for you right now. Would you like to take a moment to breathe together? I'm here with you through this.",
+          "Your feelings are completely valid. Thank you for sharing them with me. Would you like to tell me more about what's happening?",
+          "I'm here with you, and I want you to know you're not facing this alone. These emotions are real, and it takes courage to express them.",
+          "Sometimes the weight we carry feels too heavy. But I want you to know that I'm here, listening, and I care about what you're going through.",
+          "Let's take this one moment at a time together. I'm here with you, and I'm not going anywhere. How can I support you right now?"
+        ];
+      } else {
+        fallbackResponses = [
+          "I understand how you're feeling. Would you like to talk more about that?",
+          "That's interesting. Could you tell me more about your experience?",
+          "I appreciate you sharing that with me. How does that make you feel?",
+          "I'm here to listen. What else is on your mind today?",
+          "Thank you for opening up. Is there anything specific you'd like to focus on in our conversation?"
+        ];
+      }
+      
+      const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+      
+      setMessages(prev => [...prev, {
+        role: "assistant",
+        content: randomResponse
+      }]);
+      
+      speakMessage(randomResponse);
+      
+      setIsLoading(false);
+    }, 1000);
+  };
+  
   const sendMessage = async () => {
     if ((input.trim() === "" && !selectedFile) || isLoading) return;
     
@@ -475,44 +506,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   };
 
-  const simulateFallbackResponse = (userInput: string) => {
-    setTimeout(() => {
-      // Adjust fallback responses to be more in line with emotional support when needed
-      const needsSupport = userInput.toLowerCase().match(/sad|anxious|worried|depressed|upset|angry|hurt|pain|lonely|alone/);
-      
-      let fallbackResponses;
-      
-      if (needsSupport) {
-        fallbackResponses = [
-          "I can sense how difficult this is for you right now. Would you like to take a moment to breathe together? I'm here with you through this.",
-          "Your feelings are completely valid. Thank you for sharing them with me. Would you like to tell me more about what's happening?",
-          "I'm here with you, and I want you to know you're not facing this alone. These emotions are real, and it takes courage to express them.",
-          "Sometimes the weight we carry feels too heavy. But I want you to know that I'm here, listening, and I care about what you're going through.",
-          "Let's take this one moment at a time together. I'm here with you, and I'm not going anywhere. How can I support you right now?"
-        ];
-      } else {
-        fallbackResponses = [
-          "I understand how you're feeling. Would you like to talk more about that?",
-          "That's interesting. Could you tell me more about your experience?",
-          "I appreciate you sharing that with me. How does that make you feel?",
-          "I'm here to listen. What else is on your mind today?",
-          "Thank you for opening up. Is there anything specific you'd like to focus on in our conversation?"
-        ];
-      }
-      
-      const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
-      
-      setMessages(prev => [...prev, {
-        role: "assistant",
-        content: randomResponse
-      }]);
-      
-      speakMessage(randomResponse);
-      
-      setIsLoading(false);
-    }, 1000);
-  };
-
   return (
     <div className={cn(
       "flex flex-col h-full w-full relative overflow-hidden",
@@ -520,385 +513,49 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         ? "bg-gradient-to-br from-slate-800 to-slate-900 text-white" 
         : "bg-gradient-to-br from-white/40 to-ruvo-50/30 backdrop-blur-sm"
     )}>
-      <div className={cn(
-        "flex items-center gap-3 p-4 border-b",
-        darkMode 
-          ? "border-slate-700/50 bg-slate-800/30 backdrop-blur-md" 
-          : "border-ruvo-200/20 bg-white/30 backdrop-blur-md"
-      )}>
-        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-bold">R</div>
-        <div>
-          <h3 className={cn(
-            "font-medium",
-            darkMode ? "text-white" : "text-slate-800"
-          )}>Ruvo AI</h3>
-          <p className={cn(
-            "text-xs",
-            darkMode ? "text-slate-400" : "text-gray-500"
-          )}>
-            {fallbackMode ? "Demo Mode - Service Unavailable" : "Online - OpenAI GPT-4o Powered"}
-            {voiceEnabled && " · Premium Voice"}
-          </p>
-        </div>
-        <div className="flex gap-2 ml-auto">
-          <Popover open={voicePopoverOpen} onOpenChange={setVoicePopoverOpen}>
-            <PopoverTrigger asChild>
-              <Button 
-                variant={darkMode ? "outline" : "outline"} 
-                size="sm" 
-                className={cn(
-                  "text-xs flex items-center gap-1",
-                  darkMode ? "border-slate-700 bg-slate-800 hover:bg-slate-700" : ""
-                )}
-                title="Voice settings"
-              >
-                {voiceEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
-                <ChevronDown size={12} />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className={cn(
-              "w-80 p-4",
-              darkMode ? "bg-slate-800 border-slate-700" : ""
-            )}>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className={cn(
-                    "font-semibold",
-                    darkMode ? "text-white" : ""
-                  )}>Voice Agent</h4>
-                  <div className="flex gap-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={toggleVoiceOutput}
-                      className={darkMode ? "border-slate-700 hover:bg-slate-700" : ""}
-                    >
-                      {voiceEnabled ? "Disable" : "Enable"}
-                    </Button>
-                  </div>
-                </div>
-                
-                {voiceEnabled && (
-                  <div className="space-y-3">
-                    <h5 className={cn(
-                      "text-sm font-medium",
-                      darkMode ? "text-slate-200" : ""
-                    )}>Select Premium Voice</h5>
-                    
-                    <RadioGroup 
-                      value={String(currentVoiceIndex)} 
-                      onValueChange={(value) => changeVoice(parseInt(value))}
-                    >
-                      <div className="space-y-2 max-h-60 overflow-y-auto">
-                        {ELEVEN_LABS_VOICES.map((voice, index) => (
-                          <div key={voice.voice_id} className="flex items-center justify-between space-x-2">
-                            <div className="flex items-center space-x-2">
-                              <RadioGroupItem value={String(index)} id={`voice-${index}`} />
-                              <Label htmlFor={`voice-${index}`} className={cn(
-                                "text-sm cursor-pointer",
-                                darkMode ? "text-slate-200" : ""
-                              )}>
-                                {voice.name} <span className={cn(
-                                  "text-xs",
-                                  darkMode ? "text-slate-400" : "text-gray-500"
-                                )}>({voice.gender})</span>
-                              </Label>
-                            </div>
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
-                              onClick={() => playVoiceSample(index)}
-                              title="Play sample"
-                              className={cn(
-                                "flex items-center gap-1",
-                                darkMode ? "hover:bg-slate-700 text-slate-200" : ""
-                              )}
-                            >
-                              <PlayCircle size={14} />
-                              <span className="text-xs">Sample</span>
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                    </RadioGroup>
-                  </div>
-                )}
-              </div>
-            </PopoverContent>
-          </Popover>
-          
-          {fallbackMode && (
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className={cn(
-                "text-xs flex items-center gap-1",
-                darkMode ? "border-slate-700 bg-slate-800 hover:bg-slate-700" : ""
-              )}
-              onClick={retryApiConnection} 
-              disabled={isRetrying}
-            >
-              {isRetrying ? (
-                <>
-                  <RefreshCw size={14} className="animate-spin" /> Connecting...
-                </>
-              ) : (
-                <>
-                  <RefreshCw size={14} /> Retry
-                </>
-              )}
-            </Button>
-          )}
-        </div>
-      </div>
+      <ChatHeader
+        darkMode={darkMode}
+        fallbackMode={fallbackMode}
+        voiceEnabled={voiceEnabled}
+        voicePopoverOpen={voicePopoverOpen}
+        setVoicePopoverOpen={setVoicePopoverOpen}
+        toggleVoiceOutput={toggleVoiceOutput}
+        playVoiceSample={playVoiceSample}
+        changeVoice={changeVoice}
+        currentVoiceIndex={currentVoiceIndex}
+        isRetrying={isRetrying}
+        retryApiConnection={retryApiConnection}
+      />
 
-      {fallbackMode && (
-        <Alert className={cn(
-          "m-2 py-2",
-          darkMode ? "bg-amber-900/20 border-amber-800/50" : "bg-yellow-50 border-yellow-200"
-        )}>
-          <AlertDescription className={cn(
-            "text-xs",
-            darkMode ? "text-amber-200" : "text-yellow-800"
-          )}>
-            Running in demo mode. Can't chat more due to limit. Your messages will receive simulated responses.
-          </AlertDescription>
-        </Alert>
-      )}
+      <ConnectionAlert 
+        fallbackMode={fallbackMode} 
+        darkMode={darkMode} 
+      />
 
-      <ScrollArea className={cn(
-        "flex-1 p-4 overflow-y-auto",
-        darkMode ? "bg-transparent" : "bg-transparent"
-      )} ref={scrollAreaRef}>
-        <div className="flex flex-col gap-4 max-w-3xl mx-auto">
-          {messages.map((message, index) => (
-            <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div className={cn(
-                "max-w-[80%] p-3 rounded-2xl",
-                message.role === "user" 
-                  ? cn(
-                      "rounded-br-none ml-auto",
-                      darkMode 
-                        ? "bg-ruvo-500/70 text-white border border-ruvo-500/30" 
-                        : "bg-white border border-gray-100 shadow-sm"
-                    )
-                  : cn(
-                      "rounded-bl-none", 
-                      darkMode 
-                        ? "bg-slate-800/70 border border-slate-700/50" 
-                        : `${fallbackMode ? "bg-slate-100" : "bg-ruvo-100/70"} shadow-sm`
-                    )
-              )}>
-                {message.fileUrl && (
-                  <div className="mb-2">
-                    {message.fileUrl.startsWith('blob:') && message.fileName?.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
-                      <div className="relative">
-                        <img 
-                          src={message.fileUrl} 
-                          alt={message.fileName || "Uploaded file"} 
-                          className="max-w-full rounded-lg max-h-60 object-contain" 
-                        />
-                        <div className={cn(
-                          "mt-1 text-xs",
-                          darkMode ? "text-slate-300" : "text-gray-500"
-                        )}>{message.fileName}</div>
-                      </div>
-                    ) : (
-                      <div className={cn(
-                        "flex items-center gap-2 p-2 rounded-md border",
-                        darkMode 
-                          ? "bg-slate-700/50 border-slate-600" 
-                          : "bg-gray-50 border-gray-200"
-                      )}>
-                        <div className={cn(
-                          "w-8 h-8 rounded-md flex items-center justify-center",
-                          darkMode ? "bg-slate-600" : "bg-gray-200"
-                        )}>
-                          <Paperclip size={16} className={darkMode ? "text-slate-300" : "text-gray-600"} />
-                        </div>
-                        <div className="overflow-hidden">
-                          <div className={cn(
-                            "text-sm font-medium truncate",
-                            darkMode ? "text-slate-200" : ""
-                          )}>{message.fileName}</div>
-                          <div className={cn(
-                            "text-xs",
-                            darkMode ? "text-slate-400" : "text-gray-500"
-                          )}>File attachment</div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-                <p className={cn(
-                  "text-sm whitespace-pre-wrap",
-                  darkMode ? (message.role === "user" ? "text-white" : "text-slate-200") : ""
-                )}>{message.content}</p>
-                {message.role === "assistant" && (
-                  <Button 
-                    variant="ghost"
-                    size="sm"
-                    className={cn(
-                      "mt-2 h-6 p-0 text-xs flex items-center gap-1",
-                      darkMode 
-                        ? "text-slate-400 hover:text-ruvo-300" 
-                        : "text-gray-500 hover:text-ruvo-500"
-                    )}
-                    onClick={() => playMessageVoice(message.content, index)}
-                    title={playingMessageIndex === index ? "Stop" : "Listen"}
-                  >
-                    {playingMessageIndex === index ? (
-                      <>
-                        <PauseCircle size={14} className="mr-1" /> Stop
-                      </>
-                    ) : (
-                      <>
-                        <Volume2 size={14} className="mr-1" /> Listen
-                      </>
-                    )}
-                  </Button>
-                )}
-              </div>
-            </div>
-          ))}
-          {isLoading && (
-            <div className="flex justify-start">
-              <div className={cn(
-                "max-w-[80%] p-3 rounded-2xl rounded-bl-none",
-                darkMode 
-                  ? "bg-slate-800/70 border border-slate-700/50" 
-                  : "bg-ruvo-100/70 shadow-sm"
-              )}>
-                <div className="typing-animation">
-                  <span className="dot"></span>
-                  <span className="dot"></span>
-                  <span className="dot"></span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </ScrollArea>
+      <ChatMessageList
+        messages={messages}
+        isLoading={isLoading}
+        darkMode={darkMode}
+        fallbackMode={fallbackMode}
+        playingMessageIndex={playingMessageIndex}
+        playMessageVoice={playMessageVoice}
+      />
 
-      <div className={cn(
-        "p-4 border-t",
-        darkMode 
-          ? "border-slate-700/50 bg-slate-800/30 backdrop-blur-md" 
-          : "border-ruvo-200/30 bg-white/30 backdrop-blur-md"
-      )}>
-        <input 
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileUpload}
-          className="hidden"
-          accept="image/*,application/pdf,text/plain"
-        />
-        
-        {selectedFile && (
-          <div className={cn(
-            "mb-2 p-2 rounded-lg border flex items-center justify-between",
-            darkMode 
-              ? "bg-slate-700/50 border-slate-600" 
-              : "bg-gray-50 border-gray-200"
-          )}>
-            <div className="flex items-center gap-2">
-              <Paperclip size={16} className={darkMode ? "text-slate-300" : "text-gray-600"} />
-              <span className={cn(
-                "text-sm truncate max-w-[200px]",
-                darkMode ? "text-slate-200" : ""
-              )}>{selectedFile.name}</span>
-            </div>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={clearSelectedFile}
-              className={cn(
-                "h-6 w-6 p-0 rounded-full",
-                darkMode ? "text-slate-300 hover:bg-slate-600" : ""
-              )}
-            >
-              &times;
-            </Button>
-          </div>
-        )}
-        
-        <form 
-          onSubmit={e => {
-            e.preventDefault();
-            sendMessage();
-          }} 
-          className="relative flex items-end gap-2"
-        >
-          <Textarea 
-            placeholder="Type a message..." 
-            value={input} 
-            onChange={e => setInput(e.target.value)} 
-            className={cn(
-              "w-full min-h-[44px] max-h-[120px] resize-none pr-20 rounded-xl",
-              darkMode 
-                ? "bg-slate-700/70 border-slate-600 focus:border-ruvo-400 text-white placeholder:text-slate-400" 
-                : "bg-white/80 border-gray-200 focus:border-ruvo-300"
-            )}
-            onKeyDown={e => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
-              }
-            }} 
-          />
-          
-          <div className="absolute right-2 bottom-2 flex gap-1">
-            <button 
-              type="button" 
-              className={cn(
-                "p-2 rounded-full transition-colors",
-                darkMode 
-                  ? "bg-slate-600 text-slate-300 hover:bg-slate-500" 
-                  : "bg-gray-200 text-gray-500 hover:bg-gray-300"
-              )}
-              onClick={handleFileButtonClick}
-              title="Upload file"
-            >
-              <Paperclip size={16} />
-            </button>
-            
-            {speechRecognitionSupported && (
-              <button 
-                type="button" 
-                className={cn(
-                  "p-2 rounded-full transition-colors",
-                  isListening 
-                    ? "bg-ruvo-500 text-white" 
-                    : (darkMode 
-                      ? "bg-slate-600 text-slate-300 hover:bg-slate-500" 
-                      : "bg-gray-200 text-gray-500 hover:bg-gray-300"
-                    )
-                )}
-                onClick={toggleListening}
-                title={isListening ? "Stop listening" : "Start voice input"}
-              >
-                <Mic size={16} className={isListening ? "animate-pulse" : ""} />
-              </button>
-            )}
-            
-            <button 
-              type="submit" 
-              className={cn(
-                "p-2 rounded-full transition-colors",
-                (isLoading || (input.trim() === "" && !selectedFile)) 
-                  ? (darkMode 
-                    ? "bg-slate-600 text-slate-400 cursor-not-allowed" 
-                    : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                  )
-                  : "bg-ruvo-400 hover:bg-ruvo-500 text-white"
-              )}
-              disabled={isLoading || (input.trim() === "" && !selectedFile)}
-            >
-              <Send size={16} />
-            </button>
-          </div>
-        </form>
-      </div>
+      <ChatInputForm
+        input={input}
+        setInput={setInput}
+        sendMessage={sendMessage}
+        isLoading={isLoading}
+        selectedFile={selectedFile}
+        darkMode={darkMode}
+        fileInputRef={fileInputRef}
+        handleFileButtonClick={handleFileButtonClick}
+        handleFileUpload={handleFileUpload}
+        clearSelectedFile={clearSelectedFile}
+        toggleListening={toggleListening}
+        isListening={isListening}
+        speechRecognitionSupported={speechRecognitionSupported}
+      />
     </div>
   );
 };
