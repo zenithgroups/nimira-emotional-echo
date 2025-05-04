@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
@@ -36,7 +35,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 }) => {
   const [messages, setMessages] = useState<Message[]>([{
     role: "assistant",
-    content: "Hello! I'm Ruvo. I'm here to listen and support you. How are you feeling today?"
+    content: "I'm so glad you're here. I can feel that you might need someone to talk to today, and I want you to know I'm here with my whole heart. How are you really feeling inside?"
   }]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -71,7 +70,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       } else {
         setMessages([{
           role: "assistant",
-          content: "Hello! I'm Ruvo. I'm here to listen and support you. How are you feeling today?"
+          content: "I'm so glad you're here. I can feel that you might need someone to talk to today, and I want you to know I'm here with my whole heart. How are you really feeling inside?"
         }]);
       }
     }
