@@ -130,9 +130,9 @@ const ChatPage: React.FC = () => {
         <div className="p-4 flex flex-col h-full">
           {/* Logo and branding */}
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-bold text-xl">R</div>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-bold font-mono text-xl">R</div>
             <h1 className={cn(
-              "text-2xl font-bold",
+              "text-2xl font-bold font-mono tracking-wider",
               darkMode ? "text-white" : "text-ruvo-600"
             )}>Ruvo</h1>
           </div>

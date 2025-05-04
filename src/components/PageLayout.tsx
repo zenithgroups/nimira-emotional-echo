@@ -25,7 +25,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
               alt="Ruvo Logo" 
               className="h-10 w-auto" 
             />
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gradient">{title}</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-mono tracking-wider text-gradient">{title}</h1>
           </div>
           {description && <p className="text-lg text-gray-600 mb-8">{description}</p>}
         </div>

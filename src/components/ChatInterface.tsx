@@ -35,7 +35,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 }) => {
   const [messages, setMessages] = useState<Message[]>([{
     role: "assistant",
-    content: "I'm so glad you're here. I can feel that you might need someone to talk to today, and I want you to know I'm here with my whole heart. How are you really feeling inside?"
+    content: "Hi there! How are you feeling today?"
   }]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -70,7 +70,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       } else {
         setMessages([{
           role: "assistant",
-          content: "I'm so glad you're here. I can feel that you might need someone to talk to today, and I want you to know I'm here with my whole heart. How are you really feeling inside?"
+          content: "Hi there! How are you feeling today?"
         }]);
       }
     }
