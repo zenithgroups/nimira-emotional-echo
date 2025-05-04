@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, MessageSquare, Menu, X, Plus } from "lucide-react";
+import { Moon, Sun, Plus, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import ChatInterface from "@/components/ChatInterface";
 import { Switch } from "@/components/ui/switch";
@@ -85,7 +85,6 @@ const ChatPage: React.FC = () => {
   
   const selectChat = (chatId: string) => {
     setActiveChat(chatId);
-    // In a real app, you would load the messages for this chat here
   };
   
   const updateChatTitle = (id: string, title: string, lastMessage?: string) => {
@@ -130,7 +129,16 @@ const ChatPage: React.FC = () => {
         <div className="p-4 flex flex-col h-full">
           {/* Logo and branding */}
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-pixel-light text-xl">R</div>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center">
+              <img 
+                src="/lovable-uploads/0c41d136-56fc-4bd3-bd74-d9a05ce16646.png" 
+                alt="Ruvo Logo" 
+                className={cn(
+                  "h-6 w-6",
+                  darkMode ? "filter invert" : "" 
+                )} 
+              />
+            </div>
             <h1 className={cn(
               "text-2xl font-bold font-pixel",
               darkMode ? "text-white" : "text-ruvo-600"
@@ -169,7 +177,7 @@ const ChatPage: React.FC = () => {
                   )}
                   onClick={() => selectChat(chat.id)}
                 >
-                  <div className="truncate">{chat.title}</div>
+                  <div className="truncate font-medium">{chat.title}</div>
                   {chat.lastMessage && (
                     <div className="text-xs text-slate-400 truncate mt-1">
                       {chat.lastMessage?.length > 30 

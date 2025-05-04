@@ -61,23 +61,52 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
 
-  // Helper function to generate intelligent chat titles based on emotional content
+  // More intelligent chat title generation based on emotional content
   const generateChatTitle = (userMessage: string): string => {
+    if (!userMessage || userMessage.trim() === '') {
+      return 'New conversation';
+    }
+    
+    // Detect the emotional state from the message
     const emotion = detectEmotion(userMessage);
     
-    if (emotion === "sad") {
-      return "Feeling down today";
-    } else if (emotion === "anxious") {
-      return "Managing anxiety";
-    } else if (emotion === "angry") {
-      return "Processing frustration";
-    } else if (emotion === "heartbroken") {
-      return "Healing heartache";
-    } else if (userMessage.length <= 20) {
-      return userMessage;
-    } else {
-      // Create a summarized version of longer messages
-      return userMessage.slice(0, 20) + "...";
+    // Create more intelligent titles based on emotional content
+    switch(emotion) {
+      case "sad":
+        return "Feeling down today";
+      case "anxious":
+        return "Managing anxiety";
+      case "angry":
+        return "Processing frustration";
+      case "happy":
+        return "Positive chat";
+      case "excited":
+        return "Exciting discussion";
+      case "confused":
+        return "Seeking clarity";
+      case "heartbroken":
+        return "Healing heartache";
+      case "stressed":
+        return "Stress relief";
+      case "tired":
+        return "Finding energy";
+      case "fearful":
+        return "Overcoming fears";
+      default:
+        // For neutral or undetected emotions, use a shortened version of the message
+        if (userMessage.length <= 20) {
+          return userMessage;
+        } else {
+          // Extract key topics from message or just truncate
+          const keywords = userMessage
+            .toLowerCase()
+            .split(' ')
+            .filter(word => word.length > 3)
+            .slice(0, 2)
+            .join(' ');
+            
+          return keywords.charAt(0).toUpperCase() + keywords.slice(1) + " discussion";
+        }
     }
   };
 
@@ -96,7 +125,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   }, [activeChat]);
 
-  // Save messages when they change
+  // Save messages when they change and update chat title only after user has sent a message
   useEffect(() => {
     if (activeChat && messages.length > 0) {
       localStorage.setItem(`messages_${activeChat}`, JSON.stringify(messages));

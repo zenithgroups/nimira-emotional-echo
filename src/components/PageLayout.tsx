@@ -21,9 +21,9 @@ const PageLayout: React.FC<PageLayoutProps> = ({
         <div className="max-w-3xl mx-auto">
           <div className="flex items-center gap-3 mb-6">
             <img 
-              src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
+              src="/lovable-uploads/0c41d136-56fc-4bd3-bd74-d9a05ce16646.png" 
               alt="Ruvo Logo" 
-              className="h-10 w-auto" 
+              className="h-10 w-auto dark:filter dark:invert" 
             />
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-pixel tracking-tight text-gradient">{title}</h1>
           </div>

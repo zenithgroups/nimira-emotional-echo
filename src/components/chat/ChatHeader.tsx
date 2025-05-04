@@ -1,6 +1,6 @@
 
 import React from "react";
-import { RefreshCw, Volume2, VolumeX, ChevronDown } from "lucide-react";
+import { RefreshCw, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { VoicePopover } from "./VoicePopover";
@@ -39,7 +39,16 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         ? "border-slate-700/50 bg-slate-800/30 backdrop-blur-md" 
         : "border-ruvo-200/20 bg-white/30 backdrop-blur-md"
     )}>
-      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white font-bold font-pixel-light">R</div>
+      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white">
+        <img 
+          src="/lovable-uploads/0c41d136-56fc-4bd3-bd74-d9a05ce16646.png" 
+          alt="Ruvo Logo" 
+          className={cn(
+            "h-6 w-6",
+            darkMode ? "filter invert" : "" 
+          )} 
+        />
+      </div>
       <div>
         <h3 className={cn(
           "font-pixel text-sm",
