@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap');
 
 @tailwind base;
@@ -49,26 +50,26 @@
     letter-spacing: -0.01em;
   }
 
-  /* Pixel font classes */
+  /* Selective use of pixel font only for major headings */
   .font-pixel {
     font-family: 'Press Start 2P', cursive;
     letter-spacing: -0.03em;
     @apply transition-all duration-300;
   }
 
-  .font-pixel-light {
-    font-family: 'VT323', monospace;
-    letter-spacing: 0.01em;
+  .main-title {
+    font-family: 'Press Start 2P', cursive;
+    letter-spacing: -0.02em;
     @apply transition-all duration-300;
   }
 
-  /* Apply pixel font to all main headings */
-  h1, h2 {
-    @apply font-pixel tracking-tight;
-    letter-spacing: -0.02em;
+  /* Apply pixel font only to main app title */
+  h1.app-title {
+    @apply main-title tracking-tight;
   }
 
-  h3, h4, h5, h6 {
+  /* Use normal font for all other headings */
+  h1, h2, h3, h4, h5, h6 {
     @apply font-heading font-semibold tracking-tight;
     letter-spacing: -0.02em;
   }

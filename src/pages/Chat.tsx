@@ -131,16 +131,16 @@ const ChatPage: React.FC = () => {
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center">
               <img 
-                src="/lovable-uploads/0c41d136-56fc-4bd3-bd74-d9a05ce16646.png" 
+                src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
                 alt="Ruvo Logo" 
                 className={cn(
-                  "h-6 w-6",
-                  darkMode ? "filter invert" : "" 
+                  "h-7 w-7 object-contain", 
+                  darkMode ? "invert" : "" 
                 )} 
               />
             </div>
             <h1 className={cn(
-              "text-2xl font-bold font-pixel",
+              "text-2xl font-bold",
               darkMode ? "text-white" : "text-ruvo-600"
             )}>Ruvo</h1>
           </div>

@@ -1,8 +1,9 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
 import { ElevenLabsService, ELEVEN_LABS_VOICES } from "@/utils/elevenLabsUtils";
-import { getSystemPrompt, detectEmotion } from "@/utils/sentimentUtils";
+import { getSystemPrompt, detectEmotion, getOpenAITitlePrompt } from "@/utils/sentimentUtils";
 import { cn } from "@/lib/utils";
 
 // Import refactored components 
@@ -41,6 +42,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [fallbackMode, setFallbackMode] = useState(false);
   const [isRetrying, setIsRetrying] = useState(false);
+  const [chatTitleGenerated, setChatTitleGenerated] = useState(false);
   
   const [isListening, setIsListening] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
@@ -61,8 +63,42 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
 
-  // More intelligent chat title generation based on emotional content
-  const generateChatTitle = (userMessage: string): string => {
+  // Generate smarter chat title using OpenAI
+  const generateOpenAIChatTitle = async (userMessage: string): Promise<string> => {
+    try {
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [{
+            role: "user",
+            content: getOpenAITitlePrompt(userMessage)
+          }],
+          temperature: 0.7,
+          max_tokens: 50
+        })
+      });
+      
+      if (!response.ok) {
+        console.error("Error generating chat title:", response.status);
+        return generateFallbackChatTitle(userMessage);
+      }
+      
+      const data = await response.json();
+      const title = data.choices?.[0]?.message?.content?.trim() || "New conversation";
+      return title;
+    } catch (error) {
+      console.error("Error generating chat title:", error);
+      return generateFallbackChatTitle(userMessage);
+    }
+  };
+
+  // Fallback title generation if OpenAI call fails
+  const generateFallbackChatTitle = (userMessage: string): string => {
     if (!userMessage || userMessage.trim() === '') {
       return 'New conversation';
     }
@@ -83,7 +119,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       case "excited":
         return "Exciting discussion";
       case "confused":
-        return "Seeking clarity";
+        return "Seeking clarity"; 
       case "heartbroken":
         return "Healing heartache";
       case "stressed":
@@ -116,11 +152,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       const savedMessages = localStorage.getItem(`messages_${activeChat}`);
       if (savedMessages) {
         setMessages(JSON.parse(savedMessages));
+        setChatTitleGenerated(true);
       } else {
         setMessages([{
           role: "assistant",
           content: "Hi there! How are you feeling today?"
         }]);
+        setChatTitleGenerated(false);
       }
     }
   }, [activeChat]);
@@ -130,16 +168,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     if (activeChat && messages.length > 0) {
       localStorage.setItem(`messages_${activeChat}`, JSON.stringify(messages));
       
-      // Update chat title based on first user message
+      // Update chat title based on first user message if not already done
       const userMessages = messages.filter(msg => msg.role === "user");
-      if (userMessages.length > 0) {
+      if (userMessages.length > 0 && !chatTitleGenerated) {
         const firstUserMessage = userMessages[0].content;
-        const intelligentTitle = generateChatTitle(firstUserMessage);
         
-        updateChatTitle(activeChat, intelligentTitle, messages[messages.length - 1].content);
+        // Use OpenAI to generate a title
+        generateOpenAIChatTitle(firstUserMessage).then(title => {
+          updateChatTitle(activeChat, title, messages[messages.length - 1].content);
+          setChatTitleGenerated(true);
+        });
+      } else if (userMessages.length > 0) {
+        // Just update the last message
+        updateChatTitle(activeChat, undefined, messages[messages.length - 1].content);
       }
     }
-  }, [messages, activeChat, updateChatTitle]);
+  }, [messages, activeChat, updateChatTitle, chatTitleGenerated]);
 
   // Initialize voice services
   useEffect(() => {

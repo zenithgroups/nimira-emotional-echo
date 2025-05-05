@@ -15,14 +15,39 @@ const emotionalKeywords = {
     "angry", "mad", "furious", "irritated", "annoyed", "frustrated", "rage",
     "hate", "resent", "bitter", "upset", "outraged", "hostile", "pissed"
   ],
+  happy: [
+    "happy", "joyful", "glad", "pleased", "delighted", "content", "cheerful",
+    "thrilled", "excited", "blissful", "ecstatic", "elated", "jubilant"
+  ],
+  excited: [
+    "excited", "thrilled", "eager", "enthusiastic", "pumped", "stoked", "hyped",
+    "buzzing", "psyched", "amped", "exhilarated", "energized"
+  ],
+  confused: [
+    "confused", "perplexed", "puzzled", "bewildered", "unsure", "uncertain",
+    "disoriented", "lost", "baffled", "stumped", "unclear", "mixed up"
+  ],
   heartbroken: [
     "heartbroken", "betrayed", "abandoned", "rejected", "alone", "lonely",
     "broken", "hurt", "wounded", "shattered", "crushed", "dumped", "divorce"
+  ],
+  stressed: [
+    "stressed", "pressured", "burdened", "overloaded", "swamped", "tense",
+    "strained", "frazzled", "burnout", "exhausted", "overwhelmed"
+  ],
+  tired: [
+    "tired", "exhausted", "sleepy", "fatigued", "weary", "drained", "spent",
+    "worn out", "beat", "drowsy", "lethargic", "sluggish"
+  ],
+  fearful: [
+    "fearful", "afraid", "scared", "terrified", "frightened", "petrified",
+    "horrified", "panicked", "alarmed", "spooked", "startled", "phobic"
   ]
 };
 
 // Emotion categories we detect
-export type EmotionalState = "sad" | "anxious" | "angry" | "heartbroken" | "neutral";
+export type EmotionalState = "sad" | "anxious" | "angry" | "heartbroken" | "neutral" | 
+                            "happy" | "excited" | "confused" | "stressed" | "tired" | "fearful";
 
 /**
  * Very basic sentiment analysis to detect emotional states
@@ -78,4 +103,21 @@ DON'T:
   } else {
     return "You are Ruvo, an empathetic AI companion designed to provide emotional support. Your responses should be warm, understanding, and helpful. Keep responses concise (under 150 words) and focus on being a supportive friend. Never break character.";
   }
+};
+
+// Function to let OpenAI generate a chat title based on content
+export const getOpenAITitlePrompt = (message: string): string => {
+  return `You are an AI assistant that specializes in creating concise and meaningful chat titles. 
+  
+Given the first message from a user in a conversation: "${message}", 
+create a short, descriptive title (maximum 5 words) that captures the essence of what the conversation might be about.
+
+The title should be:
+1. Based on the emotional tone or main topic of the message
+2. Brief but descriptive 
+3. Not use quotes or special characters
+4. Start with a capital letter
+5. Use emotional intelligence to detect the user's state if applicable
+
+Only respond with the title text, nothing else.`;
 };
