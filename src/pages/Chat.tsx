@@ -81,10 +81,19 @@ const ChatPage: React.FC = () => {
     
     // Remove messages for this chat session
     localStorage.removeItem(`messages_${newChat.id}`);
+    
+    // Close sidebar on mobile after creating new chat
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
   };
   
   const selectChat = (chatId: string) => {
     setActiveChat(chatId);
+    // Close sidebar on mobile after selecting a chat
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
   };
   
   const updateChatTitle = (id: string, title: string, lastMessage?: string) => {
@@ -104,43 +113,53 @@ const ChatPage: React.FC = () => {
         ? "bg-gradient-to-br from-slate-900 to-slate-800 text-white" 
         : "bg-gradient-to-br from-white to-ruvo-50"
     )}>
-      {/* Mobile menu button */}
+      {/* Mobile menu button - moved to top left corner with z-index */}
       {isMobile && (
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className={cn(
-            "fixed top-4 left-4 z-50 rounded-full p-2 transition-colors",
+            "fixed top-3 left-3 z-50 rounded-full p-2 transition-colors",
             darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-700",
             "shadow-md hover:bg-opacity-80"
           )}
         >
-          {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+          {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
       )}
       
-      {/* Sidebar */}
+      {/* Sidebar with overlay for mobile */}
+      {/* Transparent overlay behind sidebar on mobile */}
+      {isMobile && sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      
       <div 
         className={cn(
           "transition-all duration-300 fixed md:relative h-screen z-40",
-          darkMode ? "bg-slate-900 border-r border-slate-700" : "bg-white/80 backdrop-blur-md border-r border-slate-200",
-          sidebarOpen ? "w-72 translate-x-0" : "w-0 -translate-x-full md:w-0 md:-translate-x-full"
+          darkMode ? "bg-slate-900 border-r border-slate-700" : "bg-white/90 backdrop-blur-md border-r border-slate-200",
+          sidebarOpen 
+            ? "w-[260px] translate-x-0" 
+            : "w-0 -translate-x-full md:w-0 md:-translate-x-full"
         )}
       >
         <div className="p-4 flex flex-col h-full">
           {/* Logo and branding */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center">
+          <div className="flex items-center gap-3 mb-6 mt-2">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center overflow-hidden">
               <img 
                 src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
                 alt="Ruvo Logo" 
                 className={cn(
-                  "h-7 w-7 object-contain", 
+                  "h-full w-full object-contain p-1", 
                   darkMode ? "invert" : "" 
                 )} 
               />
             </div>
             <h1 className={cn(
-              "text-2xl font-bold",
+              "text-xl font-bold",
               darkMode ? "text-white" : "text-ruvo-600"
             )}>Ruvo</h1>
           </div>
@@ -153,15 +172,16 @@ const ChatPage: React.FC = () => {
               darkMode ? "border-slate-700 hover:bg-slate-800 text-white bg-slate-800/80" : ""
             )}
             onClick={createNewChat}
+            size="sm"
           >
-            <Plus size={18} className="mr-2" />
+            <Plus size={16} className="mr-2" />
             New Chat
           </Button>
           
           {/* Chat history list */}
-          <div className="flex-grow overflow-y-auto mb-4">
+          <div className="flex-grow overflow-y-auto mb-4 pr-1">
             <h2 className={cn(
-              "text-sm uppercase mb-2",
+              "text-xs uppercase mb-2",
               darkMode ? "text-slate-400" : "text-slate-500"
             )}>Recent Chats</h2>
             
@@ -230,9 +250,9 @@ const ChatPage: React.FC = () => {
                 className={darkMode ? "bg-ruvo-400" : ""}
               />
               {darkMode ? (
-                <Moon size={18} className="ml-2 text-slate-300" />
+                <Moon size={16} className="ml-2 text-slate-300" />
               ) : (
-                <Sun size={18} className="ml-2 text-yellow-500" />
+                <Sun size={16} className="ml-2 text-yellow-500" />
               )}
             </div>
           </div>

@@ -34,35 +34,35 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
 }) => {
   return (
     <div className={cn(
-      "flex items-center gap-3 p-4 border-b",
+      "flex items-center gap-2 sm:gap-3 p-3 sm:p-4 border-b",
       darkMode 
         ? "border-slate-700/50 bg-slate-800/30 backdrop-blur-md" 
         : "border-ruvo-200/20 bg-white/30 backdrop-blur-md"
     )}>
-      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white">
+      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white overflow-hidden">
         <img 
           src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
           alt="Ruvo Logo" 
           className={cn(
-            "h-7 w-7 object-contain",
+            "h-full w-full object-contain p-1",
             darkMode ? "invert" : "" 
           )} 
         />
       </div>
       <div>
         <h3 className={cn(
-          "font-medium text-sm",
+          "font-medium text-xs sm:text-sm",
           darkMode ? "text-white" : "text-slate-800"
         )}>Ruvo AI</h3>
         <p className={cn(
-          "text-xs",
+          "text-[10px] sm:text-xs",
           darkMode ? "text-slate-400" : "text-gray-500"
         )}>
           {fallbackMode ? "Demo Mode - Service Unavailable" : "Online - OpenAI GPT-4o Powered"}
           {voiceEnabled && " · Premium Voice"}
         </p>
       </div>
-      <div className="flex gap-2 ml-auto">
+      <div className="flex gap-1 sm:gap-2 ml-auto">
         <VoicePopover
           darkMode={darkMode}
           voiceEnabled={voiceEnabled}

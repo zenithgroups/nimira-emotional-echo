@@ -30,7 +30,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   return (
     <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
       <div className={cn(
-        "max-w-[80%] p-3 rounded-2xl",
+        "max-w-[85%] sm:max-w-[80%] p-2.5 sm:p-3 rounded-2xl text-sm",
         role === "user" 
           ? cn(
               "rounded-br-none ml-auto",
@@ -67,14 +67,14 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
                   : "bg-gray-50 border-gray-200"
               )}>
                 <div className={cn(
-                  "w-8 h-8 rounded-md flex items-center justify-center",
+                  "w-7 h-7 rounded-md flex items-center justify-center",
                   darkMode ? "bg-slate-600" : "bg-gray-200"
                 )}>
-                  <Paperclip size={16} className={darkMode ? "text-slate-300" : "text-gray-600"} />
+                  <Paperclip size={14} className={darkMode ? "text-slate-300" : "text-gray-600"} />
                 </div>
                 <div className="overflow-hidden">
                   <div className={cn(
-                    "text-sm font-medium truncate",
+                    "text-xs font-medium truncate",
                     darkMode ? "text-slate-200" : ""
                   )}>{fileName}</div>
                   <div className={cn(
@@ -95,7 +95,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
             variant="ghost"
             size="sm"
             className={cn(
-              "mt-2 h-6 p-0 text-xs flex items-center gap-1",
+              "mt-1.5 h-6 p-0 text-xs flex items-center gap-1",
               darkMode 
                 ? "text-slate-400 hover:text-ruvo-300" 
                 : "text-gray-500 hover:text-ruvo-500"
@@ -105,11 +105,11 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
           >
             {playingMessageIndex === index ? (
               <>
-                <PauseCircle size={14} className="mr-1" /> Stop
+                <PauseCircle size={13} className="mr-1" /> Stop
               </>
             ) : (
               <>
-                <Volume2 size={14} className="mr-1" /> Listen
+                <Volume2 size={13} className="mr-1" /> Listen
               </>
             )}
           </Button>
