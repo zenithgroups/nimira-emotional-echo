@@ -43,7 +43,7 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = ({
       "flex-1 px-4 py-6 overflow-y-auto",
       darkMode ? "bg-transparent" : "bg-transparent"
     )} ref={scrollAreaRef}>
-      <div className="flex flex-col gap-6 max-w-3xl mx-auto">
+      <div className="flex flex-col gap-6 max-w-3xl mx-auto md:px-0 px-2">
         {messages.map((message, index) => (
           <ChatMessage 
             key={index}

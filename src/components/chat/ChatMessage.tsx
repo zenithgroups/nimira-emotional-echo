@@ -30,7 +30,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   return (
     <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
       <div className={cn(
-        "max-w-[85%] sm:max-w-[80%] p-2.5 sm:p-3 rounded-2xl text-sm",
+        "max-w-[85%] sm:max-w-[80%] p-3 sm:p-3.5 rounded-2xl text-sm",
         role === "user" 
           ? cn(
               "rounded-br-none ml-auto",

@@ -127,7 +127,6 @@ const ChatPage: React.FC = () => {
         </button>
       )}
       
-      {/* Sidebar with overlay for mobile */}
       {/* Transparent overlay behind sidebar on mobile */}
       {isMobile && sidebarOpen && (
         <div 
@@ -136,16 +135,17 @@ const ChatPage: React.FC = () => {
         />
       )}
       
-      <div 
+      {/* Sidebar with proper z-index and positioning */}
+      <aside 
         className={cn(
-          "transition-all duration-300 fixed md:relative h-screen z-40",
+          "transition-all duration-300 fixed md:relative h-screen z-40 overflow-hidden",
           darkMode ? "bg-slate-900 border-r border-slate-700" : "bg-white/90 backdrop-blur-md border-r border-slate-200",
           sidebarOpen 
             ? "w-[280px] translate-x-0" 
-            : "w-0 -translate-x-full md:w-0 md:-translate-x-full"
+            : "w-0 -translate-x-full"
         )}
       >
-        <div className="p-5 flex flex-col h-full">
+        <div className="p-5 flex flex-col h-full overflow-hidden">
           {/* Logo and branding */}
           <div className="flex items-center gap-3 mb-7 mt-1">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center overflow-hidden">
@@ -223,7 +223,7 @@ const ChatPage: React.FC = () => {
             </Link>
           </div>
         </div>
-      </div>
+      </aside>
 
       {/* Main Content */}
       <main className={cn(

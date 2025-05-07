@@ -57,7 +57,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
           e.preventDefault();
           sendMessage();
         }} 
-        className="relative flex items-end gap-2"
+        className="relative flex items-end gap-2 mt-2"
       >
         <Textarea 
           placeholder="Type a message..." 
