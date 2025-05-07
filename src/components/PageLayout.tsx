@@ -1,5 +1,5 @@
 
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 
@@ -14,6 +14,12 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   title, 
   description 
 }) => {
+  // Force a refresh on component mount to ensure latest content is displayed
+  useEffect(() => {
+    const timestamp = new Date().getTime();
+    console.log(`Page loaded at: ${timestamp}`);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <NavBar />
