@@ -1,12 +1,15 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Moon, Sun, Plus, Menu, X } from "lucide-react";
+import { Moon, Sun, Plus, Menu, X, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import ChatInterface from "@/components/ChatInterface";
 import { Switch } from "@/components/ui/switch";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/components/ui/use-toast";
+import { useLongPress } from "@/hooks/use-long-press";
+import { DeleteChatDialog } from "@/components/chat/DeleteChatDialog";
 
 interface ChatHistory {
   id: string;
@@ -21,6 +24,9 @@ const ChatPage: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [chatHistory, setChatHistory] = useState<ChatHistory[]>([]);
   const [activeChat, setActiveChat] = useState<string | null>(null);
+  const [chatToDelete, setChatToDelete] = useState<string | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const { toast } = useToast();
   const isMobile = useIsMobile();
   
   // Auto-close sidebar on mobile
@@ -38,7 +44,18 @@ const ChatPage: React.FC = () => {
     const savedDarkMode = localStorage.getItem('darkMode');
     
     if (savedHistory) {
-      setChatHistory(JSON.parse(savedHistory));
+      const parsedHistory = JSON.parse(savedHistory);
+      // Convert string dates back to Date objects
+      const processedHistory = parsedHistory.map((chat: any) => ({
+        ...chat,
+        timestamp: new Date(chat.timestamp)
+      }));
+      setChatHistory(processedHistory);
+      
+      // Set first chat as active if no active chat is set
+      if (processedHistory.length > 0 && !activeChat) {
+        setActiveChat(processedHistory[0].id);
+      }
     } else {
       // Initialize with the first chat
       const initialChat = {
@@ -104,6 +121,47 @@ const ChatPage: React.FC = () => {
     );
     setChatHistory(updatedHistory);
     localStorage.setItem('chatHistory', JSON.stringify(updatedHistory));
+  };
+  
+  const handleDeleteChat = (chatId: string) => {
+    const chatToBeDeleted = chatHistory.find(chat => chat.id === chatId);
+    if (chatToBeDeleted) {
+      setChatToDelete(chatId);
+      setIsDeleteDialogOpen(true);
+    }
+  };
+
+  const confirmDeleteChat = () => {
+    if (chatToDelete) {
+      // Remove chat from history
+      const updatedHistory = chatHistory.filter(chat => chat.id !== chatToDelete);
+      setChatHistory(updatedHistory);
+      
+      // Update localStorage
+      localStorage.setItem('chatHistory', JSON.stringify(updatedHistory));
+      
+      // Remove messages for this chat
+      localStorage.removeItem(`messages_${chatToDelete}`);
+      
+      // If deleted chat was active, set another chat as active
+      if (chatToDelete === activeChat) {
+        if (updatedHistory.length > 0) {
+          setActiveChat(updatedHistory[0].id);
+        } else {
+          // Create a new chat if history is empty
+          createNewChat();
+        }
+      }
+      
+      toast({
+        title: "Chat deleted",
+        description: "The chat has been permanently removed.",
+      });
+      
+      // Close dialog
+      setIsDeleteDialogOpen(false);
+      setChatToDelete(null);
+    }
   };
 
   return (
@@ -186,27 +244,43 @@ const ChatPage: React.FC = () => {
             )}>Recent Chats</h2>
             
             <div className="space-y-2">
-              {chatHistory.map((chat, i) => (
-                <div 
-                  key={chat.id}
-                  className={cn(
-                    "p-2.5 rounded-lg text-sm cursor-pointer transition-all duration-300",
-                    chat.id === activeChat
-                      ? (darkMode ? "bg-slate-800" : "bg-ruvo-100") 
-                      : (darkMode ? "hover:bg-slate-800" : "hover:bg-ruvo-50")
-                  )}
-                  onClick={() => selectChat(chat.id)}
-                >
-                  <div className="truncate font-medium">{chat.title}</div>
-                  {chat.lastMessage && (
-                    <div className="text-xs text-slate-400 truncate mt-1">
-                      {chat.lastMessage?.length > 30 
-                        ? chat.lastMessage.substring(0, 30) + "..." 
-                        : chat.lastMessage}
-                    </div>
-                  )}
-                </div>
-              ))}
+              {chatHistory.map((chat) => {
+                const longPressHandlers = useLongPress(
+                  () => handleDeleteChat(chat.id),
+                  () => selectChat(chat.id)
+                );
+                
+                return (
+                  <div 
+                    key={chat.id}
+                    className={cn(
+                      "p-2.5 rounded-lg text-sm cursor-pointer transition-all duration-300 relative",
+                      chat.id === activeChat
+                        ? (darkMode ? "bg-slate-800" : "bg-ruvo-100") 
+                        : (darkMode ? "hover:bg-slate-800" : "hover:bg-ruvo-50")
+                    )}
+                    {...longPressHandlers}
+                  >
+                    <div className="truncate font-medium">{chat.title}</div>
+                    {chat.lastMessage && (
+                      <div className="text-xs text-slate-400 truncate mt-1">
+                        {chat.lastMessage?.length > 30 
+                          ? chat.lastMessage.substring(0, 30) + "..." 
+                          : chat.lastMessage}
+                      </div>
+                    )}
+                    
+                    {longPressHandlers.isLongPressing && (
+                      <div className={cn(
+                        "absolute inset-0 flex items-center justify-center bg-opacity-90 rounded-lg",
+                        darkMode ? "bg-slate-800" : "bg-ruvo-100"
+                      )}>
+                        <Trash2 size={20} className="text-red-500" />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
           
@@ -269,6 +343,17 @@ const ChatPage: React.FC = () => {
           />
         </div>
       </main>
+      
+      {/* Delete confirmation dialog */}
+      {chatToDelete && (
+        <DeleteChatDialog
+          open={isDeleteDialogOpen}
+          setOpen={setIsDeleteDialogOpen}
+          chatTitle={chatHistory.find(chat => chat.id === chatToDelete)?.title || "this conversation"}
+          onDeleteConfirm={confirmDeleteChat}
+          darkMode={darkMode}
+        />
+      )}
     </div>
   );
 };
