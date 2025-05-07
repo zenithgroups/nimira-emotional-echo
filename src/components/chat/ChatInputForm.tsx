@@ -38,7 +38,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
 }) => {
   return (
     <div className={cn(
-      "p-3 sm:p-4 border-t",
+      "p-4 border-t",
       darkMode 
         ? "border-slate-700/50 bg-slate-800/30 backdrop-blur-md" 
         : "border-ruvo-200/30 bg-white/30 backdrop-blur-md"
@@ -64,7 +64,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
           value={input} 
           onChange={e => setInput(e.target.value)} 
           className={cn(
-            "w-full min-h-[44px] max-h-[120px] resize-none pr-16 sm:pr-20 rounded-xl text-sm",
+            "w-full min-h-[44px] max-h-[120px] resize-none pr-[76px] rounded-xl text-sm",
             darkMode 
               ? "bg-slate-700/70 border-slate-600 focus:border-ruvo-400 text-white placeholder:text-slate-400" 
               : "bg-white/80 border-gray-200 focus:border-ruvo-300"
@@ -77,12 +77,12 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
           }} 
         />
         
-        <div className="absolute right-2 bottom-2 flex gap-1">
+        <div className="absolute right-2.5 bottom-2.5 flex gap-2">
           {speechRecognitionSupported && (
             <button 
               type="button" 
               className={cn(
-                "p-1.5 sm:p-2 rounded-full transition-colors",
+                "p-2 rounded-full transition-colors",
                 isListening 
                   ? "bg-ruvo-500 text-white" 
                   : (darkMode 
@@ -93,14 +93,14 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
               onClick={toggleListening}
               title={isListening ? "Stop listening" : "Start voice input"}
             >
-              <Mic size={15} className={isListening ? "animate-pulse" : ""} />
+              <Mic size={16} className={isListening ? "animate-pulse" : ""} />
             </button>
           )}
           
           <button 
             type="submit" 
             className={cn(
-              "p-1.5 sm:p-2 rounded-full transition-colors",
+              "p-2 rounded-full transition-colors",
               (isLoading || (input.trim() === "" && !selectedFile)) 
                 ? (darkMode 
                   ? "bg-slate-600 text-slate-400 cursor-not-allowed" 
@@ -110,7 +110,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
             )}
             disabled={isLoading || (input.trim() === "" && !selectedFile)}
           >
-            <Send size={15} />
+            <Send size={16} />
           </button>
         </div>
       </form>

@@ -118,7 +118,7 @@ const ChatPage: React.FC = () => {
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className={cn(
-            "fixed top-3 left-3 z-50 rounded-full p-2 transition-colors",
+            "fixed top-4 left-4 z-50 rounded-full p-2.5 transition-colors",
             darkMode ? "bg-slate-800 text-white" : "bg-white text-slate-700",
             "shadow-md hover:bg-opacity-80"
           )}
@@ -141,19 +141,19 @@ const ChatPage: React.FC = () => {
           "transition-all duration-300 fixed md:relative h-screen z-40",
           darkMode ? "bg-slate-900 border-r border-slate-700" : "bg-white/90 backdrop-blur-md border-r border-slate-200",
           sidebarOpen 
-            ? "w-[260px] translate-x-0" 
+            ? "w-[280px] translate-x-0" 
             : "w-0 -translate-x-full md:w-0 md:-translate-x-full"
         )}
       >
-        <div className="p-4 flex flex-col h-full">
+        <div className="p-5 flex flex-col h-full">
           {/* Logo and branding */}
-          <div className="flex items-center gap-3 mb-6 mt-2">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center overflow-hidden">
+          <div className="flex items-center gap-3 mb-7 mt-1">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center overflow-hidden">
               <img 
                 src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
                 alt="Ruvo Logo" 
                 className={cn(
-                  "h-full w-full object-contain p-1", 
+                  "h-full w-full object-contain p-1.5", 
                   darkMode ? "invert" : "" 
                 )} 
               />
@@ -181,16 +181,16 @@ const ChatPage: React.FC = () => {
           {/* Chat history list */}
           <div className="flex-grow overflow-y-auto mb-4 pr-1">
             <h2 className={cn(
-              "text-xs uppercase mb-2",
+              "text-xs uppercase mb-3 font-medium",
               darkMode ? "text-slate-400" : "text-slate-500"
             )}>Recent Chats</h2>
             
-            <div className="space-y-1">
+            <div className="space-y-2">
               {chatHistory.map((chat, i) => (
                 <div 
                   key={chat.id}
                   className={cn(
-                    "p-2 rounded-lg text-sm cursor-pointer transition-all duration-300",
+                    "p-2.5 rounded-lg text-sm cursor-pointer transition-all duration-300",
                     chat.id === activeChat
                       ? (darkMode ? "bg-slate-800" : "bg-ruvo-100") 
                       : (darkMode ? "hover:bg-slate-800" : "hover:bg-ruvo-50")
@@ -215,7 +215,7 @@ const ChatPage: React.FC = () => {
             <Link 
               to="/" 
               className={cn(
-                "block p-2 rounded hover:underline",
+                "block p-2.5 rounded hover:underline",
                 darkMode ? "text-slate-300" : "text-slate-600"
               )}
             >
@@ -233,7 +233,7 @@ const ChatPage: React.FC = () => {
         {/* Top navigation bar */}
         <header 
           className={cn(
-            "py-3 px-4 md:px-6 flex items-center justify-between",
+            "py-4 px-4 md:px-6 flex items-center justify-between",
             darkMode 
               ? "bg-slate-900/50 backdrop-blur-md border-b border-slate-700" 
               : "bg-white/50 backdrop-blur-md border-b border-slate-100"
@@ -259,7 +259,7 @@ const ChatPage: React.FC = () => {
         </header>
         
         {/* Chat interface wrapper - now full height */}
-        <div className="h-[calc(100vh-57px)]">
+        <div className="h-[calc(100vh-60px)]">
           <ChatInterface 
             selectedVoiceIndex={0} 
             onSpeakingChange={setIsSpeaking} 
