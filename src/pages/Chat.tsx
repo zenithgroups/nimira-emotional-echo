@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun, Plus, Menu, X, Trash2 } from "lucide-react";
@@ -7,7 +6,7 @@ import ChatInterface from "@/components/ChatInterface";
 import { Switch } from "@/components/ui/switch";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useLongPress } from "@/hooks/use-long-press";
 import { DeleteChatDialog } from "@/components/chat/DeleteChatDialog";
 
@@ -26,8 +25,34 @@ const ChatPage: React.FC = () => {
   const [activeChat, setActiveChat] = useState<string | null>(null);
   const [chatToDelete, setChatToDelete] = useState<string | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [pressedChatId, setPressedChatId] = useState<string | null>(null);
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  
+  // Handle long press for any chat item
+  const handleLongPress = (chatId: string) => {
+    setPressedChatId(chatId);
+    handleDeleteChat(chatId);
+  };
+
+  // Handle click for any chat item
+  const handleClick = (chatId: string) => {
+    selectChat(chatId);
+  };
+
+  // Create a single instance of the long press hook
+  const longPress = useLongPress(
+    (e) => {
+      if (pressedChatId) {
+        handleLongPress(pressedChatId);
+      }
+    },
+    (e) => {
+      if (pressedChatId) {
+        handleClick(pressedChatId);
+      }
+    }
+  );
   
   // Auto-close sidebar on mobile
   React.useEffect(() => {
@@ -245,11 +270,6 @@ const ChatPage: React.FC = () => {
             
             <div className="space-y-2">
               {chatHistory.map((chat) => {
-                const longPressHandlers = useLongPress(
-                  () => handleDeleteChat(chat.id),
-                  () => selectChat(chat.id)
-                );
-                
                 return (
                   <div 
                     key={chat.id}
@@ -259,7 +279,38 @@ const ChatPage: React.FC = () => {
                         ? (darkMode ? "bg-slate-800" : "bg-ruvo-100") 
                         : (darkMode ? "hover:bg-slate-800" : "hover:bg-ruvo-50")
                     )}
-                    {...longPressHandlers}
+                    {...(() => {
+                      // Set current chat id for handling in the hook
+                      const handleMouseDown = (e: React.MouseEvent) => {
+                        setPressedChatId(chat.id);
+                        longPress.getHandlers().onMouseDown(e);
+                      };
+                      
+                      const handleMouseUp = (e: React.MouseEvent) => {
+                        longPress.getHandlers().onMouseUp(e);
+                      };
+                      
+                      const handleMouseLeave = (e: React.MouseEvent) => {
+                        longPress.getHandlers().onMouseLeave(e);
+                      };
+                      
+                      const handleTouchStart = (e: React.TouchEvent) => {
+                        setPressedChatId(chat.id);
+                        longPress.getHandlers().onTouchStart(e);
+                      };
+                      
+                      const handleTouchEnd = (e: React.TouchEvent) => {
+                        longPress.getHandlers().onTouchEnd(e);
+                      };
+                      
+                      return {
+                        onMouseDown: handleMouseDown,
+                        onMouseUp: handleMouseUp,
+                        onMouseLeave: handleMouseLeave,
+                        onTouchStart: handleTouchStart,
+                        onTouchEnd: handleTouchEnd
+                      };
+                    })()}
                   >
                     <div className="truncate font-medium">{chat.title}</div>
                     {chat.lastMessage && (
@@ -270,7 +321,7 @@ const ChatPage: React.FC = () => {
                       </div>
                     )}
                     
-                    {longPressHandlers.isLongPressing && (
+                    {longPress.isLongPressing && pressedChatId === chat.id && (
                       <div className={cn(
                         "absolute inset-0 flex items-center justify-center bg-opacity-90 rounded-lg",
                         darkMode ? "bg-slate-800" : "bg-ruvo-100"

@@ -6,20 +6,19 @@ interface LongPressOptions {
   delay?: number;
 }
 
-interface LongPressResult {
+interface LongPressHandlers {
   onMouseDown: (e: React.MouseEvent) => void;
   onMouseUp: (e: React.MouseEvent) => void;
   onMouseLeave: (e: React.MouseEvent) => void;
   onTouchStart: (e: React.TouchEvent) => void;
   onTouchEnd: (e: React.TouchEvent) => void;
-  isLongPressing: boolean;
 }
 
 export const useLongPress = (
   onLongPress: (e: React.MouseEvent | React.TouchEvent) => void,
   onClick: (e: React.MouseEvent | React.TouchEvent) => void = () => {},
   { shouldPreventDefault = true, delay = 600 }: LongPressOptions = {}
-): LongPressResult => {
+) => {
   const [isLongPressing, setIsLongPressing] = useState(false);
   const timeout = useRef<NodeJS.Timeout>();
   const target = useRef<EventTarget>();
@@ -79,12 +78,20 @@ export const useLongPress = (
     };
   }, [shouldPreventDefault, preventDefault]);
 
+  // Create handler functions once and return them
+  const handlers = useCallback(() => {
+    return {
+      onMouseDown: (e: React.MouseEvent) => start(e),
+      onMouseUp: (e: React.MouseEvent) => clear(e),
+      onMouseLeave: (e: React.MouseEvent) => clear(e, false),
+      onTouchStart: (e: React.TouchEvent) => start(e),
+      onTouchEnd: (e: React.TouchEvent) => clear(e),
+      isLongPressing
+    };
+  }, [start, clear, isLongPressing]);
+
   return {
-    onMouseDown: (e: React.MouseEvent) => start(e),
-    onMouseUp: (e: React.MouseEvent) => clear(e),
-    onMouseLeave: (e: React.MouseEvent) => clear(e, false),
-    onTouchStart: (e: React.TouchEvent) => start(e),
-    onTouchEnd: (e: React.TouchEvent) => clear(e),
-    isLongPressing,
+    getHandlers: handlers,
+    isLongPressing
   };
 };
