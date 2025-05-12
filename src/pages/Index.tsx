@@ -23,7 +23,7 @@ const Index = () => {
       // Add a small delay to see the console log before refresh
       setTimeout(() => {
         console.log('Refreshing to get latest version...');
-        window.location.reload(true);
+        window.location.reload();
       }, 500);
     } else {
       localStorage.setItem('appVersion', currentVersion.toString());

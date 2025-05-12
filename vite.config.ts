@@ -21,9 +21,9 @@ export default defineConfig(({ mode }) => ({
     // Add timestamp to filenames for cache busting
     rollupOptions: {
       output: {
-        entryFileNames: `assets/[name].[hash].[time].js`,
-        chunkFileNames: `assets/[name].[hash].[time].js`,
-        assetFileNames: `assets/[name].[hash].[time].[ext]`
+        entryFileNames: `assets/[name].[hash].js`,
+        chunkFileNames: `assets/[name].[hash].js`,
+        assetFileNames: `assets/[name].[hash].[ext]`
       }
     }
   },
