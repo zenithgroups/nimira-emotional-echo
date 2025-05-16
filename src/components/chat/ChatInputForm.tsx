@@ -50,16 +50,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
         }} 
         className="relative"
       >
-        <FileUpload
-          selectedFile={selectedFile}
-          fileInputRef={fileInputRef}
-          handleFileButtonClick={handleFileButtonClick}
-          handleFileUpload={handleFileUpload}
-          clearSelectedFile={clearSelectedFile}
-          darkMode={darkMode}
-        />
-        
-        <div className="relative flex items-end gap-2 mt-2">
+        <div className="relative">
           <Textarea 
             placeholder="Type a message..." 
             value={input} 
@@ -79,6 +70,20 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
           />
           
           <div className="absolute right-2.5 bottom-2.5 flex gap-2">
+            <button 
+              type="button" 
+              className={cn(
+                "p-2 rounded-full transition-colors",
+                darkMode 
+                  ? "bg-slate-600 text-slate-300 hover:bg-slate-500" 
+                  : "bg-gray-200 text-gray-500 hover:bg-gray-300"
+              )}
+              onClick={handleFileButtonClick}
+              title="Upload file"
+            >
+              <Paperclip size={16} />
+            </button>
+            
             {speechRecognitionSupported && (
               <button 
                 type="button" 
@@ -115,6 +120,15 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
             </button>
           </div>
         </div>
+        
+        <FileUpload
+          selectedFile={selectedFile}
+          fileInputRef={fileInputRef}
+          handleFileButtonClick={handleFileButtonClick}
+          handleFileUpload={handleFileUpload}
+          clearSelectedFile={clearSelectedFile}
+          darkMode={darkMode}
+        />
       </form>
     </div>
   );

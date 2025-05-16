@@ -31,49 +31,33 @@ export const FileUpload: React.FC<FileUploadProps> = ({
         accept="image/*,application/pdf,text/plain"
       />
       
-      <div className="flex items-center mb-2">
-        <button 
-          type="button" 
-          className={cn(
-            "p-2 rounded-full transition-colors mr-2",
-            darkMode 
-              ? "bg-slate-600 text-slate-300 hover:bg-slate-500" 
-              : "bg-gray-200 text-gray-500 hover:bg-gray-300"
-          )}
-          onClick={handleFileButtonClick}
-          title="Upload file"
-        >
-          <Paperclip size={16} />
-        </button>
-        
-        {selectedFile && (
-          <div className={cn(
-            "flex-1 p-2 rounded-lg border flex items-center justify-between",
-            darkMode 
-              ? "bg-slate-700/50 border-slate-600" 
-              : "bg-gray-50 border-gray-200"
-          )}>
-            <div className="flex items-center gap-2">
-              <Paperclip size={16} className={darkMode ? "text-slate-300" : "text-gray-600"} />
-              <span className={cn(
-                "text-sm truncate max-w-[200px]",
-                darkMode ? "text-slate-200" : ""
-              )}>{selectedFile.name}</span>
-            </div>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={clearSelectedFile}
-              className={cn(
-                "h-6 w-6 p-0 rounded-full",
-                darkMode ? "text-slate-300 hover:bg-slate-600" : ""
-              )}
-            >
-              &times;
-            </Button>
+      {selectedFile && (
+        <div className={cn(
+          "mt-2 p-2 rounded-lg border flex items-center justify-between",
+          darkMode 
+            ? "bg-slate-700/50 border-slate-600" 
+            : "bg-gray-50 border-gray-200"
+        )}>
+          <div className="flex items-center gap-2">
+            <Paperclip size={16} className={darkMode ? "text-slate-300" : "text-gray-600"} />
+            <span className={cn(
+              "text-sm truncate max-w-[200px]",
+              darkMode ? "text-slate-200" : ""
+            )}>{selectedFile.name}</span>
           </div>
-        )}
-      </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={clearSelectedFile}
+            className={cn(
+              "h-6 w-6 p-0 rounded-full",
+              darkMode ? "text-slate-300 hover:bg-slate-600" : ""
+            )}
+          >
+            &times;
+          </Button>
+        </div>
+      )}
     </>
   );
 };

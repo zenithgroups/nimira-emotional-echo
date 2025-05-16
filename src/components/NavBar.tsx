@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -58,15 +57,14 @@ const NavBar: React.FC = () => {
             <img 
               src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
               alt="Ruvo Logo" 
-              className={cn(
-                "h-8 w-auto object-contain",
-                darkMode ? "invert" : ""
-              )} 
+              className={darkMode ? "h-8 w-auto invert" : "h-8 w-auto"} 
             />
             <span className={cn(
               "text-xl sm:text-2xl font-bold transition-colors ml-2",
-              darkMode ? "text-white hover:text-gray-200" : "text-ruvo-500 hover:text-ruvo-400"
-            )}>Ruvo</span>
+              darkMode ? "text-white" : "text-ruvo-500"
+            )}>
+              Ruvo
+            </span>
           </Link>
         </div>
 
