@@ -37,12 +37,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
   speechRecognitionSupported,
 }) => {
   return (
-    <div className={cn(
-      "p-4 border-t",
-      darkMode 
-        ? "border-slate-700/50 bg-slate-800/30 backdrop-blur-md" 
-        : "border-ruvo-200/30 bg-white/30 backdrop-blur-md"
-    )}>
+    <div className="p-4 border-t border-slate-200/30 bg-white/30 backdrop-blur-md">
       <form 
         onSubmit={e => {
           e.preventDefault();
@@ -55,12 +50,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
             placeholder="Type a message..." 
             value={input} 
             onChange={e => setInput(e.target.value)} 
-            className={cn(
-              "w-full min-h-[44px] max-h-[120px] resize-none pr-[76px] rounded-xl text-sm",
-              darkMode 
-                ? "bg-slate-700/70 border-slate-600 focus:border-ruvo-400 text-white placeholder:text-slate-400" 
-                : "bg-white/80 border-gray-200 focus:border-ruvo-300"
-            )}
+            className="w-full min-h-[44px] max-h-[120px] resize-none pr-[76px] rounded-xl text-sm bg-white/80 border-gray-200 focus:border-ruvo-300"
             onKeyDown={e => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -72,12 +62,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
           <div className="absolute right-2.5 bottom-2.5 flex gap-2">
             <button 
               type="button" 
-              className={cn(
-                "p-2 rounded-full transition-colors",
-                darkMode 
-                  ? "bg-slate-600 text-slate-300 hover:bg-slate-500" 
-                  : "bg-gray-200 text-gray-500 hover:bg-gray-300"
-              )}
+              className="p-2 rounded-full transition-colors bg-gray-200 text-gray-500 hover:bg-gray-300"
               onClick={handleFileButtonClick}
               title="Upload file"
             >
@@ -91,10 +76,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
                   "p-2 rounded-full transition-colors",
                   isListening 
                     ? "bg-ruvo-500 text-white" 
-                    : (darkMode 
-                      ? "bg-slate-600 text-slate-300 hover:bg-slate-500" 
-                      : "bg-gray-200 text-gray-500 hover:bg-gray-300"
-                    )
+                    : "bg-gray-200 text-gray-500 hover:bg-gray-300"
                 )}
                 onClick={toggleListening}
                 title={isListening ? "Stop listening" : "Start voice input"}
@@ -108,10 +90,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
               className={cn(
                 "p-2 rounded-full transition-colors",
                 (isLoading || (input.trim() === "" && !selectedFile)) 
-                  ? (darkMode 
-                    ? "bg-slate-600 text-slate-400 cursor-not-allowed" 
-                    : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                  )
+                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                   : "bg-ruvo-400 hover:bg-ruvo-500 text-white"
               )}
               disabled={isLoading || (input.trim() === "" && !selectedFile)}
