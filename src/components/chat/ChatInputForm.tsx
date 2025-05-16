@@ -43,75 +43,77 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
         ? "border-slate-700/50 bg-slate-800/30 backdrop-blur-md" 
         : "border-ruvo-200/30 bg-white/30 backdrop-blur-md"
     )}>
-      <FileUpload
-        selectedFile={selectedFile}
-        fileInputRef={fileInputRef}
-        handleFileButtonClick={handleFileButtonClick}
-        handleFileUpload={handleFileUpload}
-        clearSelectedFile={clearSelectedFile}
-        darkMode={darkMode}
-      />
-      
       <form 
         onSubmit={e => {
           e.preventDefault();
           sendMessage();
         }} 
-        className="relative flex items-end gap-2 mt-2"
+        className="relative"
       >
-        <Textarea 
-          placeholder="Type a message..." 
-          value={input} 
-          onChange={e => setInput(e.target.value)} 
-          className={cn(
-            "w-full min-h-[44px] max-h-[120px] resize-none pr-[76px] rounded-xl text-sm",
-            darkMode 
-              ? "bg-slate-700/70 border-slate-600 focus:border-ruvo-400 text-white placeholder:text-slate-400" 
-              : "bg-white/80 border-gray-200 focus:border-ruvo-300"
-          )}
-          onKeyDown={e => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              sendMessage();
-            }
-          }} 
+        <FileUpload
+          selectedFile={selectedFile}
+          fileInputRef={fileInputRef}
+          handleFileButtonClick={handleFileButtonClick}
+          handleFileUpload={handleFileUpload}
+          clearSelectedFile={clearSelectedFile}
+          darkMode={darkMode}
         />
         
-        <div className="absolute right-2.5 bottom-2.5 flex gap-2">
-          {speechRecognitionSupported && (
+        <div className="relative flex items-end gap-2 mt-2">
+          <Textarea 
+            placeholder="Type a message..." 
+            value={input} 
+            onChange={e => setInput(e.target.value)} 
+            className={cn(
+              "w-full min-h-[44px] max-h-[120px] resize-none pr-[76px] rounded-xl text-sm",
+              darkMode 
+                ? "bg-slate-700/70 border-slate-600 focus:border-ruvo-400 text-white placeholder:text-slate-400" 
+                : "bg-white/80 border-gray-200 focus:border-ruvo-300"
+            )}
+            onKeyDown={e => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+              }
+            }} 
+          />
+          
+          <div className="absolute right-2.5 bottom-2.5 flex gap-2">
+            {speechRecognitionSupported && (
+              <button 
+                type="button" 
+                className={cn(
+                  "p-2 rounded-full transition-colors",
+                  isListening 
+                    ? "bg-ruvo-500 text-white" 
+                    : (darkMode 
+                      ? "bg-slate-600 text-slate-300 hover:bg-slate-500" 
+                      : "bg-gray-200 text-gray-500 hover:bg-gray-300"
+                    )
+                )}
+                onClick={toggleListening}
+                title={isListening ? "Stop listening" : "Start voice input"}
+              >
+                <Mic size={16} className={isListening ? "animate-pulse" : ""} />
+              </button>
+            )}
+            
             <button 
-              type="button" 
+              type="submit" 
               className={cn(
                 "p-2 rounded-full transition-colors",
-                isListening 
-                  ? "bg-ruvo-500 text-white" 
-                  : (darkMode 
-                    ? "bg-slate-600 text-slate-300 hover:bg-slate-500" 
-                    : "bg-gray-200 text-gray-500 hover:bg-gray-300"
+                (isLoading || (input.trim() === "" && !selectedFile)) 
+                  ? (darkMode 
+                    ? "bg-slate-600 text-slate-400 cursor-not-allowed" 
+                    : "bg-gray-200 text-gray-500 cursor-not-allowed"
                   )
+                  : "bg-ruvo-400 hover:bg-ruvo-500 text-white"
               )}
-              onClick={toggleListening}
-              title={isListening ? "Stop listening" : "Start voice input"}
+              disabled={isLoading || (input.trim() === "" && !selectedFile)}
             >
-              <Mic size={16} className={isListening ? "animate-pulse" : ""} />
+              <Send size={16} />
             </button>
-          )}
-          
-          <button 
-            type="submit" 
-            className={cn(
-              "p-2 rounded-full transition-colors",
-              (isLoading || (input.trim() === "" && !selectedFile)) 
-                ? (darkMode 
-                  ? "bg-slate-600 text-slate-400 cursor-not-allowed" 
-                  : "bg-gray-200 text-gray-500 cursor-not-allowed"
-                )
-                : "bg-ruvo-400 hover:bg-ruvo-500 text-white"
-            )}
-            disabled={isLoading || (input.trim() === "" && !selectedFile)}
-          >
-            <Send size={16} />
-          </button>
+          </div>
         </div>
       </form>
     </div>
