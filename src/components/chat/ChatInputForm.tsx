@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Send, Mic } from "lucide-react";
+import { Send, Mic, Paperclip } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { FileUpload } from "./FileUpload";
 import { cn } from "@/lib/utils";
