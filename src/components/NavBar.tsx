@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -45,7 +46,7 @@ const NavBar: React.FC = () => {
   return (
     <header className={cn(
       "sticky top-0 z-40 w-full border-b backdrop-blur supports-[backdrop-filter]:bg-background/60",
-      darkMode ? "border-slate-700/40 bg-slate-900/95" : "border-border/40 bg-background/95"
+      darkMode ? "border-slate-700/40 bg-slate-900/95" : "border-border/40 bg-gray-100/95"
     )}>
       <div className="container-custom flex h-14 sm:h-16 items-center justify-between">
         <div className="flex items-center">
@@ -61,7 +62,7 @@ const NavBar: React.FC = () => {
             />
             <span className={cn(
               "text-xl sm:text-2xl font-bold transition-colors ml-2",
-              darkMode ? "text-white" : "text-ruvo-500"
+              darkMode ? "text-white" : "text-gray-800"
             )}>
               Ruvo
             </span>
@@ -70,13 +71,13 @@ const NavBar: React.FC = () => {
 
         <nav className={cn(
           "hidden md:flex items-center gap-6",
-          darkMode ? "text-gray-300" : "text-gray-600"
+          darkMode ? "text-gray-300" : "text-gray-700"
         )}>
           <button 
             onClick={() => scrollToSection("home")} 
             className={cn(
               "text-sm font-medium transition-colors",
-              darkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-ruvo-500"
+              darkMode ? "text-gray-300 hover:text-white" : "text-gray-700 hover:text-ruvo-500"
             )}
           >
             Home
@@ -85,7 +86,7 @@ const NavBar: React.FC = () => {
             onClick={() => scrollToSection("about")} 
             className={cn(
               "text-sm font-medium transition-colors",
-              darkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-ruvo-500"
+              darkMode ? "text-gray-300 hover:text-white" : "text-gray-700 hover:text-ruvo-500"
             )}
           >
             About
@@ -94,7 +95,7 @@ const NavBar: React.FC = () => {
             onClick={() => scrollToSection("features")} 
             className={cn(
               "text-sm font-medium transition-colors",
-              darkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-ruvo-500"
+              darkMode ? "text-gray-300 hover:text-white" : "text-gray-700 hover:text-ruvo-500"
             )}
           >
             Features
@@ -103,7 +104,7 @@ const NavBar: React.FC = () => {
             onClick={() => scrollToSection("how-it-works")} 
             className={cn(
               "text-sm font-medium transition-colors",
-              darkMode ? "text-gray-300 hover:text-white" : "text-gray-600 hover:text-ruvo-500"
+              darkMode ? "text-gray-300 hover:text-white" : "text-gray-700 hover:text-ruvo-500"
             )}
           >
             How It Works
@@ -114,7 +115,7 @@ const NavBar: React.FC = () => {
               size="sm" 
               className={cn(
                 "ml-2",
-                darkMode ? "border-gray-600 text-gray-200" : ""
+                darkMode ? "border-gray-600 text-gray-200" : "border-gray-300 text-gray-700"
               )}
             >
               Contact Us
@@ -136,7 +137,7 @@ const NavBar: React.FC = () => {
             onClick={toggleMenu}
             className={cn(
               "p-2 rounded-md hover:bg-gray-100 focus:outline-none",
-              darkMode ? "text-gray-300 hover:bg-gray-800" : "text-gray-500 hover:bg-gray-100"
+              darkMode ? "text-gray-300 hover:bg-gray-800" : "text-gray-700 hover:bg-gray-200"
             )}
           >
             {isMenuOpen ? (
@@ -151,7 +152,7 @@ const NavBar: React.FC = () => {
       {isMenuOpen && (
         <div className={cn(
           "md:hidden border-t",
-          darkMode ? "bg-slate-900 border-slate-800" : "bg-white border-gray-100"
+          darkMode ? "bg-slate-900 border-slate-800" : "bg-gray-100 border-gray-200"
         )}>
           <div className="container-custom py-4 space-y-2">
             <button 
@@ -160,7 +161,7 @@ const NavBar: React.FC = () => {
                 "block w-full text-left px-3 py-2 rounded-md text-sm font-medium",
                 darkMode ? 
                   "text-gray-300 hover:bg-gray-800 hover:text-white" : 
-                  "text-gray-700 hover:bg-gray-100 hover:text-ruvo-500"
+                  "text-gray-700 hover:bg-gray-200 hover:text-ruvo-500"
               )}
             >
               Home
@@ -171,7 +172,7 @@ const NavBar: React.FC = () => {
                 "block w-full text-left px-3 py-2 rounded-md text-sm font-medium",
                 darkMode ? 
                   "text-gray-300 hover:bg-gray-800 hover:text-white" : 
-                  "text-gray-700 hover:bg-gray-100 hover:text-ruvo-500"
+                  "text-gray-700 hover:bg-gray-200 hover:text-ruvo-500"
               )}
             >
               About
@@ -182,7 +183,7 @@ const NavBar: React.FC = () => {
                 "block w-full text-left px-3 py-2 rounded-md text-sm font-medium",
                 darkMode ? 
                   "text-gray-300 hover:bg-gray-800 hover:text-white" : 
-                  "text-gray-700 hover:bg-gray-100 hover:text-ruvo-500"
+                  "text-gray-700 hover:bg-gray-200 hover:text-ruvo-500"
               )}
             >
               Features
@@ -193,7 +194,7 @@ const NavBar: React.FC = () => {
                 "block w-full text-left px-3 py-2 rounded-md text-sm font-medium",
                 darkMode ? 
                   "text-gray-300 hover:bg-gray-800 hover:text-white" : 
-                  "text-gray-700 hover:bg-gray-100 hover:text-ruvo-500"
+                  "text-gray-700 hover:bg-gray-200 hover:text-ruvo-500"
               )}
             >
               How It Works
@@ -204,7 +205,7 @@ const NavBar: React.FC = () => {
                 "block px-3 py-2 rounded-md text-sm font-medium",
                 darkMode ? 
                   "text-gray-300 hover:bg-gray-800 hover:text-white" : 
-                  "text-gray-700 hover:bg-gray-100 hover:text-ruvo-500"
+                  "text-gray-700 hover:bg-gray-200 hover:text-ruvo-500"
               )}
               onClick={closeMenu}
             >
