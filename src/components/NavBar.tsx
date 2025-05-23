@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -58,11 +57,11 @@ const NavBar: React.FC = () => {
             <img 
               src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
               alt="Ruvo Logo" 
-              className={darkMode ? "h-8 w-auto invert" : "h-8 w-auto"} 
+              className={darkMode ? "h-8 w-auto" : "h-8 w-auto"} 
             />
             <span className={cn(
               "text-xl sm:text-2xl font-bold transition-colors ml-2",
-              darkMode ? "text-white" : "text-ruvo-500"
+              darkMode ? "text-white" : "text-black"
             )}>
               Ruvo
             </span>
@@ -71,7 +70,7 @@ const NavBar: React.FC = () => {
 
         <nav className={cn(
           "hidden md:flex items-center gap-6",
-          "text-gray-800"
+          "text-black"
         )}>
           <button 
             onClick={() => scrollToSection("home")} 
