@@ -45,9 +45,9 @@ const NavBar: React.FC = () => {
   return (
     <header className={cn(
       "sticky top-0 z-40 w-full border-b backdrop-blur supports-[backdrop-filter]:bg-background/60",
-      darkMode ? "border-slate-700/40 bg-slate-900/95" : "border-border/40 bg-transparent"
+      darkMode ? "border-slate-700/40 bg-slate-900/95" : "border-border/40 bg-white/60"
     )}>
-      <div className="container-custom flex h-14 sm:h-16 items-center justify-between">
+      <div className="container px-4 mx-auto max-w-7xl flex h-16 items-center justify-between">
         <div className="flex items-center">
           <Link 
             to="/" 
@@ -70,61 +70,44 @@ const NavBar: React.FC = () => {
 
         <nav className={cn(
           "hidden md:flex items-center gap-6",
-          darkMode ? "text-white" : "text-black"
+          "text-black"
         )}>
           <button 
             onClick={() => scrollToSection("home")} 
-            className={cn(
-              "text-sm font-medium transition-colors",
-              darkMode ? "text-white hover:text-white" : "text-black hover:text-ruvo-500"
-            )}
+            className="text-sm font-medium transition-colors text-black hover:text-ruvo-500"
           >
             Home
           </button>
           <button 
             onClick={() => scrollToSection("about")} 
-            className={cn(
-              "text-sm font-medium transition-colors",
-              darkMode ? "text-white hover:text-white" : "text-black hover:text-ruvo-500"
-            )}
+            className="text-sm font-medium transition-colors text-black hover:text-ruvo-500"
           >
             About
           </button>
           <button 
             onClick={() => scrollToSection("features")} 
-            className={cn(
-              "text-sm font-medium transition-colors",
-              darkMode ? "text-white hover:text-white" : "text-black hover:text-ruvo-500"
-            )}
+            className="text-sm font-medium transition-colors text-black hover:text-ruvo-500"
           >
             Features
           </button>
           <button 
             onClick={() => scrollToSection("how-it-works")} 
-            className={cn(
-              "text-sm font-medium transition-colors",
-              darkMode ? "text-white hover:text-white" : "text-black hover:text-ruvo-500"
-            )}
+            className="text-sm font-medium transition-colors text-black hover:text-ruvo-500"
           >
             How It Works
           </button>
           <Link to="/contact">
             <Button 
-              variant={darkMode ? "outline" : "outline"} 
+              variant="outline" 
               size="sm" 
-              className={cn(
-                "ml-2",
-                darkMode ? "border-gray-600 text-white" : "border-gray-300 text-black"
-              )}
+              className="ml-2 border-gray-300 text-black"
             >
               Contact Us
             </Button>
           </Link>
           <Button 
             size="sm" 
-            className={cn(
-              darkMode ? "bg-ruvo-400 hover:bg-ruvo-300 text-white" : "bg-ruvo-500 hover:bg-ruvo-600 text-white"
-            )}
+            className="bg-ruvo-500 hover:bg-ruvo-600 text-white"
           >
             Get Started
           </Button>
@@ -133,10 +116,7 @@ const NavBar: React.FC = () => {
         <div className="md:hidden">
           <button 
             onClick={toggleMenu}
-            className={cn(
-              "p-2 rounded-md hover:bg-gray-100 focus:outline-none",
-              darkMode ? "text-white hover:bg-gray-800" : "text-black hover:bg-gray-200"
-            )}
+            className="p-2 rounded-md hover:bg-gray-100 focus:outline-none text-black"
           >
             {isMenuOpen ? (
               <X className="h-5 w-5" />
