@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Link } from "react-router-dom";
@@ -27,13 +26,13 @@ const Footer: React.FC = () => {
   
   return (
     <footer className="relative overflow-hidden">
-      {/* Enhanced gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-ruvo-400/50 to-transparent"></div>
+      {/* Professional gradient background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800"></div>
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
       
-      {/* Subtle animated background elements */}
-      <div className="absolute top-10 right-20 w-32 h-32 bg-gradient-to-br from-ruvo-400/10 to-purple-400/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 left-10 w-40 h-40 bg-gradient-to-br from-blue-400/10 to-ruvo-400/10 rounded-full blur-3xl"></div>
+      {/* Subtle background elements */}
+      <div className="absolute top-10 right-20 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 left-10 w-40 h-40 bg-gradient-to-br from-indigo-400/10 to-blue-400/10 rounded-full blur-3xl"></div>
       
       <div className="relative z-10 py-16">
         <div className="container-custom">
@@ -41,14 +40,14 @@ const Footer: React.FC = () => {
             <div>
               <div className="mb-6">
                 <Link to="/" className="flex items-center group">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-ruvo-400 to-purple-500 flex items-center justify-center mr-3 shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                  <div className="w-10 h-10 flex items-center justify-center mr-3 group-hover:scale-110 transition-all duration-300">
                     <img 
                       src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
                       alt="Ruvo Logo" 
-                      className="h-6 w-auto filter brightness-0 invert" 
+                      className="h-6 w-auto brightness-0 invert" 
                     />
                   </div>
-                  <span className="text-2xl font-bold bg-gradient-to-r from-ruvo-400 to-purple-400 bg-clip-text text-transparent group-hover:from-ruvo-300 group-hover:to-purple-300 transition-all duration-300">
+                  <span className="text-2xl font-bold bg-gradient-to-r from-blue-300 to-indigo-300 bg-clip-text text-transparent group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-300">
                     Ruvo
                   </span>
                 </Link>
@@ -59,7 +58,7 @@ const Footer: React.FC = () => {
               <div className="flex space-x-4">
                 <button 
                   onClick={() => handleSocialClick("LinkedIn")}
-                  className="p-3 rounded-xl bg-slate-800/50 text-slate-400 hover:text-ruvo-400 hover:bg-slate-700/50 border border-slate-700/50 hover:border-ruvo-400/30 transition-all duration-300 hover:scale-110"
+                  className="p-3 rounded-xl bg-slate-800/50 text-slate-400 hover:text-blue-400 hover:bg-slate-700/50 border border-slate-700/50 hover:border-blue-400/30 transition-all duration-300 hover:scale-110"
                   aria-label="LinkedIn"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -70,7 +69,7 @@ const Footer: React.FC = () => {
                 </button>
                 <button 
                   onClick={() => handleSocialClick("Twitter")}
-                  className="p-3 rounded-xl bg-slate-800/50 text-slate-400 hover:text-ruvo-400 hover:bg-slate-700/50 border border-slate-700/50 hover:border-ruvo-400/30 transition-all duration-300 hover:scale-110"
+                  className="p-3 rounded-xl bg-slate-800/50 text-slate-400 hover:text-blue-400 hover:bg-slate-700/50 border border-slate-700/50 hover:border-blue-400/30 transition-all duration-300 hover:scale-110"
                   aria-label="Twitter"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -79,7 +78,7 @@ const Footer: React.FC = () => {
                 </button>
                 <button 
                   onClick={() => handleSocialClick("Instagram")}
-                  className="p-3 rounded-xl bg-slate-800/50 text-slate-400 hover:text-ruvo-400 hover:bg-slate-700/50 border border-slate-700/50 hover:border-ruvo-400/30 transition-all duration-300 hover:scale-110"
+                  className="p-3 rounded-xl bg-slate-800/50 text-slate-400 hover:text-blue-400 hover:bg-slate-700/50 border border-slate-700/50 hover:border-blue-400/30 transition-all duration-300 hover:scale-110"
                   aria-label="Visit Ruvo on Instagram"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -94,30 +93,30 @@ const Footer: React.FC = () => {
             <div>
               <h4 className="text-lg font-semibold mb-6 text-white">Company</h4>
               <ul className="space-y-3">
-                <li><Link to="/about" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">About Us</Link></li>
-                <li><Link to="/careers" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">Careers</Link></li>
-                <li><Link to="/blog" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">Blog</Link></li>
-                <li><Link to="/press" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">Press</Link></li>
+                <li><Link to="/about" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">About Us</Link></li>
+                <li><Link to="/careers" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Careers</Link></li>
+                <li><Link to="/blog" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Blog</Link></li>
+                <li><Link to="/press" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Press</Link></li>
               </ul>
             </div>
             
             <div>
               <h4 className="text-lg font-semibold mb-6 text-white">Support</h4>
               <ul className="space-y-3">
-                <li><Link to="/help" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">Help Center</Link></li>
-                <li><Link to="/faqs" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">FAQs</Link></li>
-                <li><Link to="/contact" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">Contact Us</Link></li>
-                <li><Link to="/privacy" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">Privacy</Link></li>
+                <li><Link to="/help" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Help Center</Link></li>
+                <li><Link to="/faqs" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">FAQs</Link></li>
+                <li><Link to="/contact" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Contact Us</Link></li>
+                <li><Link to="/privacy" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Privacy</Link></li>
               </ul>
             </div>
             
             <div>
               <h4 className="text-lg font-semibold mb-6 text-white">Legal</h4>
               <ul className="space-y-3">
-                <li><Link to="/terms" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">Terms of Service</Link></li>
-                <li><Link to="/privacy-policy" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">Privacy Policy</Link></li>
-                <li><Link to="/cookies" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">Cookie Policy</Link></li>
-                <li><Link to="/data-processing" className="text-slate-400 hover:text-ruvo-400 transition-colors duration-300 hover:translate-x-1 inline-block">Data Processing</Link></li>
+                <li><Link to="/terms" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Terms of Service</Link></li>
+                <li><Link to="/privacy-policy" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Privacy Policy</Link></li>
+                <li><Link to="/cookies" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Cookie Policy</Link></li>
+                <li><Link to="/data-processing" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Data Processing</Link></li>
               </ul>
             </div>
           </div>
@@ -126,9 +125,9 @@ const Footer: React.FC = () => {
             <div className="flex flex-col md:flex-row justify-between items-center">
               <p className="text-slate-500 text-sm mb-4 md:mb-0">&copy; {currentYear} Ruvo AI. All rights reserved.</p>
               <div className="flex space-x-8">
-                <Link to="/privacy-policy" className="text-slate-500 text-sm hover:text-ruvo-400 transition-colors duration-300">Privacy Policy</Link>
-                <Link to="/terms" className="text-slate-500 text-sm hover:text-ruvo-400 transition-colors duration-300">Terms of Service</Link>
-                <Link to="/contact" className="text-slate-500 text-sm hover:text-ruvo-400 transition-colors duration-300">Contact</Link>
+                <Link to="/privacy-policy" className="text-slate-500 text-sm hover:text-blue-400 transition-colors duration-300">Privacy Policy</Link>
+                <Link to="/terms" className="text-slate-500 text-sm hover:text-blue-400 transition-colors duration-300">Terms of Service</Link>
+                <Link to="/contact" className="text-slate-500 text-sm hover:text-blue-400 transition-colors duration-300">Contact</Link>
               </div>
             </div>
           </div>

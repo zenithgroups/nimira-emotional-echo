@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -48,8 +47,8 @@ const NavBar: React.FC = () => {
     <header className={cn(
       "sticky top-0 z-50 w-full backdrop-blur-xl border-b transition-all duration-300",
       darkMode 
-        ? "bg-slate-900/90 border-slate-700/50" 
-        : "bg-white/90 border-slate-200/50 shadow-lg"
+        ? "bg-slate-900/95 border-slate-700/30" 
+        : "bg-white/95 border-slate-200/20 shadow-sm"
     )}>
       <div className="container px-4 mx-auto max-w-7xl flex h-16 items-center justify-between">
         <div className="flex items-center">
@@ -60,13 +59,13 @@ const NavBar: React.FC = () => {
                 alt="Ruvo Logo" 
                 className={cn(
                   "h-8 w-auto transition-all duration-300",
-                  darkMode ? "filter brightness-0 invert" : "filter brightness-0"
+                  darkMode ? "brightness-0 invert" : "brightness-0"
                 )}
               />
             </div>
             <span className={cn(
               "text-2xl font-bold transition-all duration-300",
-              darkMode ? "text-white" : "text-slate-900"
+              darkMode ? "text-white" : "text-slate-800"
             )}>
               Ruvo
             </span>
@@ -78,7 +77,7 @@ const NavBar: React.FC = () => {
             onClick={() => scrollToSection("home")} 
             className={cn(
               "text-sm font-medium transition-all duration-300 hover:scale-105",
-              darkMode ? "text-slate-300 hover:text-white" : "text-slate-700 hover:text-ruvo-600"
+              darkMode ? "text-slate-300 hover:text-blue-300" : "text-slate-600 hover:text-blue-600"
             )}
           >
             Home
@@ -87,7 +86,7 @@ const NavBar: React.FC = () => {
             onClick={() => scrollToSection("about")} 
             className={cn(
               "text-sm font-medium transition-all duration-300 hover:scale-105",
-              darkMode ? "text-slate-300 hover:text-white" : "text-slate-700 hover:text-ruvo-600"
+              darkMode ? "text-slate-300 hover:text-blue-300" : "text-slate-600 hover:text-blue-600"
             )}
           >
             About
@@ -96,7 +95,7 @@ const NavBar: React.FC = () => {
             onClick={() => scrollToSection("features")} 
             className={cn(
               "text-sm font-medium transition-all duration-300 hover:scale-105",
-              darkMode ? "text-slate-300 hover:text-white" : "text-slate-700 hover:text-ruvo-600"
+              darkMode ? "text-slate-300 hover:text-blue-300" : "text-slate-600 hover:text-blue-600"
             )}
           >
             Features
@@ -105,7 +104,7 @@ const NavBar: React.FC = () => {
             onClick={() => scrollToSection("how-it-works")} 
             className={cn(
               "text-sm font-medium transition-all duration-300 hover:scale-105",
-              darkMode ? "text-slate-300 hover:text-white" : "text-slate-700 hover:text-ruvo-600"
+              darkMode ? "text-slate-300 hover:text-blue-300" : "text-slate-600 hover:text-blue-600"
             )}
           >
             How It Works
@@ -115,10 +114,10 @@ const NavBar: React.FC = () => {
               variant="outline" 
               size="sm" 
               className={cn(
-                "ml-2 border-2 transition-all duration-300 hover:scale-105",
+                "ml-2 border transition-all duration-300 hover:scale-105",
                 darkMode 
-                  ? "border-slate-600 text-slate-300 hover:bg-slate-800 hover:border-slate-500"
-                  : "border-ruvo-300 text-ruvo-600 hover:bg-ruvo-50 hover:border-ruvo-500"
+                  ? "border-slate-600 text-slate-300 hover:bg-slate-800 hover:border-blue-400"
+                  : "border-slate-300 text-slate-600 hover:bg-blue-50 hover:border-blue-400"
               )}
             >
               Contact Us
@@ -126,7 +125,7 @@ const NavBar: React.FC = () => {
           </Link>
           <Button 
             size="sm" 
-            className="bg-gradient-to-r from-ruvo-600 to-purple-600 hover:from-ruvo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0"
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border-0"
           >
             Get Started
           </Button>
@@ -137,7 +136,7 @@ const NavBar: React.FC = () => {
             onClick={toggleMenu} 
             className={cn(
               "p-2 rounded-md focus:outline-none transition-all duration-300 hover:scale-110",
-              darkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-ruvo-50 text-slate-700"
+              darkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-700"
             )}
           >
             {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -149,8 +148,8 @@ const NavBar: React.FC = () => {
         <div className={cn(
           "md:hidden border-t backdrop-blur-xl transition-all duration-300",
           darkMode 
-            ? "bg-slate-900/90 border-slate-800" 
-            : "bg-white/90 border-slate-200"
+            ? "bg-slate-900/95 border-slate-800" 
+            : "bg-white/95 border-slate-200"
         )}>
           <div className="container-custom py-4 space-y-2">
             <button 
@@ -158,8 +157,8 @@ const NavBar: React.FC = () => {
               className={cn(
                 "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
                 darkMode 
-                  ? "text-slate-300 hover:bg-slate-800 hover:text-white"
-                  : "text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-600"
+                  ? "text-slate-300 hover:bg-slate-800 hover:text-blue-300"
+                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
               )}
             >
               Home
@@ -169,8 +168,8 @@ const NavBar: React.FC = () => {
               className={cn(
                 "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
                 darkMode 
-                  ? "text-slate-300 hover:bg-slate-800 hover:text-white"
-                  : "text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-600"
+                  ? "text-slate-300 hover:bg-slate-800 hover:text-blue-300"
+                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
               )}
             >
               About
@@ -180,8 +179,8 @@ const NavBar: React.FC = () => {
               className={cn(
                 "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
                 darkMode 
-                  ? "text-slate-300 hover:bg-slate-800 hover:text-white"
-                  : "text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-600"
+                  ? "text-slate-300 hover:bg-slate-800 hover:text-blue-300"
+                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
               )}
             >
               Features
@@ -191,8 +190,8 @@ const NavBar: React.FC = () => {
               className={cn(
                 "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
                 darkMode 
-                  ? "text-slate-300 hover:bg-slate-800 hover:text-white"
-                  : "text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-600"
+                  ? "text-slate-300 hover:bg-slate-800 hover:text-blue-300"
+                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
               )}
             >
               How It Works
@@ -202,15 +201,15 @@ const NavBar: React.FC = () => {
               className={cn(
                 "block px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
                 darkMode 
-                  ? "text-slate-300 hover:bg-slate-800 hover:text-white"
-                  : "text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-600"
+                  ? "text-slate-300 hover:bg-slate-800 hover:text-blue-300"
+                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
               )}
               onClick={closeMenu}
             >
               Contact Us
             </Link>
             <Button 
-              className="w-full mt-2 text-sm bg-gradient-to-r from-ruvo-600 to-purple-600 hover:from-ruvo-700 hover:to-purple-700 text-white shadow-lg transition-all duration-300" 
+              className="w-full mt-2 text-sm bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md transition-all duration-300" 
               onClick={closeMenu} 
               size="sm"
             >

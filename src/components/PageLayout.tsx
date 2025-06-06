@@ -29,9 +29,9 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             <img 
               src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
               alt="Ruvo Logo" 
-              className="h-10 w-auto dark:invert" 
+              className="h-10 w-auto brightness-0" 
             />
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-gradient">{title}</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{title}</h1>
           </div>
           {description && <p className="text-lg text-gray-600 mb-8">{description}</p>}
         </div>
