@@ -1,1 +1,5 @@
-project_id = "uqowomhiomozgrtfsjpk"
+
+project_id = "default"
+
+[functions.ai-support]
+verify_jwt = false
