@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Menu, X, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -45,22 +46,28 @@ const NavBar: React.FC = () => {
 
   return (
     <header className={cn(
-      "sticky top-0 z-40 w-full backdrop-blur-md border-b transition-all duration-300",
+      "sticky top-0 z-50 w-full backdrop-blur-xl border-b transition-all duration-300",
       darkMode 
-        ? "bg-slate-900/95 border-slate-700/40" 
-        : "bg-white/95 border-ruvo-200/30 shadow-sm"
+        ? "bg-slate-900/90 border-slate-700/50" 
+        : "bg-white/90 border-slate-200/50 shadow-lg"
     )}>
       <div className="container px-4 mx-auto max-w-7xl flex h-16 items-center justify-between">
         <div className="flex items-center">
-          <Link to="/" className="flex items-center hover:opacity-90 transition-opacity" onClick={() => closeMenu()}>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center mr-3 shadow-md">
+          <Link to="/" className="flex items-center hover:opacity-80 transition-all duration-300 group" onClick={() => closeMenu()}>
+            <div className="w-10 h-10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300">
               <img 
                 src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
                 alt="Ruvo Logo" 
-                className="h-5 w-auto filter brightness-0 invert" 
+                className={cn(
+                  "h-8 w-auto transition-all duration-300",
+                  darkMode ? "filter brightness-0 invert" : "filter brightness-0"
+                )}
               />
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-ruvo-500 to-ruvo-400 bg-clip-text text-transparent">
+            <span className={cn(
+              "text-2xl font-bold transition-all duration-300",
+              darkMode ? "text-white" : "text-slate-900"
+            )}>
               Ruvo
             </span>
           </Link>
@@ -69,34 +76,58 @@ const NavBar: React.FC = () => {
         <nav className="hidden md:flex items-center gap-8">
           <button 
             onClick={() => scrollToSection("home")} 
-            className="text-sm font-medium transition-all duration-300 text-slate-700 hover:text-ruvo-500 hover:scale-105"
+            className={cn(
+              "text-sm font-medium transition-all duration-300 hover:scale-105",
+              darkMode ? "text-slate-300 hover:text-white" : "text-slate-700 hover:text-ruvo-600"
+            )}
           >
             Home
           </button>
           <button 
             onClick={() => scrollToSection("about")} 
-            className="text-sm font-medium transition-all duration-300 text-slate-700 hover:text-ruvo-500 hover:scale-105"
+            className={cn(
+              "text-sm font-medium transition-all duration-300 hover:scale-105",
+              darkMode ? "text-slate-300 hover:text-white" : "text-slate-700 hover:text-ruvo-600"
+            )}
           >
             About
           </button>
           <button 
             onClick={() => scrollToSection("features")} 
-            className="text-sm font-medium transition-all duration-300 text-slate-700 hover:text-ruvo-500 hover:scale-105"
+            className={cn(
+              "text-sm font-medium transition-all duration-300 hover:scale-105",
+              darkMode ? "text-slate-300 hover:text-white" : "text-slate-700 hover:text-ruvo-600"
+            )}
           >
             Features
           </button>
           <button 
             onClick={() => scrollToSection("how-it-works")} 
-            className="text-sm font-medium transition-all duration-300 text-slate-700 hover:text-ruvo-500 hover:scale-105"
+            className={cn(
+              "text-sm font-medium transition-all duration-300 hover:scale-105",
+              darkMode ? "text-slate-300 hover:text-white" : "text-slate-700 hover:text-ruvo-600"
+            )}
           >
             How It Works
           </button>
           <Link to="/contact">
-            <Button variant="outline" size="sm" className="ml-2 border-ruvo-300 text-ruvo-600 hover:bg-ruvo-50 hover:border-ruvo-400 transition-all duration-300">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className={cn(
+                "ml-2 border-2 transition-all duration-300 hover:scale-105",
+                darkMode 
+                  ? "border-slate-600 text-slate-300 hover:bg-slate-800 hover:border-slate-500"
+                  : "border-ruvo-300 text-ruvo-600 hover:bg-ruvo-50 hover:border-ruvo-500"
+              )}
+            >
               Contact Us
             </Button>
           </Link>
-          <Button size="sm" className="bg-gradient-to-r from-ruvo-500 to-ruvo-400 hover:from-ruvo-600 hover:to-ruvo-500 text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+          <Button 
+            size="sm" 
+            className="bg-gradient-to-r from-ruvo-600 to-purple-600 hover:from-ruvo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 border-0"
+          >
             Get Started
           </Button>
         </nav>
@@ -104,7 +135,10 @@ const NavBar: React.FC = () => {
         <div className="md:hidden">
           <button 
             onClick={toggleMenu} 
-            className="p-2 rounded-md hover:bg-ruvo-50 focus:outline-none text-slate-700 transition-colors duration-300"
+            className={cn(
+              "p-2 rounded-md focus:outline-none transition-all duration-300 hover:scale-110",
+              darkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-ruvo-50 text-slate-700"
+            )}
           >
             {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -113,45 +147,70 @@ const NavBar: React.FC = () => {
 
       {isMenuOpen && (
         <div className={cn(
-          "md:hidden border-t backdrop-blur-md transition-all duration-300",
+          "md:hidden border-t backdrop-blur-xl transition-all duration-300",
           darkMode 
-            ? "bg-slate-900/95 border-slate-800" 
-            : "bg-white/95 border-ruvo-200/30"
+            ? "bg-slate-900/90 border-slate-800" 
+            : "bg-white/90 border-slate-200"
         )}>
           <div className="container-custom py-4 space-y-2">
             <button 
               onClick={() => scrollToSection("home")} 
-              className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-500 transition-all duration-300"
+              className={cn(
+                "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
+                darkMode 
+                  ? "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  : "text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-600"
+              )}
             >
               Home
             </button>
             <button 
               onClick={() => scrollToSection("about")} 
-              className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-500 transition-all duration-300"
+              className={cn(
+                "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
+                darkMode 
+                  ? "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  : "text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-600"
+              )}
             >
               About
             </button>
             <button 
               onClick={() => scrollToSection("features")} 
-              className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-500 transition-all duration-300"
+              className={cn(
+                "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
+                darkMode 
+                  ? "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  : "text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-600"
+              )}
             >
               Features
             </button>
             <button 
               onClick={() => scrollToSection("how-it-works")} 
-              className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-500 transition-all duration-300"
+              className={cn(
+                "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
+                darkMode 
+                  ? "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  : "text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-600"
+              )}
             >
               How It Works
             </button>
             <Link 
               to="/contact" 
-              className="block px-3 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-500 transition-all duration-300" 
+              className={cn(
+                "block px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
+                darkMode 
+                  ? "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  : "text-slate-700 hover:bg-ruvo-50 hover:text-ruvo-600"
+              )}
               onClick={closeMenu}
             >
               Contact Us
             </Link>
             <Button 
-              className="w-full mt-2 text-sm bg-gradient-to-r from-ruvo-500 to-ruvo-400 hover:from-ruvo-600 hover:to-ruvo-500 text-white shadow-md transition-all duration-300" 
+              className="w-full mt-2 text-sm bg-gradient-to-r from-ruvo-600 to-purple-600 hover:from-ruvo-700 hover:to-purple-700 text-white shadow-lg transition-all duration-300" 
               onClick={closeMenu} 
               size="sm"
             >
