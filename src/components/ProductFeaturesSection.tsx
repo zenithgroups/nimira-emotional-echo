@@ -15,93 +15,109 @@ const ProductFeaturesSection: React.FC = () => {
   };
 
   return (
-    <section id="features" className="section-spacing bg-gradient-to-br from-white to-ruvo-100/30 relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute top-40 right-0 w-72 h-72 bg-ruvo-300/20 rounded-full blur-3xl z-0"></div>
-      <div className="absolute bottom-20 left-10 w-60 h-60 bg-ruvo-400/20 rounded-full blur-3xl z-0"></div>
-      <div className="absolute top-60 left-20 w-40 h-40 bg-ruvo-200/30 rounded-full blur-2xl z-0"></div>
+    <section id="features" className="section-spacing relative overflow-hidden">
+      {/* Enhanced background with multiple gradients */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-ruvo-50/50 to-purple-50/30"></div>
+      
+      {/* Animated background elements */}
+      <div className="absolute top-20 right-0 w-96 h-96 bg-gradient-to-br from-ruvo-300/20 to-purple-300/20 rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-20 left-0 w-80 h-80 bg-gradient-to-br from-blue-300/15 to-ruvo-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-gradient-to-br from-purple-200/20 to-ruvo-200/25 rounded-full blur-2xl"></div>
       
       <div className="container-custom relative z-10">
         <div className="text-center mb-16">
-          <span className="inline-block px-4 py-2 rounded-full bg-ruvo-100 text-ruvo-500 text-sm font-medium mb-4">Powerful AI Features</span>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gradient">Advanced Capabilities</h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-ruvo-100 to-purple-100 border border-ruvo-200/50 shadow-sm mb-6">
+            <div className="w-2 h-2 bg-gradient-to-r from-ruvo-400 to-purple-400 rounded-full mr-3 animate-pulse"></div>
+            <span className="text-sm font-semibold text-ruvo-600">Powerful AI Features</span>
+          </div>
+          
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            <span className="bg-gradient-to-r from-ruvo-600 via-purple-600 to-ruvo-500 bg-clip-text text-transparent">
+              Advanced Capabilities
+            </span>
+          </h2>
+          
+          <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed mb-4">
             Experience a companion that's designed to support your emotional wellbeing with cutting-edge AI technology.
           </p>
-          <p className="mt-2 text-sm text-ruvo-500 font-medium">
-            Try the interactive demo below powered by OpenAI GPT-4o with premium voice!
-          </p>
+          
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-200/50">
+            <div className="w-2 h-2 bg-gradient-to-r from-emerald-400 to-green-400 rounded-full mr-2 animate-pulse"></div>
+            <p className="text-sm text-emerald-600 font-medium">
+              Try the interactive demo below powered by OpenAI GPT-4o with premium voice!
+            </p>
+          </div>
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Interactive Chat Interface */}
-          <div className="order-2 lg:order-1 relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-ruvo-300 to-ruvo-400 rounded-2xl blur opacity-40"></div>
-            <div className="glass h-full flex items-center justify-center p-4 md:p-8 relative">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          {/* Interactive Chat Interface with enhanced styling */}
+          <div className="order-2 lg:order-1 relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-ruvo-400 via-purple-400 to-ruvo-300 rounded-3xl blur-lg opacity-30 group-hover:opacity-40 transition-opacity duration-500"></div>
+            <div className="relative bg-white/90 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-6 md:p-8">
               <div className="w-full h-[500px]">
                 <ChatInterface />
               </div>
             </div>
           </div>
           
-          {/* Features List */}
+          {/* Features List with enhanced cards */}
           <div className="order-1 lg:order-2">
             <div className="space-y-6">
               <div 
-                className="flex gap-4 cursor-pointer p-5 rounded-xl hover:bg-ruvo-100/30 transition-all duration-300 hover:scale-[1.02] border border-transparent hover:border-ruvo-200/50"
+                className="group flex gap-6 cursor-pointer p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-ruvo-100/50 hover:bg-white/80 hover:border-ruvo-200/60 transition-all duration-500 hover:scale-[1.02] hover:shadow-xl"
                 onClick={() => handleFeatureClick("Real-time Chat", "Experience natural, human-like conversations powered by OpenAI's most advanced language model, for meaningful interactions.")}
               >
-                <div className="shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-ruvo-300 to-ruvo-400 flex items-center justify-center shadow-md">
-                  <MessageSquare className="h-6 w-6 text-white" />
+                <div className="shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-ruvo-400 to-purple-500 flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                  <MessageSquare className="h-7 w-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2 text-ruvo-600">Real-time Chat with OpenAI</h3>
-                  <p className="text-gray-600">
+                  <h3 className="text-xl font-bold mb-3 text-slate-800 group-hover:text-ruvo-600 transition-colors duration-300">Real-time Chat with OpenAI</h3>
+                  <p className="text-slate-600 leading-relaxed">
                     Experience natural, human-like conversations powered by OpenAI's most advanced language model, for meaningful interactions.
                   </p>
                 </div>
               </div>
               
               <div 
-                className="flex gap-4 cursor-pointer p-5 rounded-xl hover:bg-ruvo-100/30 transition-all duration-300 hover:scale-[1.02] border border-transparent hover:border-ruvo-200/50"
+                className="group flex gap-6 cursor-pointer p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-ruvo-100/50 hover:bg-white/80 hover:border-ruvo-200/60 transition-all duration-500 hover:scale-[1.02] hover:shadow-xl"
                 onClick={() => handleFeatureClick("Memory Journaling", "Ruvo remembers your past conversations and important life events, creating a digital memory journal that evolves with you.")}
               >
-                <div className="shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-ruvo-300 to-ruvo-400 flex items-center justify-center shadow-md">
-                  <Book className="h-6 w-6 text-white" />
+                <div className="shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-400 to-ruvo-500 flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                  <Book className="h-7 w-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2 text-ruvo-600">Memory Journaling</h3>
-                  <p className="text-gray-600">
+                  <h3 className="text-xl font-bold mb-3 text-slate-800 group-hover:text-ruvo-600 transition-colors duration-300">Memory Journaling</h3>
+                  <p className="text-slate-600 leading-relaxed">
                     Ruvo remembers your past conversations and important life events, creating a digital memory journal that evolves with you.
                   </p>
                 </div>
               </div>
               
               <div 
-                className="flex gap-4 cursor-pointer p-5 rounded-xl hover:bg-ruvo-100/30 transition-all duration-300 hover:scale-[1.02] border border-transparent hover:border-ruvo-200/50"
+                className="group flex gap-6 cursor-pointer p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-ruvo-100/50 hover:bg-white/80 hover:border-ruvo-200/60 transition-all duration-500 hover:scale-[1.02] hover:shadow-xl"
                 onClick={() => handleFeatureClick("Daily Mood Check-ins", "Regular emotion tracking and personalized insights to help you understand patterns in your emotional wellbeing.")}
               >
-                <div className="shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-ruvo-300 to-ruvo-400 flex items-center justify-center shadow-md">
-                  <Smile className="h-6 w-6 text-white" />
+                <div className="shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-green-500 flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                  <Smile className="h-7 w-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2 text-ruvo-600">Daily Mood Check-ins</h3>
-                  <p className="text-gray-600">
+                  <h3 className="text-xl font-bold mb-3 text-slate-800 group-hover:text-ruvo-600 transition-colors duration-300">Daily Mood Check-ins</h3>
+                  <p className="text-slate-600 leading-relaxed">
                     Regular emotion tracking and personalized insights to help you understand patterns in your emotional wellbeing.
                   </p>
                 </div>
               </div>
               
               <div 
-                className="flex gap-4 cursor-pointer p-5 rounded-xl hover:bg-ruvo-100/30 transition-all duration-300 hover:scale-[1.02] border border-transparent hover:border-ruvo-200/50"
+                className="group flex gap-6 cursor-pointer p-6 rounded-2xl bg-white/60 backdrop-blur-sm border border-ruvo-100/50 hover:bg-white/80 hover:border-ruvo-200/60 transition-all duration-500 hover:scale-[1.02] hover:shadow-xl"
                 onClick={() => handleFeatureClick("Security & Privacy", "Your conversations with Ruvo are encrypted and private, with transparent data practices and user control.")}
               >
-                <div className="shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-ruvo-300 to-ruvo-400 flex items-center justify-center shadow-md">
-                  <Shield className="h-6 w-6 text-white" />
+                <div className="shrink-0 w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                  <Shield className="h-7 w-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2 text-ruvo-600">Secure, Private by Design</h3>
-                  <p className="text-gray-600">
+                  <h3 className="text-xl font-bold mb-3 text-slate-800 group-hover:text-ruvo-600 transition-colors duration-300">Secure, Private by Design</h3>
+                  <p className="text-slate-600 leading-relaxed">
                     Your conversations with Ruvo are encrypted and private, with transparent data practices and user control.
                   </p>
                 </div>
