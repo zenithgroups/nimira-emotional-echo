@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { MessageSquare, Mail, Phone, Bot, CheckCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from '@/integrations/supabase/client';
+import ChatSupport from "@/components/ChatSupport";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -21,6 +22,7 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [aiResponse, setAiResponse] = useState('');
   const [showResponse, setShowResponse] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -116,13 +118,17 @@ const Contact = () => {
               </div>
               <h3 className="font-semibold mb-2">Chat Support</h3>
               <p className="text-gray-600 text-sm mb-4">
-                Chat with our support team in real-time during business hours.
+                Chat with our AI support system in real-time for instant help.
               </p>
-              <Button variant="outline" className="w-full">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => setIsChatOpen(true)}
+              >
                 Start Chat
               </Button>
               <div className="text-xs text-gray-500 mt-3">
-                Available 9AM-6PM ET, Monday-Friday
+                Available 24/7 with AI assistance
               </div>
             </CardContent>
           </Card>
@@ -271,6 +277,8 @@ const Contact = () => {
           </div>
         </section>
       </div>
+
+      <ChatSupport isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </PageLayout>
   );
 };
