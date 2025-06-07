@@ -24,7 +24,7 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: "Hello! I'm here to help you with any questions about Ruvo AI. How can I assist you today?",
+      content: "Hello! I'm Ruvipi, your Ruvo AI support companion. I'm here to help you understand how our emotionally intelligent AI can support your journey. How can I assist you today?",
       isUser: false,
       timestamp: new Date()
     }
@@ -82,14 +82,22 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
 
       if (error) throw error;
 
-      // Clean up the AI response by removing "Subject:" prefix and other formatting
+      // Clean up the AI response by removing any formal signatures
       let cleanResponse = data.response || data.fallbackResponse || "I'm sorry, I'm having trouble responding right now. Please try again.";
       
-      // Remove "Subject:" prefix if it exists
+      // Remove various signature patterns
       cleanResponse = cleanResponse.replace(/^Subject:\s*[^:]*:?\s*/i, '');
-      
-      // Remove any greeting that might be redundant
+      cleanResponse = cleanResponse.replace(/Best regards,[\s\S]*$/i, '');
+      cleanResponse = cleanResponse.replace(/Sincerely,[\s\S]*$/i, '');
+      cleanResponse = cleanResponse.replace(/Thank you,[\s\S]*$/i, '');
+      cleanResponse = cleanResponse.replace(/\[Your Name\][\s\S]*$/i, '');
+      cleanResponse = cleanResponse.replace(/Customer Support Team[\s\S]*$/i, '');
+      cleanResponse = cleanResponse.replace(/RuvoLabs[\s\S]*$/i, '');
       cleanResponse = cleanResponse.replace(/^Hi Chat User,?\s*/i, '');
+      
+      // Remove any trailing signatures or formal closings
+      cleanResponse = cleanResponse.replace(/\n\n.*Team.*$/s, '');
+      cleanResponse = cleanResponse.trim();
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -122,13 +130,14 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md h-[600px] flex flex-col shadow-2xl">
+      <div className="fixed inset-0" onClick={onClose} />
+      <Card className="relative w-full max-w-md h-[600px] flex flex-col shadow-2xl">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
           <CardTitle className="flex items-center gap-2 text-slate-800">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
               <Bot className="h-4 w-4 text-white" />
             </div>
-            Ruvo AI Support
+            Ruvipi - Ruvo AI Support
           </CardTitle>
           <Button variant="ghost" size="sm" onClick={onClose} className="hover:bg-white/50">
             <X className="h-4 w-4" />
@@ -196,7 +205,7 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
+                placeholder="Ask me about Ruvo AI..."
                 disabled={isLoading}
                 className="flex-1"
               />
