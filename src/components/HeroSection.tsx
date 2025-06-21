@@ -2,7 +2,6 @@
 import React from "react";
 import { useToast } from "@/components/ui/use-toast";
 import TrueFocus from "./misc/TrueFocus";
-import { Link } from "react-router-dom";
 
 const HeroSection: React.FC = () => {
   const { toast } = useToast();
@@ -57,12 +56,12 @@ const HeroSection: React.FC = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/chat" className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <a href="/chat" className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                 <span>Try Ruvo for Free</span>
                 <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-              </Link>
+              </a>
               <button
                 onClick={handleLearnMore}
                 className="group inline-flex items-center justify-center px-8 py-4 bg-white/90 backdrop-blur-sm text-slate-700 border border-slate-200 hover:border-blue-300 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 hover:bg-blue-50/50"
@@ -93,7 +92,7 @@ const HeroSection: React.FC = () => {
               {/* Refined glass card */}
               <div className="relative bg-white/95 backdrop-blur-xl border border-slate-200/50 p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 group">
                 {/* Subtle gradient border effect */}
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-300/30 via-indigo-300/30 to-blue-300/30 rounded-2xl opacity-20 group-hover:opacity-30 transition-opacity duration-500 blur-sm"></div>
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-300/30 via-indigo-300/30 to-blue-300/30 rounded-2xl opacity-20 transition-opacity duration-500 blur-sm"></div>
                 
                 {/* Gentle floating orbs */}
                 <div className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-br from-blue-300/40 to-indigo-300/40 rounded-full blur-xl animate-pulse"></div>
@@ -142,16 +141,11 @@ const HeroSection: React.FC = () => {
                   </div>
 
                   <div className="pt-4">
-                    <form onSubmit={(e) => e.preventDefault()} className="relative">
-                      <input
-                        type="text"
-                        placeholder="Send a message..."
-                        className="w-full bg-slate-50/90 backdrop-blur-sm border border-slate-200 rounded-full px-4 py-3 text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300"
-                      />
-                      <Link
-                        to="/chat"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white p-2.5 rounded-full transition-all duration-300 hover:scale-110 shadow-md"
-                      >
+                    <div className="relative">
+                      <div className="w-full bg-slate-50/90 backdrop-blur-sm border border-slate-200 rounded-full px-4 py-3 text-sm placeholder-slate-400 cursor-not-allowed">
+                        <span className="text-slate-400">Send a message...</span>
+                      </div>
+                      <div className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2.5 rounded-full shadow-md cursor-not-allowed opacity-50">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="16"
@@ -166,8 +160,8 @@ const HeroSection: React.FC = () => {
                           <path d="m22 2-7 20-4-9-9-4Z"></path>
                           <path d="M22 2 11 13"></path>
                         </svg>
-                      </Link>
-                    </form>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
