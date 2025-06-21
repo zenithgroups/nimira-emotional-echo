@@ -31,12 +31,13 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Sophisticated floating orbs */}
-      <div className="orb-sophisticated-1 top-20 left-10 -z-10"></div>
-      <div className="orb-sophisticated-2 top-60 right-20 -z-10"></div>
-      <div className="orb-sophisticated-3 bottom-40 left-1/3 -z-10"></div>
-      <div className="orb-sophisticated-1 bottom-20 right-10 -z-10" style={{animationDelay: '3s'}}></div>
+    <div className="min-h-screen relative overflow-hidden bg-white">
+      {/* Modern floating orbs */}
+      <div className="orb-modern-1 top-20 left-10 -z-10"></div>
+      <div className="orb-modern-2 top-60 right-20 -z-10"></div>
+      <div className="orb-modern-3 bottom-40 left-1/3 -z-10"></div>
+      <div className="orb-modern-1 bottom-20 right-10 -z-10" style={{animationDelay: '5s'}}></div>
+      <div className="orb-modern-2 top-1/2 left-20 -z-10" style={{animationDelay: '8s'}}></div>
       
       <NavBar />
       <HeroSection />
