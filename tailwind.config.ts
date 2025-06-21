@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -20,9 +21,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        heading: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['VT323', 'monospace'],
-        pixel: ['"Press Start 2P"', 'cursive'],
+        display: ['Playfair Display', 'serif'],
+        space: ['Space Grotesk', 'sans-serif'],
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -58,13 +58,12 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
         },
-        ruvo: {
-          100: '#E5DEFF',
-          200: '#D3E4FD',
-          300: '#D6BCFA',
-          400: '#9B87F5',
-          500: '#7E69AB',
-          600: '#1A1F2C',
+        emotional: {
+          purple: '#8b5cf6',
+          pink: '#db2777',
+          blue: '#3b82f6',
+          emerald: '#10b981',
+          amber: '#f59e0b',
         },
         sidebar: {
           DEFAULT: 'hsl(var(--sidebar-background))',
@@ -76,14 +75,6 @@ export default {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))'
         },
-        dark: {
-          100: '#1E293B', // slate-800
-          200: '#0F172A', // slate-900
-          300: '#020617', // slate-950
-          accent: '#334155', // slate-700
-          muted: '#475569', // slate-600
-          border: '#334155', // slate-700
-        }
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -99,59 +90,39 @@ export default {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
-        'fade-in': {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        'breathe': {
+          '0%, 100%': { transform: 'scale(1)', opacity: '0.7' },
+          '50%': { transform: 'scale(1.05)', opacity: '1' },
         },
-        'fade-out': {
-          '0%': { opacity: '1', transform: 'translateY(0)' },
-          '100%': { opacity: '0', transform: 'translateY(10px)' },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-20px)' },
         },
-        'gradient-flow': {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
+        'pulse-glow': {
+          '0%, 100%': { boxShadow: '0 0 20px rgba(139, 92, 246, 0.3)' },
+          '50%': { boxShadow: '0 0 40px rgba(139, 92, 246, 0.6)' },
+        },
+        'gradient-shift': {
+          '0%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
         },
-        'typing': {
-          '0%': { transform: 'translateY(0)', opacity: '0.6' },
-          '50%': { transform: 'translateY(-5px)', opacity: '1' },
-          '100%': { transform: 'translateY(0)', opacity: '0.6' },
+        'typing-bounce': {
+          '0%, 80%, 100%': { transform: 'scale(0.8)', opacity: '0.5' },
+          '40%': { transform: 'scale(1.2)', opacity: '1' },
         },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'fade-in': 'fade-in 0.5s ease-out',
-        'fade-out': 'fade-out 0.5s ease-out',
-        'gradient-flow': 'gradient-flow 3s ease infinite',
-        'typing': 'typing 1.4s infinite',
+        'breathe': 'breathe 4s ease-in-out infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
+        'gradient-shift': 'gradient-shift 8s ease infinite',
+        'typing-bounce': 'typing-bounce 1.4s infinite ease-in-out',
       },
       backgroundImage: {
-        'hero-gradient': 'linear-gradient(45deg, #9B87F5, #7E69AB, #D3E4FD)',
-      },
-      fontSize: {
-        'xs': ['0.75rem', { lineHeight: '1rem' }],
-        'sm': ['0.875rem', { lineHeight: '1.25rem' }],
-        'base': ['1rem', { lineHeight: '1.5rem' }],
-        'lg': ['1.125rem', { lineHeight: '1.75rem' }],
-        'xl': ['1.25rem', { lineHeight: '1.75rem' }],
-        '2xl': ['1.5rem', { lineHeight: '2rem' }],
-        '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
-        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
-        '5xl': ['3rem', { lineHeight: '1' }],
-        '6xl': ['3.75rem', { lineHeight: '1' }],
-      },
-      spacing: {
-        '4xs': '0.125rem',
-        '3xs': '0.25rem',
-        '2xs': '0.375rem',
-        'xs': '0.5rem',
-        'sm': '0.75rem',
-        'md': '1rem',
-        'lg': '1.25rem',
-        'xl': '1.5rem',
-        '2xl': '2rem',
-        '3xl': '2.5rem',
-        '4xl': '3rem',
+        'emotional-gradient': 'linear-gradient(135deg, #8b5cf6, #db2777, #3b82f6, #10b981)',
       },
     }
   },

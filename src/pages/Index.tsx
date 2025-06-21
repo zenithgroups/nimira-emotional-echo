@@ -31,7 +31,13 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Floating emotional orbs */}
+      <div className="orb-1 top-20 left-10 -z-10"></div>
+      <div className="orb-2 top-60 right-20 -z-10"></div>
+      <div className="orb-3 bottom-40 left-1/3 -z-10"></div>
+      <div className="orb-1 bottom-20 right-10 -z-10" style={{animationDelay: '2s'}}></div>
+      
       <NavBar />
       <HeroSection />
       <HowItWorksSection />
