@@ -55,7 +55,7 @@ const GlowingSoul = ({ position, color = '#ffffff', size = 0.8, pulseSpeed = 1 }
 
 // Energy connection between souls
 const EnergyConnection = () => {
-  const lineRef = useRef<THREE.Line>(null);
+  const lineRef = useRef<THREE.Mesh>(null);
   
   const points = useMemo(() => {
     const curve = new THREE.CatmullRomCurve3([
@@ -68,25 +68,28 @@ const EnergyConnection = () => {
     return curve.getPoints(50);
   }, []);
   
+  const tubeGeometry = useMemo(() => {
+    const curve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-2, 0, 0),
+      new THREE.Vector3(-1, 0.3, 0),
+      new THREE.Vector3(0, 0.2, 0),
+      new THREE.Vector3(1, 0.3, 0),
+      new THREE.Vector3(2, 0, 0)
+    ]);
+    return new THREE.TubeGeometry(curve, 20, 0.02, 8, false);
+  }, []);
+  
   useFrame((state) => {
     if (lineRef.current) {
       const opacity = 0.4 + Math.sin(state.clock.elapsedTime * 2) * 0.3;
-      (lineRef.current.material as THREE.LineBasicMaterial).opacity = opacity;
+      (lineRef.current.material as THREE.MeshBasicMaterial).opacity = opacity;
     }
   });
 
   return (
-    <line ref={lineRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={points.length}
-          array={new Float32Array(points.flatMap(p => [p.x, p.y, p.z]))}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <lineBasicMaterial color="#00ffff" transparent opacity={0.7} linewidth={3} />
-    </line>
+    <mesh ref={lineRef} geometry={tubeGeometry}>
+      <meshBasicMaterial color="#00ffff" transparent opacity={0.7} />
+    </mesh>
   );
 };
 
