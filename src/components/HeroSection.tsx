@@ -1,7 +1,7 @@
 
 import React from "react";
 import { useToast } from "@/components/ui/use-toast";
-import TrueFocus from "./misc/TrueFocus";
+import HumanAIInteraction3D from "./HumanAIInteraction3D";
 
 const HeroSection: React.FC = () => {
   const { toast } = useToast();
@@ -92,90 +92,23 @@ const HeroSection: React.FC = () => {
           </div>
 
           <div className="flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-lg">
-              {/* Human-AI interaction visualization */}
-              <div className="relative">
-                {/* Glowing interaction field */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-cyan-400/30 to-blue-600/20 rounded-full blur-3xl animate-pulse"></div>
+            <div className="relative w-full max-w-lg h-96 lg:h-[500px]">
+              {/* 3D Scene Container */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-cyan-800/10 to-blue-700/10 backdrop-blur-xl border border-blue-500/20 rounded-3xl overflow-hidden">
+                <HumanAIInteraction3D />
                 
-                {/* Main interaction container */}
-                <div className="relative bg-gradient-to-br from-blue-900/40 via-cyan-800/30 to-blue-700/20 backdrop-blur-xl border border-blue-500/30 rounded-3xl p-8 shadow-2xl">
-                  {/* Human figure (simplified silhouette) */}
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-                    <div className="w-16 h-20 relative">
-                      {/* Head */}
-                      <div className="w-6 h-6 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full mx-auto"></div>
-                      {/* Body */}
-                      <div className="w-8 h-12 bg-gradient-to-br from-gray-300 to-gray-400 rounded-lg mx-auto mt-1"></div>
-                    </div>
-                  </div>
-
-                  {/* AI wireframe figure */}
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <div className="w-16 h-20 relative">
-                      {/* AI Head wireframe */}
-                      <div className="w-6 h-6 border-2 border-cyan-400 rounded-full mx-auto relative overflow-hidden">
-                        {/* Grid pattern inside head */}
-                        <div className="absolute inset-0 opacity-60">
-                          <svg viewBox="0 0 24 24" className="w-full h-full">
-                            <defs>
-                              <pattern id="brain-grid" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
-                                <path d="M0 2h4M2 0v4" stroke="currentColor" strokeWidth="0.5" className="text-cyan-400"/>
-                              </pattern>
-                            </defs>
-                            <rect width="100%" height="100%" fill="url(#brain-grid)"/>
-                          </svg>
-                        </div>
-                        {/* Pulsing center dot */}
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1 h-1 bg-cyan-300 rounded-full animate-pulse"></div>
-                      </div>
-                      {/* AI Body wireframe */}
-                      <div className="w-8 h-12 border-2 border-cyan-400 rounded-lg mx-auto mt-1 relative">
-                        {/* Vertical lines */}
-                        <div className="absolute left-1/4 top-0 bottom-0 w-px bg-cyan-400/50"></div>
-                        <div className="absolute right-1/4 top-0 bottom-0 w-px bg-cyan-400/50"></div>
-                        {/* Horizontal lines */}
-                        <div className="absolute top-1/3 left-0 right-0 h-px bg-cyan-400/50"></div>
-                        <div className="absolute top-2/3 left-0 right-0 h-px bg-cyan-400/50"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Interaction beam/connection */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <div className="w-20 h-1 bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-500 opacity-80 animate-pulse rounded-full"></div>
-                    {/* Floating particles along the beam */}
-                    <div className="absolute top-0 left-2 w-1 h-1 bg-cyan-300 rounded-full animate-ping" style={{ animationDelay: '0s' }}></div>
-                    <div className="absolute top-0 left-8 w-1 h-1 bg-blue-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
-                    <div className="absolute top-0 left-14 w-1 h-1 bg-cyan-300 rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
-                  </div>
-
-                  {/* Emotional indicators around the scene */}
-                  <div className="absolute top-8 left-8 text-xs text-cyan-300 opacity-70 animate-pulse">
-                    💝 Empathy
-                  </div>
-                  <div className="absolute top-8 right-8 text-xs text-blue-300 opacity-70 animate-pulse" style={{ animationDelay: '0.5s' }}>
-                    🧠 Intelligence
-                  </div>
-                  <div className="absolute bottom-8 left-8 text-xs text-cyan-300 opacity-70 animate-pulse" style={{ animationDelay: '1s' }}>
-                    ❤️ Connection
-                  </div>
-                  <div className="absolute bottom-8 right-8 text-xs text-blue-300 opacity-70 animate-pulse" style={{ animationDelay: '1.5s' }}>
-                    ✨ Understanding
-                  </div>
-
-                  {/* Circuit pattern overlay */}
-                  <div className="absolute inset-0 opacity-10">
-                    <svg viewBox="0 0 200 200" className="w-full h-full">
-                      <defs>
-                        <pattern id="circuit" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                          <path d="M0 10h20M10 0v20" stroke="currentColor" strokeWidth="0.5" className="text-cyan-400"/>
-                          <circle cx="10" cy="10" r="1" fill="currentColor" className="text-cyan-400"/>
-                        </pattern>
-                      </defs>
-                      <rect width="100%" height="100%" fill="url(#circuit)"/>
-                    </svg>
-                  </div>
+                {/* Overlay UI elements */}
+                <div className="absolute top-4 left-4 text-xs text-cyan-300 opacity-70 animate-pulse">
+                  💝 Empathy
+                </div>
+                <div className="absolute top-4 right-4 text-xs text-blue-300 opacity-70 animate-pulse" style={{ animationDelay: '0.5s' }}>
+                  🧠 Intelligence
+                </div>
+                <div className="absolute bottom-4 left-4 text-xs text-cyan-300 opacity-70 animate-pulse" style={{ animationDelay: '1s' }}>
+                  ❤️ Connection
+                </div>
+                <div className="absolute bottom-4 right-4 text-xs text-blue-300 opacity-70 animate-pulse" style={{ animationDelay: '1.5s' }}>
+                  ✨ Understanding
                 </div>
               </div>
               
