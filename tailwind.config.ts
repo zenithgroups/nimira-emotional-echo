@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -77,12 +78,12 @@ export default {
           ring: 'hsl(var(--sidebar-ring))'
         },
         dark: {
-          100: '#1E293B', // slate-800
-          200: '#0F172A', // slate-900
-          300: '#020617', // slate-950
-          accent: '#334155', // slate-700
-          muted: '#475569', // slate-600
-          border: '#334155', // slate-700
+          100: '#1E293B',
+          200: '#0F172A',
+          300: '#020617',
+          accent: '#334155',
+          muted: '#475569',
+          border: '#334155',
         }
       },
       borderRadius: {
@@ -116,6 +117,18 @@ export default {
           '50%': { transform: 'translateY(-5px)', opacity: '1' },
           '100%': { transform: 'translateY(0)', opacity: '0.6' },
         },
+        'spin-slow': {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        'glow': {
+          '0%, 100%': { opacity: '0.5' },
+          '50%': { opacity: '1' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -124,9 +137,13 @@ export default {
         'fade-out': 'fade-out 0.5s ease-out',
         'gradient-flow': 'gradient-flow 3s ease infinite',
         'typing': 'typing 1.4s infinite',
+        'spin-slow': 'spin-slow 8s linear infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'glow': 'glow 2s ease-in-out infinite',
       },
       backgroundImage: {
         'hero-gradient': 'linear-gradient(45deg, #9B87F5, #7E69AB, #D3E4FD)',
+        'dark-gradient': 'linear-gradient(135deg, #0F172A, #1E293B, #334155)',
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],
@@ -139,6 +156,7 @@ export default {
         '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
         '5xl': ['3rem', { lineHeight: '1' }],
         '6xl': ['3.75rem', { lineHeight: '1' }],
+        '7xl': ['4.5rem', { lineHeight: '1' }],
       },
       spacing: {
         '4xs': '0.125rem',

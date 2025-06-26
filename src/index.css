@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=VT323&family=Press+Start+2P&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,33 +7,33 @@
 
 @layer base {
   :root {
-    --background: 260 25% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 262 60% 75%; /* Lavender */
-    --primary-foreground: 210 40% 98%;
+    --primary: 45 93% 58%; /* Amber */
+    --primary-foreground: 222.2 84% 4.9%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 262 51% 90%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 262 60% 75%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 45 93% 58%;
 
     --radius: 1rem;
   }
@@ -48,9 +48,11 @@
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
     -webkit-text-size-adjust: 100%;
     letter-spacing: -0.01em;
+    background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%);
+    min-height: 100vh;
   }
 
-  /* Selective use of pixel font only for major headings */
+  /* Modern font styles */
   .font-pixel {
     font-family: 'Press Start 2P', cursive;
     letter-spacing: -0.03em;
@@ -58,23 +60,21 @@
   }
 
   .main-title {
-    font-family: 'Press Start 2P', cursive;
-    letter-spacing: -0.02em;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.03em;
     @apply transition-all duration-300;
   }
 
-  /* Apply pixel font only to main app title */
   h1.app-title {
     @apply main-title tracking-tight;
   }
 
-  /* Use normal font for all other headings */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-semibold tracking-tight;
+    @apply font-heading font-bold tracking-tight;
     letter-spacing: -0.02em;
   }
 
-  /* Additional heading styles */
   h1 {
     @apply text-4xl md:text-5xl lg:text-6xl;
   }
@@ -91,21 +91,28 @@
     @apply leading-relaxed;
   }
 
-  /* Keep existing styles */
+  /* Modern glass morphism */
   .glass {
-    @apply bg-white/70 backdrop-blur-lg border border-white/20 rounded-2xl shadow-lg;
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
+  }
+
+  .glass-dark {
+    @apply bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
   }
 
   .gradient-bg {
-    @apply bg-gradient-to-br from-ruvo-400 via-ruvo-500 to-ruvo-300 bg-size-200 animate-gradient-flow;
+    @apply bg-gradient-to-br from-amber-600 via-amber-500 to-amber-400 bg-size-200 animate-gradient-flow;
   }
 
   .text-gradient {
-    @apply bg-gradient-to-r from-ruvo-400 to-ruvo-300 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-amber-400 to-amber-300 bg-clip-text text-transparent;
+  }
+
+  .text-gradient-gold {
+    @apply bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 bg-clip-text text-transparent;
   }
 }
 
-/* Keep existing component classes */
 @layer components {
   .container-custom {
     @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
@@ -116,7 +123,11 @@
   }
 
   .gradient-button {
-    @apply bg-gradient-to-r from-ruvo-400 to-ruvo-300 hover:from-ruvo-300 hover:to-ruvo-400 text-white font-medium rounded-full px-6 py-2.5 sm:px-8 sm:py-3 transition duration-300 shadow-md hover:shadow-lg text-sm sm:text-base;
+    @apply bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold rounded-lg px-6 py-2.5 sm:px-8 sm:py-3 transition-all duration-300 shadow-lg hover:shadow-xl hover:shadow-amber-500/25 text-sm sm:text-base;
+  }
+
+  .dark-button {
+    @apply bg-white/5 backdrop-blur-sm text-white border border-white/20 hover:border-amber-500/50 rounded-lg px-6 py-2.5 sm:px-8 sm:py-3 transition-all duration-300 hover:bg-white/10 text-sm sm:text-base;
   }
 
   .bg-size-200 {
@@ -124,55 +135,73 @@
   }
 
   .card-feature {
-    @apply bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-4 sm:p-6 border border-ruvo-200/50 transition-all duration-300 hover:shadow-xl hover:border-ruvo-300/50;
+    @apply bg-black/40 backdrop-blur-xl rounded-2xl shadow-2xl p-4 sm:p-6 border border-white/10 transition-all duration-300 hover:shadow-2xl hover:border-amber-500/30 hover:bg-black/50;
   }
 
-  /* Mobile optimized text classes */
+  .card-glass {
+    @apply bg-white/5 backdrop-blur-xl rounded-2xl shadow-2xl p-6 border border-white/10 transition-all duration-300 hover:shadow-2xl hover:border-amber-500/30;
+  }
+
+  /* Enhanced mobile text classes */
   .mobile-text-base {
-    @apply text-base sm:text-lg;
+    @apply text-base sm:text-lg font-light;
   }
   
   .mobile-text-sm {
-    @apply text-sm sm:text-base;
+    @apply text-sm sm:text-base font-light;
   }
   
   .mobile-heading-1 {
-    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight;
+    @apply text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight;
   }
   
   .mobile-heading-2 {
-    @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4;
+    @apply text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6;
   }
   
   .mobile-heading-3 {
-    @apply text-xl sm:text-2xl font-semibold mb-2 sm:mb-3;
+    @apply text-2xl sm:text-3xl font-semibold mb-3 sm:mb-4;
   }
 
-  /* Enhanced transitions for UI elements */
+  /* Smooth transitions */
   .transition-smooth {
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
   }
   
-  /* Pixel text animation for main titles */
-  @keyframes pixel-appear {
-    from {
-      transform: translateY(-5px);
-      opacity: 0;
+  /* AI-themed animations */
+  @keyframes ai-pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.8;
     }
-    to {
-      transform: translateY(0);
+    50% {
+      transform: scale(1.05);
       opacity: 1;
     }
   }
   
-  .pixel-animate {
-    animation: pixel-appear 0.5s ease-out forwards;
+  .ai-pulse {
+    animation: ai-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes circuit-flow {
+    0% {
+      stroke-dashoffset: 100;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  .circuit-flow {
+    stroke-dasharray: 10;
+    animation: circuit-flow 2s linear infinite;
   }
 }
 
-/* Enhanced typing animation for chat */
+/* Enhanced typing animation */
 .typing-animation {
   display: flex;
   align-items: center;
@@ -183,13 +212,9 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #9B87F5;
+  background-color: #FBB040;
   margin: 0 3px;
   opacity: 0.6;
-}
-
-.dark .dot {
-  background-color: #D6BCFA;
 }
 
 .dot:nth-child(1) {
@@ -219,7 +244,7 @@
   }
 }
 
-/* Smooth transitions for various UI elements */
+/* Smooth chat transitions */
 .chat-transition {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -245,14 +270,44 @@
   transition: opacity 300ms, transform 300ms;
 }
 
-/* Dark mode overrides */
+/* Dark theme overrides */
 .dark .text-gradient {
-  background: linear-gradient(to right, #9B87F5, #D6BCFA);
+  background: linear-gradient(to right, #FBB040, #F59E0B);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Logo color inversion in dark mode */
-.dark .invert-in-dark {
-  filter: invert(1);
+/* Particle effects */
+.particle {
+  position: absolute;
+  background: radial-gradient(circle, #FBB040 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+/* Glowing effects */
+.glow-amber {
+  box-shadow: 0 0 20px rgba(251, 176, 64, 0.3);
+}
+
+.glow-amber:hover {
+  box-shadow: 0 0 30px rgba(251, 176, 64, 0.5);
+}
+
+/* Circuit board pattern */
+.circuit-pattern {
+  background-image: 
+    linear-gradient(90deg, rgba(251, 176, 64, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(251, 176, 64, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
