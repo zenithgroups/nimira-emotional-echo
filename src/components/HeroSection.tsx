@@ -92,57 +92,37 @@ const HeroSection: React.FC = () => {
           </div>
 
           <div className="flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-lg">
-              {/* Main AI brain visualization */}
-              <div className="relative">
-                {/* Glowing orb background */}
-                <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 via-amber-400/30 to-amber-600/20 rounded-full blur-3xl animate-pulse"></div>
-                
-                {/* Central brain/AI head representation */}
-                <div className="relative bg-gradient-to-br from-amber-900/40 via-amber-800/30 to-amber-700/20 backdrop-blur-xl border border-amber-500/30 rounded-3xl p-12 shadow-2xl">
-                  {/* AI circuit pattern overlay */}
-                  <div className="absolute inset-0 opacity-20">
-                    <svg viewBox="0 0 200 200" className="w-full h-full">
-                      <defs>
-                        <pattern id="circuit" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-                          <path d="M0 20h40M20 0v40" stroke="currentColor" strokeWidth="0.5" className="text-amber-400"/>
-                          <circle cx="20" cy="20" r="2" fill="currentColor" className="text-amber-400"/>
-                        </pattern>
-                      </defs>
-                      <rect width="100%" height="100%" fill="url(#circuit)"/>
-                    </svg>
-                  </div>
-                  
-                  {/* Central AI icon */}
-                  <div className="relative z-10 flex items-center justify-center">
-                    <div className="w-32 h-32 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-2xl">
-                      <div className="w-24 h-24 bg-gradient-to-br from-amber-300 to-amber-500 rounded-full flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" className="w-12 h-12 text-black">
-                          <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Floating connection nodes */}
-                  <div className="absolute top-8 left-8 w-4 h-4 bg-amber-400 rounded-full animate-pulse opacity-70"></div>
-                  <div className="absolute top-12 right-12 w-3 h-3 bg-amber-300 rounded-full animate-pulse opacity-60" style={{ animationDelay: '0.5s' }}></div>
-                  <div className="absolute bottom-12 left-12 w-3 h-3 bg-amber-500 rounded-full animate-pulse opacity-50" style={{ animationDelay: '1s' }}></div>
-                  <div className="absolute bottom-8 right-8 w-4 h-4 bg-amber-400 rounded-full animate-pulse opacity-80" style={{ animationDelay: '1.5s' }}></div>
-                  
-                  {/* Connection lines */}
-                  <svg className="absolute inset-0 w-full h-full opacity-30">
-                    <line x1="20%" y1="20%" x2="80%" y2="80%" stroke="currentColor" strokeWidth="1" className="text-amber-400"/>
-                    <line x1="80%" y1="20%" x2="20%" y2="80%" stroke="currentColor" strokeWidth="1" className="text-amber-400"/>
-                    <line x1="50%" y1="10%" x2="50%" y2="90%" stroke="currentColor" strokeWidth="1" className="text-amber-400"/>
-                    <line x1="10%" y1="50%" x2="90%" y2="50%" stroke="currentColor" strokeWidth="1" className="text-amber-400"/>
-                  </svg>
-                </div>
-              </div>
+            <div className="relative w-full max-w-2xl">
+              {/* Background glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 via-amber-400/30 to-amber-600/20 rounded-full blur-3xl animate-pulse"></div>
               
-              {/* Surrounding orbital elements */}
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-amber-400/40 rounded-full animate-spin-slow"></div>
-              <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-amber-300/50 rounded-full animate-spin-slow" style={{ animationDirection: 'reverse' }}></div>
+              {/* Main image container with blur effects */}
+              <div className="relative">
+                <img 
+                  src="/lovable-uploads/a341418d-e306-4bb0-a31f-82a01869d411.png" 
+                  alt="Human and AI interaction" 
+                  className="w-full h-auto object-contain relative z-10"
+                  style={{
+                    maskImage: `
+                      radial-gradient(ellipse 90% 85% at 50% 42.5%, black 60%, transparent 100%),
+                      linear-gradient(to bottom, black 85%, transparent 100%),
+                      linear-gradient(to right, transparent 2%, black 8%, black 92%, transparent 98%),
+                      linear-gradient(to left, transparent 2%, black 8%, black 92%, transparent 98%)
+                    `,
+                    maskComposite: 'intersect',
+                    WebkitMaskImage: `
+                      radial-gradient(ellipse 90% 85% at 50% 42.5%, black 60%, transparent 100%),
+                      linear-gradient(to bottom, black 85%, transparent 100%),
+                      linear-gradient(to right, transparent 2%, black 8%, black 92%, transparent 98%),
+                      linear-gradient(to left, transparent 2%, black 8%, black 92%, transparent 98%)
+                    `,
+                    WebkitMaskComposite: 'source-in'
+                  }}
+                />
+                
+                {/* Additional ambient glow */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent pointer-events-none"></div>
+              </div>
             </div>
           </div>
         </div>
