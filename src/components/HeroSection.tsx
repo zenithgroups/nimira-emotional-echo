@@ -91,40 +91,23 @@ const HeroSection: React.FC = () => {
           </div>
 
           <div className="flex justify-center lg:justify-end relative">
-            {/* Large image with blur effects for natural integration */}
-            <div className="relative w-full max-w-2xl h-[500px] lg:h-[600px]">
+            {/* Large image with natural blur integration */}
+            <div className="relative w-full max-w-3xl h-[600px] lg:h-[700px]">
               <img 
-                src="/lovable-uploads/834bf29f-62eb-4545-b8ad-61ef6a89af46.png" 
+                src="/lovable-uploads/2e6e40c4-83d6-4dcb-a67d-394947b4fcee.png" 
                 alt="Human and AI interaction visualization"
-                className="w-full h-full object-contain filter brightness-110 contrast-110 relative z-10"
+                className="w-full h-full object-cover relative z-10"
               />
               
-              {/* Blur effects for natural integration */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent blur-sm"></div>
-              <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-transparent to-transparent blur-sm"></div>
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-transparent to-slate-900/40 blur-sm"></div>
+              {/* Edge blur effects - left and right edges */}
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-transparent to-slate-900 opacity-60"></div>
               
-              {/* Soft edge blur overlay */}
-              <div className="absolute -inset-4 bg-gradient-to-br from-blue-900/10 via-transparent to-cyan-900/10 blur-2xl opacity-50"></div>
+              {/* Bottom 15% blur matching background */}
+              <div className="absolute bottom-0 left-0 right-0 h-[15%] bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent"></div>
               
-              {/* Overlay UI elements */}
-              <div className="absolute top-4 left-4 text-xs text-cyan-300 opacity-70 animate-pulse z-20">
-                💝 Empathy
-              </div>
-              <div className="absolute top-4 right-4 text-xs text-blue-300 opacity-70 animate-pulse z-20" style={{ animationDelay: '0.5s' }}>
-                🧠 Intelligence
-              </div>
-              <div className="absolute bottom-4 left-4 text-xs text-cyan-300 opacity-70 animate-pulse z-20" style={{ animationDelay: '1s' }}>
-                ❤️ Connection
-              </div>
-              <div className="absolute bottom-4 right-4 text-xs text-blue-300 opacity-70 animate-pulse z-20" style={{ animationDelay: '1.5s' }}>
-                ✨ Understanding
-              </div>
+              {/* Top edge soft blur */}
+              <div className="absolute top-0 left-0 right-0 h-[10%] bg-gradient-to-b from-slate-900/60 to-transparent"></div>
             </div>
-            
-            {/* Surrounding orbital elements */}
-            <div className="absolute -top-4 -right-4 w-8 h-8 bg-blue-400/40 rounded-full animate-spin-slow"></div>
-            <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-cyan-300/50 rounded-full animate-spin-slow" style={{ animationDirection: 'reverse' }}></div>
           </div>
         </div>
       </div>
