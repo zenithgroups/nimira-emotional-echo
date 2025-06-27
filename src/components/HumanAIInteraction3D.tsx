@@ -1,153 +1,161 @@
 
 import React, { useRef, useMemo } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Sphere, Text, Float } from '@react-three/drei';
+import { Canvas, useFrame, extend } from '@react-three/fiber';
+import { OrbitControls, Sphere, Text, Float, Trail } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Glowing Soul component
-const GlowingSoul = ({ position, color = '#ffffff', size = 0.8, pulseSpeed = 1 }) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const outerRef = useRef<THREE.Mesh>(null);
+// Create wireframe material
+const WireframeMaterial = ({ color = '#00ffff', opacity = 0.8 }) => {
+  const material = useMemo(() => {
+    return new THREE.MeshBasicMaterial({
+      color: color,
+      wireframe: true,
+      transparent: true,
+      opacity: opacity,
+    });
+  }, [color, opacity]);
   
-  useFrame((state) => {
-    if (meshRef.current && outerRef.current) {
-      const pulse = Math.sin(state.clock.elapsedTime * pulseSpeed) * 0.1 + 1;
-      meshRef.current.scale.setScalar(pulse);
-      outerRef.current.scale.setScalar(pulse * 1.2);
-    }
-  });
+  return <primitive object={material} />;
+};
 
+// Human figure component
+const HumanFigure = () => {
   return (
-    <group position={position}>
-      {/* Outer glow */}
-      <mesh ref={outerRef}>
-        <sphereGeometry args={[size * 1.5, 32, 32]} />
-        <meshBasicMaterial 
-          color={color} 
-          transparent 
-          opacity={0.1} 
-          side={THREE.BackSide}
-        />
+    <group position={[-2, 0, 0]}>
+      {/* Head */}
+      <mesh position={[0, 1.5, 0]}>
+        <sphereGeometry args={[0.3, 16, 16]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
       </mesh>
       
-      {/* Main soul orb */}
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[size, 32, 32]} />
-        <meshBasicMaterial 
-          color={color} 
-          transparent 
-          opacity={0.8}
-        />
+      {/* Body */}
+      <mesh position={[0, 0.5, 0]}>
+        <cylinderGeometry args={[0.3, 0.4, 1.5, 8]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
       </mesh>
       
-      {/* Inner core */}
-      <mesh>
-        <sphereGeometry args={[size * 0.6, 16, 16]} />
-        <meshBasicMaterial 
-          color={color} 
-          transparent 
-          opacity={0.9}
-        />
+      {/* Arms */}
+      <mesh position={[-0.5, 0.8, 0]} rotation={[0, 0, Math.PI / 6]}>
+        <cylinderGeometry args={[0.1, 0.1, 0.8, 6]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
+      </mesh>
+      <mesh position={[0.5, 0.8, 0]} rotation={[0, 0, -Math.PI / 6]}>
+        <cylinderGeometry args={[0.1, 0.1, 0.8, 6]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.9} />
       </mesh>
     </group>
   );
 };
 
-// Energy connection between souls
-const EnergyConnection = () => {
-  const lineRef = useRef<THREE.Line>(null);
-  
-  const points = useMemo(() => {
-    const curve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-2, 0, 0),
-      new THREE.Vector3(-1, 0.3, 0),
-      new THREE.Vector3(0, 0.2, 0),
-      new THREE.Vector3(1, 0.3, 0),
-      new THREE.Vector3(2, 0, 0)
-    ]);
-    return curve.getPoints(50);
-  }, []);
+// AI Wireframe figure component
+const AIWireframeFigure = () => {
+  const meshRef = useRef<THREE.Group>(null);
   
   useFrame((state) => {
-    if (lineRef.current) {
-      const opacity = 0.4 + Math.sin(state.clock.elapsedTime * 2) * 0.3;
-      (lineRef.current.material as THREE.LineBasicMaterial).opacity = opacity;
+    if (meshRef.current) {
+      meshRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.1;
     }
   });
 
   return (
-    <line ref={lineRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={points.length}
-          array={new Float32Array(points.flatMap(p => [p.x, p.y, p.z]))}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <lineBasicMaterial color="#00ffff" transparent opacity={0.7} linewidth={3} />
-    </line>
+    <group ref={meshRef} position={[2, 0, 0]}>
+      {/* AI Head - wireframe sphere with grid pattern */}
+      <mesh position={[0, 1.5, 0]}>
+        <sphereGeometry args={[0.35, 12, 12]} />
+        <WireframeMaterial color="#00ffff" opacity={0.8} />
+      </mesh>
+      
+      {/* Inner brain pattern */}
+      <mesh position={[0, 1.5, 0]}>
+        <sphereGeometry args={[0.25, 8, 8]} />
+        <WireframeMaterial color="#0099ff" opacity={0.6} />
+      </mesh>
+      
+      {/* AI Body - wireframe cylinder */}
+      <mesh position={[0, 0.5, 0]}>
+        <cylinderGeometry args={[0.3, 0.4, 1.5, 8]} />
+        <WireframeMaterial color="#00ffff" opacity={0.7} />
+      </mesh>
+      
+      {/* AI Arms - wireframe */}
+      <mesh position={[-0.5, 0.8, 0]} rotation={[0, 0, Math.PI / 6]}>
+        <cylinderGeometry args={[0.1, 0.1, 0.8, 6]} />
+        <WireframeMaterial color="#00ffff" opacity={0.7} />
+      </mesh>
+      <mesh position={[0.5, 0.8, 0]} rotation={[0, 0, -Math.PI / 6]}>
+        <cylinderGeometry args={[0.1, 0.1, 0.8, 6]} />
+        <WireframeMaterial color="#00ffff" opacity={0.7} />
+      </mesh>
+      
+      {/* Floating data points around AI */}
+      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+        <mesh position={[0.8, 1.8, 0.3]}>
+          <sphereGeometry args={[0.05, 6, 6]} />
+          <meshBasicMaterial color="#00ffff" />
+        </mesh>
+      </Float>
+      
+      <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.8}>
+        <mesh position={[-0.6, 1.2, 0.4]}>
+          <sphereGeometry args={[0.04, 6, 6]} />
+          <meshBasicMaterial color="#0099ff" />
+        </mesh>
+      </Float>
+    </group>
   );
 };
 
-// Floating energy particles
-const EnergyParticles = () => {
-  const particlesRef = useRef<THREE.Points>(null);
-  const particleCount = 50;
+// Connection beam between human and AI
+const ConnectionBeam = () => {
+  const meshRef = useRef<THREE.Mesh>(null);
   
-  const { positions, velocities } = useMemo(() => {
-    const positions = new Float32Array(particleCount * 3);
-    const velocities = new Float32Array(particleCount * 3);
-    
-    for (let i = 0; i < particleCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 8;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 6;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 4;
-      
-      velocities[i * 3] = (Math.random() - 0.5) * 0.02;
-      velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.02;
-      velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.02;
-    }
-    
-    return { positions, velocities };
-  }, []);
-
-  useFrame(() => {
-    if (particlesRef.current) {
-      const positions = particlesRef.current.geometry.attributes.position.array as Float32Array;
-      
-      for (let i = 0; i < particleCount; i++) {
-        positions[i * 3] += velocities[i * 3];
-        positions[i * 3 + 1] += velocities[i * 3 + 1];
-        positions[i * 3 + 2] += velocities[i * 3 + 2];
-        
-        // Boundary check and reset
-        if (Math.abs(positions[i * 3]) > 4) velocities[i * 3] *= -1;
-        if (Math.abs(positions[i * 3 + 1]) > 3) velocities[i * 3 + 1] *= -1;
-        if (Math.abs(positions[i * 3 + 2]) > 2) velocities[i * 3 + 2] *= -1;
-      }
-      
-      particlesRef.current.geometry.attributes.position.needsUpdate = true;
+  useFrame((state) => {
+    if (meshRef.current) {
+      const opacity = 0.6 + Math.sin(state.clock.elapsedTime * 3) * 0.3;
+      (meshRef.current.material as THREE.MeshBasicMaterial).opacity = opacity;
     }
   });
 
   return (
-    <points ref={particlesRef}>
+    <mesh ref={meshRef} position={[0, 1.2, 0]} rotation={[0, 0, Math.PI / 2]}>
+      <cylinderGeometry args={[0.02, 0.02, 3.5, 8]} />
+      <meshBasicMaterial color="#00ffff" transparent opacity={0.6} />
+    </mesh>
+  );
+};
+
+// Particle system for ambiance
+const Particles = () => {
+  const points = useRef<THREE.Points>(null);
+  const particlesCount = 100;
+  
+  const positions = useMemo(() => {
+    const positions = new Float32Array(particlesCount * 3);
+    for (let i = 0; i < particlesCount; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 10;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+    }
+    return positions;
+  }, []);
+
+  useFrame((state) => {
+    if (points.current) {
+      points.current.rotation.y = state.clock.elapsedTime * 0.05;
+    }
+  });
+
+  return (
+    <points ref={points}>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={particleCount}
+          count={particlesCount}
           array={positions}
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial 
-        color="#00ffff" 
-        size={0.03} 
-        transparent 
-        opacity={0.8}
-        sizeAttenuation={true}
-      />
+      <pointsMaterial color="#00ffff" size={0.02} transparent opacity={0.6} />
     </points>
   );
 };
@@ -156,73 +164,43 @@ const EnergyParticles = () => {
 const Scene3D = () => {
   return (
     <>
-      {/* Ambient lighting */}
-      <ambientLight intensity={0.3} />
-      <pointLight position={[0, 0, 5]} intensity={0.5} color="#ffffff" />
+      {/* Lighting */}
+      <ambientLight intensity={0.4} />
+      <pointLight position={[10, 10, 10]} intensity={0.8} color="#ffffff" />
+      <pointLight position={[-10, -10, -10]} intensity={0.3} color="#00ffff" />
       
-      {/* Human soul - warm white */}
-      <GlowingSoul 
-        position={[-2, 0, 0]} 
-        color="#ffffff" 
-        size={0.6} 
-        pulseSpeed={0.8} 
-      />
-      
-      {/* AI soul - cyan blue with more complex animation */}
-      <GlowingSoul 
-        position={[2, 0, 0]} 
-        color="#00ffff" 
-        size={0.7} 
-        pulseSpeed={1.2} 
-      />
-      
-      {/* Energy connection */}
-      <EnergyConnection />
-      
-      {/* Floating particles */}
-      <EnergyParticles />
+      {/* Main figures */}
+      <HumanFigure />
+      <AIWireframeFigure />
+      <ConnectionBeam />
+      <Particles />
       
       {/* Floating text labels */}
-      <Float speed={1} rotationIntensity={0.1} floatIntensity={0.3}>
-        <Text
-          position={[-2, -1.2, 0]}
-          fontSize={0.15}
-          color="#ffffff"
-          anchorX="center"
-          anchorY="middle"
-          font="/fonts/inter.woff"
-        >
-          Human Soul
-        </Text>
-      </Float>
+      <Text
+        position={[-2, -1.5, 0]}
+        fontSize={0.2}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+      >
+        Human
+      </Text>
       
-      <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.4}>
-        <Text
-          position={[2, -1.2, 0]}
-          fontSize={0.15}
-          color="#00ffff"
-          anchorX="center"
-          anchorY="middle"
-          font="/fonts/inter.woff"
-        >
-          AI Soul
-        </Text>
-      </Float>
+      <Text
+        position={[2, -1.5, 0]}
+        fontSize={0.2}
+        color="#00ffff"
+        anchorX="center"
+        anchorY="middle"
+      >
+        AI
+      </Text>
       
-      {/* Additional floating elements */}
-      <Float speed={2} rotationIntensity={0.2} floatIntensity={0.5}>
-        <mesh position={[0, 1.5, 0]}>
-          <sphereGeometry args={[0.05, 8, 8]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.6} />
-        </mesh>
-      </Float>
-      
-      <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.6}>
-        <mesh position={[0, -1.5, 0]}>
-          <sphereGeometry args={[0.04, 8, 8]} />
-          <meshBasicMaterial color="#00ffff" transparent opacity={0.5} />
-        </mesh>
-      </Float>
+      {/* Grid floor */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]}>
+        <planeGeometry args={[20, 20, 20, 20]} />
+        <meshBasicMaterial color="#003366" wireframe transparent opacity={0.3} />
+      </mesh>
     </>
   );
 };
@@ -231,18 +209,16 @@ const HumanAIInteraction3D: React.FC = () => {
   return (
     <div className="w-full h-full">
       <Canvas
-        camera={{ position: [0, 0, 6], fov: 45 }}
+        camera={{ position: [0, 2, 8], fov: 50 }}
         className="bg-transparent"
       >
         <Scene3D />
         <OrbitControls 
           enablePan={false} 
           enableZoom={true} 
-          maxDistance={10} 
-          minDistance={3}
-          maxPolarAngle={Math.PI / 1.5}
-          autoRotate={true}
-          autoRotateSpeed={0.5}
+          maxDistance={15} 
+          minDistance={5}
+          maxPolarAngle={Math.PI / 2}
         />
       </Canvas>
     </div>
