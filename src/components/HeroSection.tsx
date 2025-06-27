@@ -1,7 +1,6 @@
 
 import React from "react";
 import { useToast } from "@/components/ui/use-toast";
-import HumanAIInteraction3D from "./HumanAIInteraction3D";
 
 const HeroSection: React.FC = () => {
   const { toast } = useToast();
@@ -93,9 +92,13 @@ const HeroSection: React.FC = () => {
 
           <div className="flex justify-center lg:justify-end">
             <div className="relative w-full max-w-lg h-96 lg:h-[500px]">
-              {/* 3D Scene Container */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-cyan-800/10 to-blue-700/10 backdrop-blur-xl border border-blue-500/20 rounded-3xl overflow-hidden">
-                <HumanAIInteraction3D />
+              {/* Main image container with glassmorphism background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-cyan-800/10 to-blue-700/10 backdrop-blur-xl border border-blue-500/20 rounded-3xl overflow-hidden flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/834bf29f-62eb-4545-b8ad-61ef6a89af46.png" 
+                  alt="Human and AI interaction visualization"
+                  className="w-full h-full object-contain p-8 filter brightness-110 contrast-110"
+                />
                 
                 {/* Overlay UI elements */}
                 <div className="absolute top-4 left-4 text-xs text-cyan-300 opacity-70 animate-pulse">
