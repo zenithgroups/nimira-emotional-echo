@@ -90,35 +90,41 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-lg h-96 lg:h-[500px]">
-              {/* Main image container with glassmorphism background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-cyan-800/10 to-blue-700/10 backdrop-blur-xl border border-blue-500/20 rounded-3xl overflow-hidden flex items-center justify-center">
-                <img 
-                  src="/lovable-uploads/834bf29f-62eb-4545-b8ad-61ef6a89af46.png" 
-                  alt="Human and AI interaction visualization"
-                  className="w-full h-full object-contain p-8 filter brightness-110 contrast-110"
-                />
-                
-                {/* Overlay UI elements */}
-                <div className="absolute top-4 left-4 text-xs text-cyan-300 opacity-70 animate-pulse">
-                  💝 Empathy
-                </div>
-                <div className="absolute top-4 right-4 text-xs text-blue-300 opacity-70 animate-pulse" style={{ animationDelay: '0.5s' }}>
-                  🧠 Intelligence
-                </div>
-                <div className="absolute bottom-4 left-4 text-xs text-cyan-300 opacity-70 animate-pulse" style={{ animationDelay: '1s' }}>
-                  ❤️ Connection
-                </div>
-                <div className="absolute bottom-4 right-4 text-xs text-blue-300 opacity-70 animate-pulse" style={{ animationDelay: '1.5s' }}>
-                  ✨ Understanding
-                </div>
-              </div>
+          <div className="flex justify-center lg:justify-end relative">
+            {/* Large image with blur effects for natural integration */}
+            <div className="relative w-full max-w-2xl h-[500px] lg:h-[600px]">
+              <img 
+                src="/lovable-uploads/834bf29f-62eb-4545-b8ad-61ef6a89af46.png" 
+                alt="Human and AI interaction visualization"
+                className="w-full h-full object-contain filter brightness-110 contrast-110 relative z-10"
+              />
               
-              {/* Surrounding orbital elements */}
-              <div className="absolute -top-4 -right-4 w-8 h-8 bg-blue-400/40 rounded-full animate-spin-slow"></div>
-              <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-cyan-300/50 rounded-full animate-spin-slow" style={{ animationDirection: 'reverse' }}></div>
+              {/* Blur effects for natural integration */}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent blur-sm"></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-transparent to-transparent blur-sm"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-900/40 via-transparent to-slate-900/40 blur-sm"></div>
+              
+              {/* Soft edge blur overlay */}
+              <div className="absolute -inset-4 bg-gradient-to-br from-blue-900/10 via-transparent to-cyan-900/10 blur-2xl opacity-50"></div>
+              
+              {/* Overlay UI elements */}
+              <div className="absolute top-4 left-4 text-xs text-cyan-300 opacity-70 animate-pulse z-20">
+                💝 Empathy
+              </div>
+              <div className="absolute top-4 right-4 text-xs text-blue-300 opacity-70 animate-pulse z-20" style={{ animationDelay: '0.5s' }}>
+                🧠 Intelligence
+              </div>
+              <div className="absolute bottom-4 left-4 text-xs text-cyan-300 opacity-70 animate-pulse z-20" style={{ animationDelay: '1s' }}>
+                ❤️ Connection
+              </div>
+              <div className="absolute bottom-4 right-4 text-xs text-blue-300 opacity-70 animate-pulse z-20" style={{ animationDelay: '1.5s' }}>
+                ✨ Understanding
+              </div>
             </div>
+            
+            {/* Surrounding orbital elements */}
+            <div className="absolute -top-4 -right-4 w-8 h-8 bg-blue-400/40 rounded-full animate-spin-slow"></div>
+            <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-cyan-300/50 rounded-full animate-spin-slow" style={{ animationDirection: 'reverse' }}></div>
           </div>
         </div>
       </div>
