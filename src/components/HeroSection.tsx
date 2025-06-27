@@ -1,6 +1,7 @@
 
 import React from "react";
 import { useToast } from "@/components/ui/use-toast";
+import HumanAIInteraction3D from "./HumanAIInteraction3D";
 
 const HeroSection: React.FC = () => {
   const { toast } = useToast();
@@ -90,23 +91,30 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end relative">
-            {/* Large image with natural blur integration */}
-            <div className="relative w-full max-w-3xl h-[600px] lg:h-[700px]">
-              <img 
-                src="/lovable-uploads/2e6e40c4-83d6-4dcb-a67d-394947b4fcee.png" 
-                alt="Human and AI interaction visualization"
-                className="w-full h-full object-cover relative z-10"
-              />
+          <div className="flex justify-center lg:justify-end">
+            <div className="relative w-full max-w-lg h-96 lg:h-[500px]">
+              {/* 3D Scene Container */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-cyan-800/10 to-blue-700/10 backdrop-blur-xl border border-blue-500/20 rounded-3xl overflow-hidden">
+                <HumanAIInteraction3D />
+                
+                {/* Overlay UI elements */}
+                <div className="absolute top-4 left-4 text-xs text-cyan-300 opacity-70 animate-pulse">
+                  💝 Empathy
+                </div>
+                <div className="absolute top-4 right-4 text-xs text-blue-300 opacity-70 animate-pulse" style={{ animationDelay: '0.5s' }}>
+                  🧠 Intelligence
+                </div>
+                <div className="absolute bottom-4 left-4 text-xs text-cyan-300 opacity-70 animate-pulse" style={{ animationDelay: '1s' }}>
+                  ❤️ Connection
+                </div>
+                <div className="absolute bottom-4 right-4 text-xs text-blue-300 opacity-70 animate-pulse" style={{ animationDelay: '1.5s' }}>
+                  ✨ Understanding
+                </div>
+              </div>
               
-              {/* Edge blur effects - left and right edges */}
-              <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-transparent to-slate-900 opacity-60"></div>
-              
-              {/* Bottom 15% blur matching background */}
-              <div className="absolute bottom-0 left-0 right-0 h-[15%] bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent"></div>
-              
-              {/* Top edge soft blur */}
-              <div className="absolute top-0 left-0 right-0 h-[10%] bg-gradient-to-b from-slate-900/60 to-transparent"></div>
+              {/* Surrounding orbital elements */}
+              <div className="absolute -top-4 -right-4 w-8 h-8 bg-blue-400/40 rounded-full animate-spin-slow"></div>
+              <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-cyan-300/50 rounded-full animate-spin-slow" style={{ animationDirection: 'reverse' }}></div>
             </div>
           </div>
         </div>
