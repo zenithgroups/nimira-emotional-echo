@@ -29,9 +29,6 @@ const HeroSection: React.FC = () => {
         <div className="absolute bottom-32 left-1/4 w-1.5 h-1.5 bg-amber-400 rounded-full opacity-35 animate-pulse" style={{ animationDelay: '3s' }}></div>
       </div>
 
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-amber-900/20 via-transparent to-amber-900/10"></div>
-
       <div className="container-custom relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           <div className="space-y-4 text-left max-w-md">
@@ -91,38 +88,28 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-5xl">
-              {/* Main image container with professional blur effects */}
-              <div className="relative">
-                <img 
-                  src="/lovable-uploads/a341418d-e306-4bb0-a31f-82a01869d411.png" 
-                  alt="Human and AI interaction" 
-                  className="w-full h-auto object-contain relative z-10 scale-125"
-                  style={{
-                    maskImage: `
-                      radial-gradient(ellipse 90% 85% at 50% 40%, black 45%, rgba(0,0,0,0.9) 65%, rgba(0,0,0,0.3) 85%, transparent 100%),
-                      linear-gradient(to bottom, black 75%, rgba(0,0,0,0.8) 85%, rgba(0,0,0,0.4) 92%, transparent 100%),
-                      linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 8%, black 15%, black 85%, rgba(0,0,0,0.2) 92%, transparent 100%),
-                      linear-gradient(to left, transparent 0%, rgba(0,0,0,0.2) 8%, black 15%, black 85%, rgba(0,0,0,0.2) 92%, transparent 100%)
-                    `,
-                    maskComposite: 'intersect',
-                    WebkitMaskImage: `
-                      radial-gradient(ellipse 90% 85% at 50% 40%, black 45%, rgba(0,0,0,0.9) 65%, rgba(0,0,0,0.3) 85%, transparent 100%),
-                      linear-gradient(to bottom, black 75%, rgba(0,0,0,0.8) 85%, rgba(0,0,0,0.4) 92%, transparent 100%),
-                      linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 8%, black 15%, black 85%, rgba(0,0,0,0.2) 92%, transparent 100%),
-                      linear-gradient(to left, transparent 0%, rgba(0,0,0,0.2) 8%, black 15%, black 85%, rgba(0,0,0,0.2) 92%, transparent 100%)
-                    `,
-                    WebkitMaskComposite: 'source-in',
-                    filter: 'blur(1px)'
-                  }}
-                />
-                
-                {/* Professional gradient overlays for seamless blending */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/30 to-transparent pointer-events-none"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-900/70 via-transparent to-slate-900/50 pointer-events-none"></div>
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/60 pointer-events-none"></div>
-              </div>
+          <div className="flex justify-center lg:justify-end relative">
+            {/* Subtle background glow */}
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-amber-400/10 to-amber-500/5 blur-3xl"></div>
+            
+            <div className="relative w-full max-w-6xl">
+              <img 
+                src="/lovable-uploads/a341418d-e306-4bb0-a31f-82a01869d411.png" 
+                alt="Human and AI interaction" 
+                className="w-full h-auto object-contain relative z-10 scale-125"
+                style={{
+                  maskImage: `
+                    radial-gradient(ellipse 90% 85% at 50% 40%, black 50%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,0.3) 90%, transparent 100%),
+                    linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 10%, black 20%, black 80%, rgba(0,0,0,0.2) 90%, transparent 100%)
+                  `,
+                  maskComposite: 'intersect',
+                  WebkitMaskImage: `
+                    radial-gradient(ellipse 90% 85% at 50% 40%, black 50%, rgba(0,0,0,0.9) 70%, rgba(0,0,0,0.3) 90%, transparent 100%),
+                    linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 10%, black 20%, black 80%, rgba(0,0,0,0.2) 90%, transparent 100%)
+                  `,
+                  WebkitMaskComposite: 'source-in'
+                }}
+              />
             </div>
           </div>
         </div>
