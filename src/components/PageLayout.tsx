@@ -21,7 +21,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-slate-900 to-blue-900">
       <NavBar />
       <div className="container-custom py-12 md:py-20">
         <div className="max-w-3xl mx-auto">
@@ -29,11 +29,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             <img 
               src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
               alt="Ruvo Logo" 
-              className="h-10 w-auto brightness-0" 
+              className="h-10 w-auto brightness-0 invert" 
             />
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{title}</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-amber-300 bg-clip-text text-transparent">{title}</h1>
           </div>
-          {description && <p className="text-lg text-gray-600 mb-8">{description}</p>}
+          {description && <p className="text-lg text-gray-200 mb-8">{description}</p>}
         </div>
         <div className="mt-8">{children}</div>
       </div>
