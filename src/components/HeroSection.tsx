@@ -34,13 +34,13 @@ const HeroSection: React.FC = () => {
 
       <div className="container-custom relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          <div className="space-y-6 text-left max-w-lg">
+          <div className="space-y-4 text-left max-w-md">
             <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 backdrop-blur-sm">
               <div className="w-1.5 h-1.5 bg-amber-400 rounded-full mr-2 animate-pulse"></div>
               <span className="text-xs font-medium text-amber-200">AI-powered emotional intelligence</span>
             </div>
             
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight text-white">
               AI-powered
               <br />
               <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 bg-clip-text text-transparent">
@@ -50,14 +50,14 @@ const HeroSection: React.FC = () => {
               companion
             </h1>
 
-            <p className="text-base md:text-lg text-gray-300 max-w-md leading-relaxed font-light">
+            <p className="text-sm md:text-base text-gray-300 max-w-sm leading-relaxed font-light">
               Experience the future of emotional AI with Ruvo - your intelligent companion that understands, feels, and responds with genuine empathy.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            <div className="flex flex-col sm:flex-row gap-3 pt-3">
               <a 
                 href="/chat" 
-                className="group inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-amber-500/25 text-sm"
+                className="group inline-flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-black font-semibold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-amber-500/25 text-sm"
               >
                 <span>Get Started</span>
                 <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,7 +66,7 @@ const HeroSection: React.FC = () => {
               </a>
               <button
                 onClick={handleLearnMore}
-                className="group inline-flex items-center justify-center px-6 py-3 bg-white/5 backdrop-blur-sm text-white border border-white/20 hover:border-amber-500/50 rounded-lg transition-all duration-300 hover:scale-105 hover:bg-white/10 text-sm"
+                className="group inline-flex items-center justify-center px-5 py-2.5 bg-white/5 backdrop-blur-sm text-white border border-white/20 hover:border-amber-500/50 rounded-lg transition-all duration-300 hover:scale-105 hover:bg-white/10 text-sm"
               >
                 <span className="font-medium">Learn More</span>
                 <svg className="ml-2 w-4 h-4 group-hover:translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@ const HeroSection: React.FC = () => {
               </button>
             </div>
 
-            <div className="pt-6 flex items-center space-x-6">
+            <div className="pt-4 flex items-center space-x-4">
               <div className="flex items-center text-gray-400">
                 <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full mr-2 animate-pulse"></div>
                 <span className="text-xs font-medium">100% Secure</span>
@@ -92,38 +92,36 @@ const HeroSection: React.FC = () => {
           </div>
 
           <div className="flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-4xl">
-              {/* Enhanced background glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-amber-500/30 via-amber-400/40 to-amber-600/30 rounded-full blur-[100px] animate-pulse"></div>
-              
-              {/* Main image container with enhanced blur effects */}
+            <div className="relative w-full max-w-5xl">
+              {/* Main image container with professional blur effects */}
               <div className="relative">
                 <img 
                   src="/lovable-uploads/a341418d-e306-4bb0-a31f-82a01869d411.png" 
                   alt="Human and AI interaction" 
-                  className="w-full h-auto object-contain relative z-10 scale-110"
+                  className="w-full h-auto object-contain relative z-10 scale-125"
                   style={{
                     maskImage: `
-                      radial-gradient(ellipse 85% 80% at 50% 40%, black 50%, rgba(0,0,0,0.8) 70%, transparent 100%),
-                      linear-gradient(to bottom, black 80%, rgba(0,0,0,0.6) 90%, transparent 100%),
-                      linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 5%, black 10%, black 90%, rgba(0,0,0,0.3) 95%, transparent 100%),
-                      linear-gradient(to left, transparent 0%, rgba(0,0,0,0.3) 5%, black 10%, black 90%, rgba(0,0,0,0.3) 95%, transparent 100%)
+                      radial-gradient(ellipse 90% 85% at 50% 40%, black 45%, rgba(0,0,0,0.9) 65%, rgba(0,0,0,0.3) 85%, transparent 100%),
+                      linear-gradient(to bottom, black 75%, rgba(0,0,0,0.8) 85%, rgba(0,0,0,0.4) 92%, transparent 100%),
+                      linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 8%, black 15%, black 85%, rgba(0,0,0,0.2) 92%, transparent 100%),
+                      linear-gradient(to left, transparent 0%, rgba(0,0,0,0.2) 8%, black 15%, black 85%, rgba(0,0,0,0.2) 92%, transparent 100%)
                     `,
                     maskComposite: 'intersect',
                     WebkitMaskImage: `
-                      radial-gradient(ellipse 85% 80% at 50% 40%, black 50%, rgba(0,0,0,0.8) 70%, transparent 100%),
-                      linear-gradient(to bottom, black 80%, rgba(0,0,0,0.6) 90%, transparent 100%),
-                      linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 5%, black 10%, black 90%, rgba(0,0,0,0.3) 95%, transparent 100%),
-                      linear-gradient(to left, transparent 0%, rgba(0,0,0,0.3) 5%, black 10%, black 90%, rgba(0,0,0,0.3) 95%, transparent 100%)
+                      radial-gradient(ellipse 90% 85% at 50% 40%, black 45%, rgba(0,0,0,0.9) 65%, rgba(0,0,0,0.3) 85%, transparent 100%),
+                      linear-gradient(to bottom, black 75%, rgba(0,0,0,0.8) 85%, rgba(0,0,0,0.4) 92%, transparent 100%),
+                      linear-gradient(to right, transparent 0%, rgba(0,0,0,0.2) 8%, black 15%, black 85%, rgba(0,0,0,0.2) 92%, transparent 100%),
+                      linear-gradient(to left, transparent 0%, rgba(0,0,0,0.2) 8%, black 15%, black 85%, rgba(0,0,0,0.2) 92%, transparent 100%)
                     `,
                     WebkitMaskComposite: 'source-in',
-                    filter: 'blur(0.5px)'
+                    filter: 'blur(1px)'
                   }}
                 />
                 
-                {/* Enhanced ambient glow and professional blur overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent pointer-events-none"></div>
-                <div className="absolute inset-0 bg-gradient-to-r from-slate-900/60 via-transparent to-slate-900/40 pointer-events-none"></div>
+                {/* Professional gradient overlays for seamless blending */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/30 to-transparent pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-900/70 via-transparent to-slate-900/50 pointer-events-none"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-slate-900/60 pointer-events-none"></div>
               </div>
             </div>
           </div>
