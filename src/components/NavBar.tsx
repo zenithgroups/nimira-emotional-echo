@@ -44,12 +44,7 @@ const NavBar: React.FC = () => {
   };
 
   return (
-    <header className={cn(
-      "sticky top-0 z-50 w-full backdrop-blur-xl border-b transition-all duration-300",
-      darkMode 
-        ? "bg-slate-900/95 border-slate-700/30" 
-        : "bg-white/95 border-slate-200/20 shadow-sm"
-    )}>
+    <header className="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-blue-400/20 bg-blue-950/95 transition-all duration-300">
       <div className="container px-4 mx-auto max-w-7xl flex h-16 items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="flex items-center hover:opacity-80 transition-all duration-300 group" onClick={() => closeMenu()}>
@@ -63,10 +58,7 @@ const NavBar: React.FC = () => {
                 )}
               />
             </div>
-            <span className={cn(
-              "text-2xl font-bold transition-all duration-300",
-              darkMode ? "text-white" : "text-slate-800"
-            )}>
+            <span className="text-2xl font-bold text-white transition-all duration-300">
               Ruvo
             </span>
           </Link>
@@ -75,37 +67,25 @@ const NavBar: React.FC = () => {
         <nav className="hidden md:flex items-center gap-8">
           <button 
             onClick={() => scrollToSection("home")} 
-            className={cn(
-              "text-sm font-medium transition-all duration-300 hover:scale-105",
-              darkMode ? "text-slate-300 hover:text-blue-300" : "text-slate-600 hover:text-blue-600"
-            )}
+            className="text-sm font-medium text-gray-300 hover:text-blue-300 transition-all duration-300 hover:scale-105"
           >
             Home
           </button>
           <button 
             onClick={() => scrollToSection("about")} 
-            className={cn(
-              "text-sm font-medium transition-all duration-300 hover:scale-105",
-              darkMode ? "text-slate-300 hover:text-blue-300" : "text-slate-600 hover:text-blue-600"
-            )}
+            className="text-sm font-medium text-gray-300 hover:text-blue-300 transition-all duration-300 hover:scale-105"
           >
             About
           </button>
           <button 
             onClick={() => scrollToSection("features")} 
-            className={cn(
-              "text-sm font-medium transition-all duration-300 hover:scale-105",
-              darkMode ? "text-slate-300 hover:text-blue-300" : "text-slate-600 hover:text-blue-600"
-            )}
+            className="text-sm font-medium text-gray-300 hover:text-blue-300 transition-all duration-300 hover:scale-105"
           >
             Features
           </button>
           <button 
             onClick={() => scrollToSection("how-it-works")} 
-            className={cn(
-              "text-sm font-medium transition-all duration-300 hover:scale-105",
-              darkMode ? "text-slate-300 hover:text-blue-300" : "text-slate-600 hover:text-blue-600"
-            )}
+            className="text-sm font-medium text-gray-300 hover:text-blue-300 transition-all duration-300 hover:scale-105"
           >
             How It Works
           </button>
@@ -113,12 +93,7 @@ const NavBar: React.FC = () => {
             <Button 
               variant="outline" 
               size="sm" 
-              className={cn(
-                "ml-2 border transition-all duration-300 hover:scale-105",
-                darkMode 
-                  ? "border-slate-600 text-slate-300 hover:bg-slate-800 hover:border-blue-400"
-                  : "border-slate-300 text-slate-600 hover:bg-blue-50 hover:border-blue-400"
-              )}
+              className="ml-2 border border-blue-400/30 text-gray-300 hover:bg-blue-500/20 hover:border-amber-400/50 hover:text-white transition-all duration-300 hover:scale-105"
             >
               Contact Us
             </Button>
@@ -134,10 +109,7 @@ const NavBar: React.FC = () => {
         <div className="md:hidden">
           <button 
             onClick={toggleMenu} 
-            className={cn(
-              "p-2 rounded-md focus:outline-none transition-all duration-300 hover:scale-110",
-              darkMode ? "hover:bg-slate-800 text-slate-300" : "hover:bg-slate-100 text-slate-700"
-            )}
+            className="p-2 rounded-md focus:outline-none transition-all duration-300 hover:scale-110 hover:bg-blue-800/50 text-gray-300"
           >
             {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -145,65 +117,35 @@ const NavBar: React.FC = () => {
       </div>
 
       {isMenuOpen && (
-        <div className={cn(
-          "md:hidden border-t backdrop-blur-xl transition-all duration-300",
-          darkMode 
-            ? "bg-slate-900/95 border-slate-800" 
-            : "bg-white/95 border-slate-200"
-        )}>
+        <div className="md:hidden border-t border-blue-400/20 backdrop-blur-xl bg-blue-950/95 transition-all duration-300">
           <div className="container-custom py-4 space-y-2">
             <button 
               onClick={() => scrollToSection("home")} 
-              className={cn(
-                "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
-                darkMode 
-                  ? "text-slate-300 hover:bg-slate-800 hover:text-blue-300"
-                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
-              )}
+              className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-blue-800/50 hover:text-blue-300 transition-all duration-300"
             >
               Home
             </button>
             <button 
               onClick={() => scrollToSection("about")} 
-              className={cn(
-                "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
-                darkMode 
-                  ? "text-slate-300 hover:bg-slate-800 hover:text-blue-300"
-                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
-              )}
+              className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-blue-800/50 hover:text-blue-300 transition-all duration-300"
             >
               About
             </button>
             <button 
               onClick={() => scrollToSection("features")} 
-              className={cn(
-                "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
-                darkMode 
-                  ? "text-slate-300 hover:bg-slate-800 hover:text-blue-300"
-                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
-              )}
+              className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-blue-800/50 hover:text-blue-300 transition-all duration-300"
             >
               Features
             </button>
             <button 
               onClick={() => scrollToSection("how-it-works")} 
-              className={cn(
-                "block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
-                darkMode 
-                  ? "text-slate-300 hover:bg-slate-800 hover:text-blue-300"
-                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
-              )}
+              className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-blue-800/50 hover:text-blue-300 transition-all duration-300"
             >
               How It Works
             </button>
             <Link 
               to="/contact" 
-              className={cn(
-                "block px-3 py-2 rounded-md text-sm font-medium transition-all duration-300",
-                darkMode 
-                  ? "text-slate-300 hover:bg-slate-800 hover:text-blue-300"
-                  : "text-slate-700 hover:bg-blue-50 hover:text-blue-600"
-              )}
+              className="block px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-blue-800/50 hover:text-blue-300 transition-all duration-300"
               onClick={closeMenu}
             >
               Contact Us
