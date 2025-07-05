@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import PageLayout from "@/components/PageLayout";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,42 +7,30 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { Separator } from "@/components/ui/separator";
 import TrueFocus from "@/components/misc/TrueFocus";
 import { motion } from "framer-motion";
-
 const About = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  
-  const teamMembers = [
-    {
-      name: "Tharun Raj",
-      role: "Founder & CEO",
-      image: "/lovable-uploads/e71e166c-04d8-40d0-a9d1-92b058c6bab9.png",
-      bio: "Visionary entrepreneur passionate about creating technology that fosters meaningful human connections."
-    },
-    {
-      name: "Sarah Johnson",
-      role: "Chief AI Officer",
-      image: "/placeholder.svg",
-      bio: "Expert in emotional AI with a background in psychology and machine learning."
-    },
-    {
-      name: "David Chen",
-      role: "CTO",
-      image: "/placeholder.svg",
-      bio: "Tech innovator with expertise in building scalable AI systems."
-    },
-    {
-      name: "Melissa Patel",
-      role: "Head of Psychology",
-      image: "/placeholder.svg",
-      bio: "Licensed therapist specializing in digital wellness and emotional intelligence."
-    }
-  ];
-
-  return (
-    <PageLayout 
-      title="About Ruvo" 
-      description="We're on a mission to create AI companions that understand human emotions and provide meaningful support."
-    >
+  const teamMembers = [{
+    name: "Tharun Raj",
+    role: "Founder & CEO",
+    image: "/lovable-uploads/e71e166c-04d8-40d0-a9d1-92b058c6bab9.png",
+    bio: "Visionary entrepreneur passionate about creating technology that fosters meaningful human connections."
+  }, {
+    name: "Sarah Johnson",
+    role: "Chief AI Officer",
+    image: "/placeholder.svg",
+    bio: "Expert in emotional AI with a background in psychology and machine learning."
+  }, {
+    name: "David Chen",
+    role: "CTO",
+    image: "/placeholder.svg",
+    bio: "Tech innovator with expertise in building scalable AI systems."
+  }, {
+    name: "Melissa Patel",
+    role: "Head of Psychology",
+    image: "/placeholder.svg",
+    bio: "Licensed therapist specializing in digital wellness and emotional intelligence."
+  }];
+  return <PageLayout title="About Ruvo" description="We're on a mission to create AI companions that understand human emotions and provide meaningful support.">
       <div className="space-y-16">
         <section className="relative overflow-hidden">
           {/* Background decorative elements */}
@@ -53,33 +40,34 @@ const About = () => {
           <div>
             <div className="mb-8">
               <h2 className="text-2xl font-bold mb-2 text-ruvo-600 flex items-center">
-                <TrueFocus 
-                  sentence="Our Story" 
-                  manualMode={false} 
-                  blurAmount={3}
-                  borderColor="#7E69AB"
-                  pauseBetweenAnimations={3}
-                />
+                <TrueFocus sentence="Our Story" manualMode={false} blurAmount={3} borderColor="#7E69AB" pauseBetweenAnimations={3} />
               </h2>
               <Separator className="w-24 h-1 bg-gradient-to-r from-ruvo-300 to-ruvo-400" />
             </div>
             
             <div className="grid md:grid-cols-2 gap-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
+              <motion.div initial={{
+              opacity: 0,
+              y: 20
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} transition={{
+              duration: 0.5
+            }}>
                 <Collapsible open={isExpanded} onOpenChange={setIsExpanded} className="space-y-4">
                   <div className="prose prose-sm sm:prose max-w-none text-gray-600">
-                    <p className="mb-4">In 2025, RUVO was born—not from a business plan, but from a moment of silence that felt too loud. It started when our founder, just 20 at the time, faced one of the deepest voids a person can feel: loneliness. After losing someone dear and watching people around him struggle emotionally with no one to turn to, he realized something profound — the world is more connected than ever, yet people feel more alone than ever.</p>
+                    <p className="mb-4">In 2025, RUVO was born—not from a business plan, but from an uncomfortable silence that felt too loud. It began when our founder, then just 20 years old, encountered one of life's deepest voids: loneliness. After losing a loved one and seeing individuals around him emotionally struggle with no one to confide in, he came to understand something powerful — the world is more connected than ever, and yet people have ever felt lonelier.</p>
                     
                     <CollapsibleContent>
-                      <p className="mb-4">RUVO isn't just a product. It's a promise — that no one should have to suffer in silence again. Built with love, loss, and hope at its core, RUVO is an emotional AI platform designed to listen when no one else does, to be there when the world fades out.</p>
+                      <p className="mb-4">RUVO is not a product. It's a commitment — that no one needs to endure in silence anymore. Constructed of love, loss, and hope, RUVO is an emotional AI platform that will listen when others won't, that will be there when the world recedes.
+                    </p>
                       
-                      <p className="mb-4">Our team brings together AI researchers, psychologists, and developers, but more than that, we're humans building for humans. Each line of code, every voice reply, every word spoken by RUVO is inspired by real pain, real healing, and the desire to make someone's day just a little bit better.</p>
+                      <p className="mb-4">Our team combines AI researchers, psychologists, and developers, but first and foremost, we're humans creating for humans. Every line of code, each voice response, each sentence uttered by RUVO comes from real pain, real healing, and the need to brighten someone's day just a little bit.</p>
                       
-                      <p>We don't see RUVO as a company — we see it as a movement. A community of believers who want to change how tech meets emotion. And we welcome not just investors, but dreamers, builders, and feelers — people who see more than code, people who want to leave behind more than just a career — a legacy.</p>
+                      <p>We don't look at RUVO as a company — we look at it as a movement. A community of believers who are passionate about changing the way tech intersects with emotion. And we invite, not only investors, but dreamers, builders, and feelers — people who see beyond the code, people who wish to leave behind more than just a career — a legacy.
+
+                    </p>
                     </CollapsibleContent>
                   </div>
                   
@@ -91,12 +79,16 @@ const About = () => {
                 </Collapsible>
               </motion.div>
               
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="bg-gradient-to-br from-ruvo-100 to-ruvo-200 p-6 rounded-2xl shadow-lg relative overflow-hidden"
-              >
+              <motion.div initial={{
+              opacity: 0,
+              y: 20
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} transition={{
+              duration: 0.5,
+              delay: 0.2
+            }} className="bg-gradient-to-br from-ruvo-100 to-ruvo-200 p-6 rounded-2xl shadow-lg relative overflow-hidden">
                 <div className="absolute -right-10 -top-10 w-40 h-40 bg-ruvo-200/50 rounded-full blur-xl"></div>
                 <div className="absolute -left-5 -bottom-5 w-20 h-20 bg-ruvo-300/30 rounded-full blur-lg"></div>
                 <div className="relative glass p-6 rounded-xl">
@@ -123,23 +115,24 @@ const About = () => {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-              >
+            {teamMembers.map((member, index) => <motion.div key={index} initial={{
+            opacity: 0,
+            y: 20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            duration: 0.4,
+            delay: index * 0.1
+          }}>
                 <Card className="overflow-hidden transition-all duration-300 hover:shadow-md border-ruvo-100 hover:border-ruvo-300">
                   <CardContent className="p-0">
                     <div className="p-6 text-center">
                       <Avatar className="w-24 h-24 mx-auto mb-4 border-2 border-ruvo-200 shadow-md">
-                        <AvatarImage 
-                          src={member.image} 
-                          alt={member.name}
-                          className="w-full h-full object-cover" 
-                          style={{ objectFit: "cover", objectPosition: "center" }}
-                        />
+                        <AvatarImage src={member.image} alt={member.name} className="w-full h-full object-cover" style={{
+                      objectFit: "cover",
+                      objectPosition: "center"
+                    }} />
                         <AvatarFallback className="bg-ruvo-100 text-ruvo-500 text-lg">
                           {member.name.split(' ').map(n => n[0]).join('')}
                         </AvatarFallback>
@@ -150,8 +143,7 @@ const About = () => {
                     </div>
                   </CardContent>
                 </Card>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </section>
 
@@ -162,11 +154,16 @@ const About = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-            >
+            <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            duration: 0.3,
+            delay: 0.1
+          }}>
               <Card className="h-full border-ruvo-100 hover:border-ruvo-300 transition-all duration-300">
                 <CardContent className="pt-6 h-full flex flex-col">
                   <h3 className="font-semibold mb-2 text-ruvo-500">Empathy First</h3>
@@ -176,11 +173,16 @@ const About = () => {
                 </CardContent>
               </Card>
             </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
-            >
+            <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            duration: 0.3,
+            delay: 0.2
+          }}>
               <Card className="h-full border-ruvo-100 hover:border-ruvo-300 transition-all duration-300">
                 <CardContent className="pt-6 h-full flex flex-col">
                   <h3 className="font-semibold mb-2 text-ruvo-500">Privacy & Trust</h3>
@@ -190,11 +192,16 @@ const About = () => {
                 </CardContent>
               </Card>
             </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.3 }}
-            >
+            <motion.div initial={{
+            opacity: 0,
+            y: 20
+          }} animate={{
+            opacity: 1,
+            y: 0
+          }} transition={{
+            duration: 0.3,
+            delay: 0.3
+          }}>
               <Card className="h-full border-ruvo-100 hover:border-ruvo-300 transition-all duration-300">
                 <CardContent className="pt-6 h-full flex flex-col">
                   <h3 className="font-semibold mb-2 text-ruvo-500">Constant Improvement</h3>
@@ -207,8 +214,6 @@ const About = () => {
           </div>
         </section>
       </div>
-    </PageLayout>
-  );
+    </PageLayout>;
 };
-
 export default About;
