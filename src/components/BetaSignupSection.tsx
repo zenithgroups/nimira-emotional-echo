@@ -80,20 +80,12 @@ const BetaSignupSection: React.FC = () => {
   };
 
   return (
-    <section id="join-beta" className="section-spacing bg-gradient-to-br from-blue-950 via-slate-900 to-blue-900 relative overflow-hidden">
-      {/* Animated background particles with blue and gold theme */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-2 h-2 bg-blue-400 rounded-full opacity-60 animate-pulse"></div>
-        <div className="absolute top-40 right-32 w-1 h-1 bg-amber-400 rounded-full opacity-70 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-        <div className="absolute bottom-40 left-40 w-1.5 h-1.5 bg-blue-500 rounded-full opacity-50 animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute bottom-60 right-60 w-2 h-2 bg-blue-300 rounded-full opacity-40 animate-pulse" style={{ animationDelay: '2s' }}></div>
-      </div>
-      
+    <section id="join-beta" className="section-spacing bg-black relative overflow-hidden">
       <div className="container-custom relative z-10">
-        <div className="max-w-3xl mx-auto glass-dark py-12 px-6 sm:px-10 rounded-3xl">
+        <div className="max-w-3xl mx-auto card-glass py-12 px-6 sm:px-10 rounded-3xl animate-fade-up">
           <div className="text-center mb-10">
-            <h2 className="mobile-heading-3 bg-gradient-to-r from-blue-400 to-amber-300 bg-clip-text text-transparent">Join Our Early Access Beta</h2>
-            <p className="text-gray-200">
+            <h2 className="mobile-heading-3 text-white">Join Our Early Access Beta</h2>
+            <p className="text-gray-300">
               Be among the first to experience Ruvo and help shape the future of AI companionship.
             </p>
           </div>
@@ -109,7 +101,7 @@ const BetaSignupSection: React.FC = () => {
                     <FormControl>
                       <Input
                         {...field}
-                        className="w-full px-4 py-3 rounded-xl bg-blue-950/50 border border-blue-400/30 text-white placeholder-gray-400 focus:border-amber-400/60 focus:ring focus:ring-amber-300/20 focus:ring-opacity-50 transition-all"
+                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/20 text-white placeholder-gray-400 focus:border-orange-400/60 focus:ring focus:ring-orange-300/20 focus:ring-opacity-50 transition-all"
                         placeholder="Your name"
                         disabled={loading}
                       />
@@ -129,7 +121,7 @@ const BetaSignupSection: React.FC = () => {
                       <Input
                         {...field}
                         type="email"
-                        className="w-full px-4 py-3 rounded-xl bg-blue-950/50 border border-blue-400/30 text-white placeholder-gray-400 focus:border-amber-400/60 focus:ring focus:ring-amber-300/20 focus:ring-opacity-50 transition-all"
+                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/20 text-white placeholder-gray-400 focus:border-orange-400/60 focus:ring focus:ring-orange-300/20 focus:ring-opacity-50 transition-all"
                         placeholder="your.email@example.com"
                         disabled={loading}
                       />

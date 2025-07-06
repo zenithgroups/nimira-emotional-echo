@@ -6,6 +6,7 @@ import HowItWorksSection from "@/components/HowItWorksSection";
 import ProductFeaturesSection from "@/components/ProductFeaturesSection";
 import BetaSignupSection from "@/components/BetaSignupSection";
 import AboutSection from "@/components/AboutSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -31,12 +32,13 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-slate-900 to-blue-900">
+    <div className="min-h-screen bg-black">
       <NavBar />
       <HeroSection />
-      <div className="bg-gradient-to-b from-blue-950/50 via-slate-900/50 to-blue-900/50">
+      <div className="bg-black">
         <HowItWorksSection />
         <ProductFeaturesSection />
+        <TestimonialsSection />
         <BetaSignupSection />
         <AboutSection />
       </div>

@@ -44,7 +44,7 @@ const NavBar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-blue-400/20 bg-blue-950/95 transition-all duration-300">
+    <header className="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/10 bg-black/95 transition-all duration-300">
       <div className="container px-4 mx-auto max-w-7xl flex h-16 items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="flex items-center hover:opacity-80 transition-all duration-300 group" onClick={() => closeMenu()}>

@@ -25,14 +25,8 @@ const Footer: React.FC = () => {
   };
   
   return (
-    <footer className="relative overflow-hidden">
-      {/* Professional gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800"></div>
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
-      
-      {/* Subtle background elements */}
-      <div className="absolute top-10 right-20 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-20 left-10 w-40 h-40 bg-gradient-to-br from-indigo-400/10 to-blue-400/10 rounded-full blur-3xl"></div>
+    <footer className="relative overflow-hidden bg-black">
+      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
       
       <div className="relative z-10 py-16">
         <div className="container-custom">
@@ -47,18 +41,18 @@ const Footer: React.FC = () => {
                       className="h-6 w-auto brightness-0 invert" 
                     />
                   </div>
-                  <span className="text-2xl font-bold bg-gradient-to-r from-blue-300 to-indigo-300 bg-clip-text text-transparent group-hover:from-blue-200 group-hover:to-indigo-200 transition-all duration-300">
+                  <span className="text-2xl font-bold text-white group-hover:text-orange-300 transition-all duration-300">
                     Ruvo
                   </span>
                 </Link>
               </div>
-              <p className="text-slate-400 mb-6 leading-relaxed">
+              <p className="text-gray-400 mb-6 leading-relaxed">
                 Your emotional AI companion, designed to understand and support you with empathy and intelligence.
               </p>
               <div className="flex space-x-4">
                 <button 
                   onClick={() => handleSocialClick("LinkedIn")}
-                  className="p-3 rounded-xl bg-slate-800/50 text-slate-400 hover:text-blue-400 hover:bg-slate-700/50 border border-slate-700/50 hover:border-blue-400/30 transition-all duration-300 hover:scale-110"
+                  className="p-3 rounded-xl bg-white/5 text-gray-400 hover:text-orange-400 hover:bg-white/10 border border-white/10 hover:border-orange-400/30 transition-all duration-300 hover:scale-110"
                   aria-label="LinkedIn"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -69,7 +63,7 @@ const Footer: React.FC = () => {
                 </button>
                 <button 
                   onClick={() => handleSocialClick("Twitter")}
-                  className="p-3 rounded-xl bg-slate-800/50 text-slate-400 hover:text-blue-400 hover:bg-slate-700/50 border border-slate-700/50 hover:border-blue-400/30 transition-all duration-300 hover:scale-110"
+                  className="p-3 rounded-xl bg-white/5 text-gray-400 hover:text-orange-400 hover:bg-white/10 border border-white/10 hover:border-orange-400/30 transition-all duration-300 hover:scale-110"
                   aria-label="Twitter"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -78,7 +72,7 @@ const Footer: React.FC = () => {
                 </button>
                 <button 
                   onClick={() => handleSocialClick("Instagram")}
-                  className="p-3 rounded-xl bg-slate-800/50 text-slate-400 hover:text-blue-400 hover:bg-slate-700/50 border border-slate-700/50 hover:border-blue-400/30 transition-all duration-300 hover:scale-110"
+                  className="p-3 rounded-xl bg-white/5 text-gray-400 hover:text-orange-400 hover:bg-white/10 border border-white/10 hover:border-orange-400/30 transition-all duration-300 hover:scale-110"
                   aria-label="Visit Ruvo on Instagram"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -93,41 +87,41 @@ const Footer: React.FC = () => {
             <div>
               <h4 className="text-lg font-semibold mb-6 text-white">Company</h4>
               <ul className="space-y-3">
-                <li><Link to="/about" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">About Us</Link></li>
-                <li><Link to="/careers" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Careers</Link></li>
-                <li><Link to="/blog" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Blog</Link></li>
-                <li><Link to="/press" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Press</Link></li>
+                <li><Link to="/about" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">About Us</Link></li>
+                <li><Link to="/careers" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">Careers</Link></li>
+                <li><Link to="/blog" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">Blog</Link></li>
+                <li><Link to="/press" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">Press</Link></li>
               </ul>
             </div>
             
             <div>
               <h4 className="text-lg font-semibold mb-6 text-white">Support</h4>
               <ul className="space-y-3">
-                <li><Link to="/help" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Help Center</Link></li>
-                <li><Link to="/faqs" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">FAQs</Link></li>
-                <li><Link to="/contact" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Contact Us</Link></li>
-                <li><Link to="/privacy" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Privacy</Link></li>
+                <li><Link to="/help" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">Help Center</Link></li>
+                <li><Link to="/faqs" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">FAQs</Link></li>
+                <li><Link to="/contact" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">Contact Us</Link></li>
+                <li><Link to="/privacy" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">Privacy</Link></li>
               </ul>
             </div>
             
             <div>
               <h4 className="text-lg font-semibold mb-6 text-white">Legal</h4>
               <ul className="space-y-3">
-                <li><Link to="/terms" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Terms of Service</Link></li>
-                <li><Link to="/privacy-policy" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Privacy Policy</Link></li>
-                <li><Link to="/cookies" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Cookie Policy</Link></li>
-                <li><Link to="/data-processing" className="text-slate-400 hover:text-blue-400 transition-colors duration-300 hover:translate-x-1 inline-block">Data Processing</Link></li>
+                <li><Link to="/terms" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">Terms of Service</Link></li>
+                <li><Link to="/privacy-policy" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">Privacy Policy</Link></li>
+                <li><Link to="/cookies" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">Cookie Policy</Link></li>
+                <li><Link to="/data-processing" className="text-gray-400 hover:text-orange-400 transition-colors duration-300 hover:translate-x-1 inline-block">Data Processing</Link></li>
               </ul>
             </div>
           </div>
           
-          <div className="pt-8 border-t border-slate-700/50">
+          <div className="pt-8 border-t border-white/20">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className="text-slate-500 text-sm mb-4 md:mb-0">&copy; {currentYear} Ruvo AI. All rights reserved.</p>
+              <p className="text-gray-500 text-sm mb-4 md:mb-0">&copy; {currentYear} Ruvo AI. All rights reserved.</p>
               <div className="flex space-x-8">
-                <Link to="/privacy-policy" className="text-slate-500 text-sm hover:text-blue-400 transition-colors duration-300">Privacy Policy</Link>
-                <Link to="/terms" className="text-slate-500 text-sm hover:text-blue-400 transition-colors duration-300">Terms of Service</Link>
-                <Link to="/contact" className="text-slate-500 text-sm hover:text-blue-400 transition-colors duration-300">Contact</Link>
+                <Link to="/privacy-policy" className="text-gray-500 text-sm hover:text-orange-400 transition-colors duration-300">Privacy Policy</Link>
+                <Link to="/terms" className="text-gray-500 text-sm hover:text-orange-400 transition-colors duration-300">Terms of Service</Link>
+                <Link to="/contact" className="text-gray-500 text-sm hover:text-orange-400 transition-colors duration-300">Contact</Link>
               </div>
             </div>
           </div>
