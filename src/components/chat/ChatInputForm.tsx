@@ -19,6 +19,7 @@ interface ChatInputFormProps {
   toggleListening: () => void;
   isListening: boolean;
   speechRecognitionSupported: boolean;
+  onOpenVoiceConversation?: () => void;
 }
 
 export const ChatInputForm: React.FC<ChatInputFormProps> = ({
@@ -35,6 +36,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
   toggleListening,
   isListening,
   speechRecognitionSupported,
+  onOpenVoiceConversation,
 }) => {
   const [showWave, setShowWave] = useState(false);
 
@@ -113,29 +115,34 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
                 type="button" 
                 className={cn(
                   "relative p-3 rounded-full transition-all duration-300 hover:scale-110",
-                  "voice-ripple",
-                  isListening && "active",
-                  isListening 
-                    ? "bg-gradient-to-r from-violet-500 to-orange-400 text-white shadow-lg shadow-violet-500/30" 
-                    : darkMode
-                      ? "bg-slate-700/80 text-slate-300 hover:bg-slate-600/80 hover:text-white" 
-                      : "bg-gray-100/80 text-gray-600 hover:bg-gray-200/80 hover:text-gray-800",
-                  "backdrop-blur-sm border border-white/10"
+                  "group overflow-hidden",
+                  "bg-gradient-to-r from-violet-500 to-orange-500 text-white",
+                  "shadow-lg hover:shadow-xl hover:shadow-violet-500/30",
+                  "backdrop-blur-sm border border-white/20",
+                  "before:absolute before:inset-0 before:bg-gradient-to-r before:from-violet-600 before:to-orange-600",
+                  "before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
                 )}
-                onClick={toggleListening}
-                title={isListening ? "Stop listening" : "Start voice input"}
+                onClick={onOpenVoiceConversation || toggleListening}
+                title="Start voice conversation"
               >
-                {isListening ? (
-                  <div className="sound-wave">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div className="relative z-10 flex items-center justify-center">
+                  <div className={cn(
+                    "w-5 h-5 rounded-full bg-white/20 flex items-center justify-center",
+                    "transition-all duration-300 group-hover:bg-white/30"
+                  )}>
+                    <MicIcon size={14} />
                   </div>
-                ) : (
-                  <MicIcon size={18} />
-                )}
+                  
+                  {/* Pulsing ring effect */}
+                  <div className={cn(
+                    "absolute inset-0 rounded-full border-2 border-white/40",
+                    "animate-ping opacity-75"
+                  )} />
+                  <div className={cn(
+                    "absolute inset-0 rounded-full border border-white/60",
+                    "animate-pulse"
+                  )} />
+                </div>
               </button>
             )}
             

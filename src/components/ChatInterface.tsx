@@ -11,6 +11,7 @@ import { ChatHeader } from "./chat/ChatHeader";
 import { ChatMessageList } from "./chat/ChatMessageList"; 
 import { ChatInputForm } from "./chat/ChatInputForm";
 import { ConnectionAlert } from "./chat/ConnectionAlert";
+import { VoiceConversation } from "./chat/VoiceConversation";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -49,6 +50,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [speechRecognitionSupported, setSpeechRecognitionSupported] = useState(false);
   const [currentVoiceIndex, setCurrentVoiceIndex] = useState(selectedVoiceIndex);
   const [voicePopoverOpen, setVoicePopoverOpen] = useState(false);
+  const [isVoiceConversationOpen, setIsVoiceConversationOpen] = useState(false);
+  const [isProcessingVoice, setIsProcessingVoice] = useState(false);
   
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -339,6 +342,49 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         });
       }
     }
+  };
+
+  const openVoiceConversation = () => {
+    setIsVoiceConversationOpen(true);
+  };
+
+  const closeVoiceConversation = () => {
+    setIsVoiceConversationOpen(false);
+    setIsListening(false);
+    setIsProcessingVoice(false);
+    speechRecognition.current?.stop();
+  };
+
+  const handleVoiceToggle = () => {
+    if (!speechRecognitionSupported) {
+      toast({
+        title: "Speech Recognition Not Supported",
+        description: "Your browser doesn't support voice input. Please use text input instead.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (isListening) {
+      speechRecognition.current?.stop();
+      setIsListening(false);
+    } else {
+      const started = speechRecognition.current?.start();
+      if (!started) {
+        toast({
+          title: "Voice Input Error",
+          description: "Failed to start voice recognition. Please try again.",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+
+  const handleVoiceMessage = async (message: string) => {
+    setIsProcessingVoice(true);
+    setInput(message);
+    await sendMessage();
+    setIsProcessingVoice(false);
   };
   
   const toggleVoiceOutput = () => {
@@ -645,6 +691,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         toggleListening={toggleListening}
         isListening={isListening}
         speechRecognitionSupported={speechRecognitionSupported}
+        onOpenVoiceConversation={openVoiceConversation}
+      />
+
+      <VoiceConversation
+        isOpen={isVoiceConversationOpen}
+        onClose={closeVoiceConversation}
+        darkMode={darkMode}
+        isListening={isListening}
+        onToggleListening={handleVoiceToggle}
+        isProcessing={isProcessingVoice}
+        onSendMessage={handleVoiceMessage}
       />
     </div>
   );
