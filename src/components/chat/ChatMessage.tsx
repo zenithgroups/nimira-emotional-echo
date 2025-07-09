@@ -1,6 +1,6 @@
 
-import React from "react";
-import { Paperclip, Volume2, PauseCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Paperclip, Volume2, PauseCircle, Bot, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +14,7 @@ interface ChatMessageProps {
   index: number;
   playingMessageIndex: number | null;
   playMessageVoice: (text: string, messageIndex: number) => void;
+  isTyping?: boolean;
 }
 
 export const ChatMessage: React.FC<ChatMessageProps> = ({
@@ -25,60 +26,95 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
   fallbackMode,
   index,
   playingMessageIndex,
-  playMessageVoice
+  playMessageVoice,
+  isTyping = false
 }) => {
+  const [displayedContent, setDisplayedContent] = useState("");
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    if (role === "assistant" && !isTyping) {
+      setIsAnimating(true);
+      let currentIndex = 0;
+      const interval = setInterval(() => {
+        if (currentIndex <= content.length) {
+          setDisplayedContent(content.slice(0, currentIndex));
+          currentIndex++;
+        } else {
+          clearInterval(interval);
+          setIsAnimating(false);
+        }
+      }, 30);
+
+      return () => clearInterval(interval);
+    } else {
+      setDisplayedContent(content);
+    }
+  }, [content, role, isTyping]);
+
+  const isAssistantPlaying = playingMessageIndex === index;
+
   return (
-    <div className={`flex ${role === "user" ? "justify-end" : "justify-start"}`}>
+    <div className={cn(
+      "flex gap-3 items-start group",
+      role === "user" ? "justify-end" : "justify-start"
+    )}>
+      {/* AI Avatar */}
+      {role === "assistant" && (
+        <div className={cn(
+          "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1",
+          "ai-avatar",
+          isAssistantPlaying && "speaking",
+          darkMode 
+            ? "bg-gradient-to-br from-violet-600 to-violet-800" 
+            : "bg-gradient-to-br from-violet-500 to-violet-700"
+        )}>
+          <Bot size={14} className="text-white" />
+        </div>
+      )}
+
       <div className={cn(
-        "max-w-[85%] sm:max-w-[80%] p-3 sm:p-3.5 rounded-2xl text-sm",
+        "max-w-[85%] sm:max-w-[80%] p-4 rounded-2xl text-sm transition-all duration-300 group-hover:shadow-lg",
         role === "user" 
-          ? cn(
-              "rounded-br-none ml-auto",
-              darkMode 
-                ? "bg-ruvo-500/70 text-white border border-ruvo-500/30" 
-                : "bg-white border border-gray-100 shadow-sm"
-            )
-          : cn(
-              "rounded-bl-none", 
-              darkMode 
-                ? "bg-slate-800/70 border border-slate-700/50" 
-                : `${fallbackMode ? "bg-slate-100" : "bg-ruvo-100/70"} shadow-sm`
-            )
+          ? "chat-bubble-user text-white rounded-br-sm ml-auto" 
+          : darkMode 
+            ? "chat-bubble-assistant text-slate-100 rounded-bl-sm" 
+            : "chat-bubble-assistant-light text-gray-800 rounded-bl-sm"
       )}>
         {fileUrl && (
-          <div className="mb-2">
+          <div className="mb-3">
             {fileUrl.startsWith('blob:') && fileName?.match(/\.(jpg|jpeg|png|gif|webp)$/i) ? (
               <div className="relative">
                 <img 
                   src={fileUrl} 
                   alt={fileName || "Uploaded file"} 
-                  className="max-w-full rounded-lg max-h-60 object-contain" 
+                  className="max-w-full rounded-xl max-h-60 object-contain shadow-lg" 
                 />
                 <div className={cn(
-                  "mt-1 text-xs",
-                  darkMode ? "text-slate-300" : "text-gray-500"
+                  "mt-2 text-xs opacity-70",
+                  darkMode ? "text-slate-300" : "text-gray-600"
                 )}>{fileName}</div>
               </div>
             ) : (
               <div className={cn(
-                "flex items-center gap-2 p-2 rounded-md border",
+                "flex items-center gap-3 p-3 rounded-xl border backdrop-blur-sm",
                 darkMode 
-                  ? "bg-slate-700/50 border-slate-600" 
-                  : "bg-gray-50 border-gray-200"
+                  ? "bg-slate-700/30 border-slate-600/30" 
+                  : "bg-white/50 border-gray-200/50"
               )}>
                 <div className={cn(
-                  "w-7 h-7 rounded-md flex items-center justify-center",
-                  darkMode ? "bg-slate-600" : "bg-gray-200"
+                  "w-8 h-8 rounded-lg flex items-center justify-center",
+                  darkMode ? "bg-slate-600/50" : "bg-gray-200/70"
                 )}>
-                  <Paperclip size={14} className={darkMode ? "text-slate-300" : "text-gray-600"} />
+                  <Paperclip size={16} className={darkMode ? "text-slate-300" : "text-gray-600"} />
                 </div>
                 <div className="overflow-hidden">
                   <div className={cn(
-                    "text-xs font-medium truncate",
-                    darkMode ? "text-slate-200" : ""
+                    "text-sm font-medium truncate",
+                    darkMode ? "text-slate-200" : "text-gray-800"
                   )}>{fileName}</div>
                   <div className={cn(
-                    "text-xs",
+                    "text-xs opacity-70",
                     darkMode ? "text-slate-400" : "text-gray-500"
                   )}>File attachment</div>
                 </div>
@@ -86,35 +122,57 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({
             )}
           </div>
         )}
-        <p className={cn(
-          "text-sm whitespace-pre-wrap",
-          darkMode ? (role === "user" ? "text-white" : "text-slate-200") : ""
-        )}>{content}</p>
-        {role === "assistant" && (
+
+        {/* Typing indicator */}
+        {isTyping ? (
+          <div className="typing-indicator">
+            <div className="typing-dot"></div>
+            <div className="typing-dot"></div>
+            <div className="typing-dot"></div>
+          </div>
+        ) : (
+          <p className="text-sm leading-relaxed whitespace-pre-wrap">
+            {displayedContent}
+            {isAnimating && <span className="animate-pulse">|</span>}
+          </p>
+        )}
+
+        {role === "assistant" && !isTyping && (
           <Button 
             variant="ghost"
             size="sm"
             className={cn(
-              "mt-1.5 h-6 p-0 text-xs flex items-center gap-1",
+              "mt-2 h-7 px-2 text-xs flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300",
+              "hover:scale-105 rounded-lg backdrop-blur-sm",
               darkMode 
-                ? "text-slate-400 hover:text-ruvo-300" 
-                : "text-gray-500 hover:text-ruvo-500"
+                ? "text-slate-400 hover:text-violet-300 hover:bg-slate-700/50" 
+                : "text-gray-500 hover:text-violet-600 hover:bg-white/50"
             )}
             onClick={() => playMessageVoice(content, index)}
-            title={playingMessageIndex === index ? "Stop" : "Listen"}
+            title={isAssistantPlaying ? "Stop" : "Listen"}
           >
-            {playingMessageIndex === index ? (
+            {isAssistantPlaying ? (
               <>
-                <PauseCircle size={13} className="mr-1" /> Stop
+                <PauseCircle size={14} /> Stop
               </>
             ) : (
               <>
-                <Volume2 size={13} className="mr-1" /> Listen
+                <Volume2 size={14} /> Listen
               </>
             )}
           </Button>
         )}
       </div>
+
+      {/* User Avatar */}
+      {role === "user" && (
+        <div className={cn(
+          "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1",
+          "bg-gradient-to-br from-orange-400 to-orange-600"
+        )}>
+          <User size={14} className="text-white" />
+        </div>
+      )}
     </div>
   );
 };

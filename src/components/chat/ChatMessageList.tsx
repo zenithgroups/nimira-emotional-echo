@@ -1,8 +1,8 @@
-
 import React, { useRef, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChatMessage } from "./ChatMessage";
 import { cn } from "@/lib/utils";
+import { Bot } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -40,33 +40,65 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = ({
 
   return (
     <ScrollArea className={cn(
-      "flex-1 px-4 py-6 overflow-y-auto",
-      darkMode ? "bg-transparent" : "bg-transparent"
+      "flex-1 px-6 py-8 overflow-y-auto relative",
+      darkMode 
+        ? "bg-gradient-to-b from-slate-900/50 via-slate-800/30 to-slate-900/50" 
+        : "bg-gradient-to-b from-gray-50/50 via-white/30 to-gray-50/50"
     )} ref={scrollAreaRef}>
-      <div className="flex flex-col gap-6 max-w-3xl mx-auto md:px-0 px-2">
-        {messages.map((message, index) => (
-          <ChatMessage 
-            key={index}
-            {...message}
-            index={index}
-            darkMode={darkMode}
-            fallbackMode={fallbackMode}
-            playingMessageIndex={playingMessageIndex}
-            playMessageVoice={playMessageVoice}
+      {/* Ambient background */}
+      <div className="particles absolute inset-0">
+        {[...Array(12)].map((_, i) => (
+          <div
+            key={i}
+            className="particle"
+            style={{
+              left: `${10 + (i * 8)}%`,
+              top: `${20 + (i % 3) * 30}%`,
+              animationDelay: `${i * 0.8}s`,
+              opacity: 0.4
+            }}
           />
         ))}
+      </div>
+
+      <div className="flex flex-col gap-8 max-w-4xl mx-auto relative z-10">
+        {messages.map((message, index) => (
+          <div 
+            key={index}
+            className="opacity-0 animate-fade-in"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            <ChatMessage 
+              {...message}
+              index={index}
+              darkMode={darkMode}
+              fallbackMode={fallbackMode}
+              playingMessageIndex={playingMessageIndex}
+              playMessageVoice={playMessageVoice}
+            />
+          </div>
+        ))}
         {isLoading && (
-          <div className="flex justify-start">
+          <div className="flex gap-3 items-start animate-fade-in">
             <div className={cn(
-              "max-w-[80%] p-3 rounded-2xl rounded-bl-none",
+              "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
+              "ai-avatar speaking",
               darkMode 
-                ? "bg-slate-800/70 border border-slate-700/50" 
-                : "bg-ruvo-100/70 shadow-sm"
+                ? "bg-gradient-to-br from-violet-600 to-violet-800" 
+                : "bg-gradient-to-br from-violet-500 to-violet-700"
             )}>
-              <div className="typing-animation">
-                <span className="dot"></span>
-                <span className="dot"></span>
-                <span className="dot"></span>
+              <Bot size={14} className="text-white" />
+            </div>
+            <div className={cn(
+              "p-4 rounded-2xl rounded-bl-sm backdrop-blur-xl",
+              darkMode 
+                ? "chat-bubble-assistant" 
+                : "chat-bubble-assistant-light"
+            )}>
+              <div className="typing-indicator">
+                <div className="typing-dot"></div>
+                <div className="typing-dot"></div>
+                <div className="typing-dot"></div>
               </div>
             </div>
           </div>

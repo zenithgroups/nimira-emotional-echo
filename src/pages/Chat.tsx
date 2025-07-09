@@ -191,10 +191,10 @@ const ChatPage: React.FC = () => {
 
   return (
     <div className={cn(
-      "min-h-screen transition-colors duration-300 flex",
+      "min-h-screen transition-colors duration-500 flex relative overflow-hidden",
       darkMode 
-        ? "bg-gradient-to-br from-slate-900 to-slate-800 text-white" 
-        : "bg-gradient-to-br from-white to-ruvo-50"
+        ? "bg-gradient-to-br from-black via-slate-900 to-slate-800 text-white" 
+        : "bg-gradient-to-br from-gray-50 via-white to-gray-100"
     )}>
       {/* Mobile menu button - moved to top left corner with z-index */}
       {isMobile && (
@@ -218,13 +218,15 @@ const ChatPage: React.FC = () => {
         />
       )}
       
-      {/* Sidebar with proper z-index and positioning */}
+      {/* Sidebar with glassmorphism */}
       <aside 
         className={cn(
-          "transition-all duration-300 fixed md:relative h-screen z-40 overflow-hidden",
-          darkMode ? "bg-slate-900 border-r border-slate-700" : "bg-white/90 backdrop-blur-md border-r border-slate-200",
+          "transition-all duration-500 fixed md:relative h-screen z-40 overflow-hidden backdrop-blur-2xl",
+          darkMode 
+            ? "bg-gradient-to-b from-slate-900/95 via-slate-800/90 to-slate-900/95 border-r border-slate-700/50" 
+            : "bg-gradient-to-b from-white/95 via-gray-50/90 to-white/95 border-r border-gray-200/50",
           sidebarOpen 
-            ? "w-[280px] translate-x-0" 
+            ? "w-[300px] translate-x-0 shadow-2xl" 
             : "w-0 -translate-x-full"
         )}
       >
@@ -249,15 +251,15 @@ const ChatPage: React.FC = () => {
           
           {/* New chat button */}
           <Button 
-            variant={darkMode ? "outline" : "default"}
             className={cn(
-              "mb-6 w-full justify-start transition-all duration-300",
-              darkMode ? "border-slate-700 hover:bg-slate-800 text-white bg-slate-800/80" : ""
+              "mb-8 w-full justify-start transition-all duration-300 rounded-xl h-12",
+              "bg-gradient-to-r from-violet-500 to-orange-400 text-white border-0",
+              "hover:from-violet-600 hover:to-orange-500 hover:scale-105 hover:shadow-lg",
+              "shadow-lg backdrop-blur-sm"
             )}
             onClick={createNewChat}
-            size="sm"
           >
-            <Plus size={16} className="mr-2" />
+            <Plus size={18} className="mr-3" />
             New Chat
           </Button>
           
@@ -274,10 +276,15 @@ const ChatPage: React.FC = () => {
                   <div 
                     key={chat.id}
                     className={cn(
-                      "p-2.5 rounded-lg text-sm cursor-pointer transition-all duration-300 relative",
+                      "p-4 rounded-xl text-sm cursor-pointer transition-all duration-300 relative backdrop-blur-sm",
+                      "border border-white/10 hover:scale-[1.02] hover:shadow-lg",
                       chat.id === activeChat
-                        ? (darkMode ? "bg-slate-800" : "bg-ruvo-100") 
-                        : (darkMode ? "hover:bg-slate-800" : "hover:bg-ruvo-50")
+                        ? darkMode 
+                          ? "bg-gradient-to-r from-violet-600/30 to-orange-400/20 border-violet-500/50" 
+                          : "bg-gradient-to-r from-violet-100/80 to-orange-100/60 border-violet-300/50"
+                        : darkMode 
+                          ? "hover:bg-slate-800/60 hover:border-slate-600/50" 
+                          : "hover:bg-white/60 hover:border-gray-300/50"
                     )}
                     {...(() => {
                       // Set current chat id for handling in the hook
@@ -358,10 +365,11 @@ const ChatPage: React.FC = () => {
         {/* Top navigation bar */}
         <header 
           className={cn(
-            "py-4 px-4 md:px-6 flex items-center justify-between",
+            "py-5 px-6 flex items-center justify-between backdrop-blur-2xl relative z-10",
             darkMode 
-              ? "bg-slate-900/50 backdrop-blur-md border-b border-slate-700" 
-              : "bg-white/50 backdrop-blur-md border-b border-slate-100"
+              ? "bg-gradient-to-r from-slate-900/80 via-slate-800/70 to-slate-900/80 border-b border-slate-700/50" 
+              : "bg-gradient-to-r from-white/80 via-gray-50/70 to-white/80 border-b border-gray-200/50",
+            "shadow-lg"
           )}
         >
           <div className="w-full flex justify-end items-center gap-4">

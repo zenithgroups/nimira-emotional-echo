@@ -1,6 +1,6 @@
 
-import React from "react";
-import { Send, Mic, Paperclip } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Send, Mic, Paperclip, MicIcon } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { FileUpload } from "./FileUpload";
 import { cn } from "@/lib/utils";
@@ -36,21 +36,54 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
   isListening,
   speechRecognitionSupported,
 }) => {
+  const [showWave, setShowWave] = useState(false);
+
+  useEffect(() => {
+    setShowWave(isListening);
+  }, [isListening]);
+
   return (
-    <div className="p-4 border-t border-slate-200/30 bg-white/30 backdrop-blur-md">
+    <div className={cn(
+      "p-6 border-t backdrop-blur-xl relative",
+      darkMode 
+        ? "bg-gradient-to-r from-slate-900/90 via-slate-800/90 to-slate-900/90 border-slate-700/50" 
+        : "bg-gradient-to-r from-white/90 via-gray-50/90 to-white/90 border-gray-200/50"
+    )}>
+      {/* Ambient particles */}
+      <div className="particles absolute inset-0">
+        {[...Array(6)].map((_, i) => (
+          <div
+            key={i}
+            className="particle"
+            style={{
+              left: `${20 + i * 15}%`,
+              animationDelay: `${i * 0.5}s`,
+              opacity: 0.6
+            }}
+          />
+        ))}
+      </div>
+
       <form 
         onSubmit={e => {
           e.preventDefault();
           sendMessage();
         }} 
-        className="relative"
+        className="relative z-10"
       >
         <div className="relative">
           <Textarea 
-            placeholder="Type a message..." 
+            placeholder="Share your thoughts..." 
             value={input} 
             onChange={e => setInput(e.target.value)} 
-            className="w-full min-h-[44px] max-h-[120px] resize-none pr-[76px] rounded-xl text-sm bg-white/80 border-gray-200 focus:border-ruvo-300"
+            className={cn(
+              "w-full min-h-[52px] max-h-[120px] resize-none pr-[140px] rounded-2xl text-sm transition-all duration-300",
+              "border-2 focus:border-violet-400/50 focus:ring-4 focus:ring-violet-400/10",
+              darkMode 
+                ? "bg-slate-800/80 backdrop-blur-xl border-slate-600/50 text-white placeholder:text-slate-400" 
+                : "bg-white/80 backdrop-blur-xl border-gray-300/50 text-gray-900 placeholder:text-gray-500",
+              "shadow-lg hover:shadow-xl"
+            )}
             onKeyDown={e => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -59,10 +92,16 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
             }} 
           />
           
-          <div className="absolute right-2.5 bottom-2.5 flex gap-2">
+          <div className="absolute right-3 bottom-3 flex gap-2 items-center">
             <button 
               type="button" 
-              className="p-2 rounded-full transition-colors bg-gray-200 text-gray-500 hover:bg-gray-300"
+              className={cn(
+                "p-2.5 rounded-full transition-all duration-300 hover:scale-110",
+                darkMode 
+                  ? "bg-slate-700/80 text-slate-300 hover:bg-slate-600/80 hover:text-white" 
+                  : "bg-gray-100/80 text-gray-600 hover:bg-gray-200/80 hover:text-gray-800",
+                "backdrop-blur-sm border border-white/10"
+              )}
               onClick={handleFileButtonClick}
               title="Upload file"
             >
@@ -73,25 +112,42 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
               <button 
                 type="button" 
                 className={cn(
-                  "p-2 rounded-full transition-colors",
+                  "relative p-3 rounded-full transition-all duration-300 hover:scale-110",
+                  "voice-ripple",
+                  isListening && "active",
                   isListening 
-                    ? "bg-ruvo-500 text-white" 
-                    : "bg-gray-200 text-gray-500 hover:bg-gray-300"
+                    ? "bg-gradient-to-r from-violet-500 to-orange-400 text-white shadow-lg shadow-violet-500/30" 
+                    : darkMode
+                      ? "bg-slate-700/80 text-slate-300 hover:bg-slate-600/80 hover:text-white" 
+                      : "bg-gray-100/80 text-gray-600 hover:bg-gray-200/80 hover:text-gray-800",
+                  "backdrop-blur-sm border border-white/10"
                 )}
                 onClick={toggleListening}
                 title={isListening ? "Stop listening" : "Start voice input"}
               >
-                <Mic size={16} className={isListening ? "animate-pulse" : ""} />
+                {isListening ? (
+                  <div className="sound-wave">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                ) : (
+                  <MicIcon size={18} />
+                )}
               </button>
             )}
             
             <button 
               type="submit" 
               className={cn(
-                "p-2 rounded-full transition-colors",
+                "p-2.5 rounded-full transition-all duration-300 hover:scale-110 backdrop-blur-sm border border-white/10",
                 (isLoading || (input.trim() === "" && !selectedFile)) 
-                  ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-                  : "bg-ruvo-400 hover:bg-ruvo-500 text-white"
+                  ? darkMode 
+                    ? "bg-slate-700/50 text-slate-500 cursor-not-allowed" 
+                    : "bg-gray-100/50 text-gray-400 cursor-not-allowed"
+                  : "bg-gradient-to-r from-violet-500 to-orange-400 text-white shadow-lg shadow-violet-500/30 hover:shadow-xl hover:shadow-violet-500/40"
               )}
               disabled={isLoading || (input.trim() === "" && !selectedFile)}
             >
