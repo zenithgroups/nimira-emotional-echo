@@ -116,22 +116,17 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
                 className={cn(
                   "relative p-3 rounded-full transition-all duration-300 hover:scale-110",
                   "group overflow-hidden",
-                  "bg-gradient-to-r from-violet-500 to-orange-500 text-white",
+                  "bg-gradient-to-r from-violet-500 to-orange-400 text-white",
                   "shadow-lg hover:shadow-xl hover:shadow-violet-500/30",
                   "backdrop-blur-sm border border-white/20",
-                  "before:absolute before:inset-0 before:bg-gradient-to-r before:from-violet-600 before:to-orange-600",
+                  "before:absolute before:inset-0 before:bg-gradient-to-r before:from-violet-600 before:to-orange-500",
                   "before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
                 )}
                 onClick={onOpenVoiceConversation || toggleListening}
                 title="Start voice conversation"
               >
                 <div className="relative z-10 flex items-center justify-center">
-                  <div className={cn(
-                    "w-5 h-5 rounded-full bg-white/20 flex items-center justify-center",
-                    "transition-all duration-300 group-hover:bg-white/30"
-                  )}>
-                    <MicIcon size={14} />
-                  </div>
+                  <MicIcon size={16} className="text-white" />
                   
                   {/* Pulsing ring effect */}
                   <div className={cn(

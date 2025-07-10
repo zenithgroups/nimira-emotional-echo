@@ -11,7 +11,7 @@ import { ChatHeader } from "./chat/ChatHeader";
 import { ChatMessageList } from "./chat/ChatMessageList"; 
 import { ChatInputForm } from "./chat/ChatInputForm";
 import { ConnectionAlert } from "./chat/ConnectionAlert";
-import { VoiceConversation } from "./chat/VoiceConversation";
+import { EnhancedVoiceConversation } from "./chat/EnhancedVoiceConversation";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -26,6 +26,9 @@ interface ChatInterfaceProps {
   darkMode?: boolean;
   activeChat?: string | null;
   updateChatTitle?: (id: string, title: string, lastMessage?: string) => void;
+  userData?: any;
+  voiceEnabled?: boolean;
+  onToggleVoice?: () => void;
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({
@@ -33,11 +36,16 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   onSpeakingChange = () => {},
   darkMode = false,
   activeChat = null,
-  updateChatTitle = () => {}
+  updateChatTitle = () => {},
+  userData = null,
+  voiceEnabled = true,
+  onToggleVoice = () => {}
 }) => {
   const [messages, setMessages] = useState<Message[]>([{
     role: "assistant",
-    content: "Hi there! How are you feeling today?"
+    content: userData 
+      ? `Hi ${userData.nickname || userData.name}! How are you feeling today?`
+      : "Hi there! How are you feeling today?"
   }]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +54,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [chatTitleGenerated, setChatTitleGenerated] = useState(false);
   
   const [isListening, setIsListening] = useState(false);
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [speechRecognitionSupported, setSpeechRecognitionSupported] = useState(false);
   const [currentVoiceIndex, setCurrentVoiceIndex] = useState(selectedVoiceIndex);
   const [voicePopoverOpen, setVoicePopoverOpen] = useState(false);
@@ -159,7 +166,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       } else {
         setMessages([{
           role: "assistant",
-          content: "Hi there! How are you feeling today?"
+          content: userData 
+            ? `Hi ${userData.nickname || userData.name}! How are you feeling today?`
+            : "Hi there! How are you feeling today?"
         }]);
         setChatTitleGenerated(false);
       }
@@ -387,13 +396,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     setIsProcessingVoice(false);
   };
   
-  const toggleVoiceOutput = () => {
-    setVoiceEnabled(!voiceEnabled);
-    toast({
-      title: voiceEnabled ? "Voice Output Disabled" : "Voice Output Enabled",
-      description: voiceEnabled ? "Responses will not be read aloud." : "Responses will be read aloud."
-    });
-  };
+  // Remove internal voice toggle since it's now handled by parent
 
   const speakMessage = async (text: string) => {
     if (!voiceEnabled) return;
@@ -655,7 +658,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         voiceEnabled={voiceEnabled}
         voicePopoverOpen={voicePopoverOpen}
         setVoicePopoverOpen={setVoicePopoverOpen}
-        toggleVoiceOutput={toggleVoiceOutput}
+        toggleVoiceOutput={onToggleVoice}
         playVoiceSample={playVoiceSample}
         changeVoice={changeVoice}
         currentVoiceIndex={currentVoiceIndex}
@@ -694,15 +697,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         onOpenVoiceConversation={openVoiceConversation}
       />
 
-      <VoiceConversation
-        isOpen={isVoiceConversationOpen}
-        onClose={closeVoiceConversation}
-        darkMode={darkMode}
-        isListening={isListening}
-        onToggleListening={handleVoiceToggle}
-        isProcessing={isProcessingVoice}
-        onSendMessage={handleVoiceMessage}
-      />
+        <EnhancedVoiceConversation
+          isOpen={isVoiceConversationOpen}
+          onClose={closeVoiceConversation}
+          darkMode={darkMode}
+          isListening={isListening}
+          onToggleListening={handleVoiceToggle}
+          isProcessing={isProcessingVoice}
+          onSendMessage={handleVoiceMessage}
+          voiceEnabled={voiceEnabled}
+          onToggleVoice={onToggleVoice}
+        />
     </div>
   );
 };
