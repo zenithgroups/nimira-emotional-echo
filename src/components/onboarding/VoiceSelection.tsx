@@ -1,61 +1,10 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Play, Pause, Mic, ChevronLeft, ChevronRight, Volume2 } from 'lucide-react';
-
-interface Voice {
-  id: string;
-  name: string;
-  gender: 'male' | 'female';
-  description: string;
-  avatar: string;
-}
-
-const AVAILABLE_VOICES: Voice[] = [
-  {
-    id: 'aria',
-    name: 'Aria',
-    gender: 'female',
-    description: 'Warm and empathetic',
-    avatar: '👩‍🦰'
-  },
-  {
-    id: 'sarah',
-    name: 'Sarah',
-    gender: 'female', 
-    description: 'Gentle and caring',
-    avatar: '👩‍🦱'
-  },
-  {
-    id: 'charlotte',
-    name: 'Charlotte',
-    gender: 'female',
-    description: 'Friendly and supportive',
-    avatar: '👩‍🦳'
-  },
-  {
-    id: 'george',
-    name: 'George',
-    gender: 'male',
-    description: 'Calm and reassuring',
-    avatar: '👨‍🦰'
-  },
-  {
-    id: 'callum',
-    name: 'Callum',
-    gender: 'male',
-    description: 'Understanding and patient',
-    avatar: '👨‍🦱'
-  },
-  {
-    id: 'liam',
-    name: 'Liam',
-    gender: 'male',
-    description: 'Encouraging and wise',
-    avatar: '👨‍🦳'
-  }
-];
+import { ELEVEN_LABS_VOICES, ElevenLabsService } from '@/utils/elevenLabsUtils';
 
 interface VoiceSelectionProps {
   onVoiceSelect: (voiceId: string) => void;
@@ -68,41 +17,57 @@ export const VoiceSelection: React.FC<VoiceSelectionProps> = ({
   onSkip,
   darkMode
 }) => {
-  const [selectedVoice, setSelectedVoice] = useState<string>(AVAILABLE_VOICES[0].id);
+  const [selectedVoice, setSelectedVoice] = useState<string>(ELEVEN_LABS_VOICES[0].voice_id);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [playingVoice, setPlayingVoice] = useState<string | null>(null);
+  const [sampleError, setSampleError] = useState<string | null>(null);
+  const elevenLabsService = React.useRef(new ElevenLabsService());
 
   const handlePrevious = () => {
-    const newIndex = currentIndex > 0 ? currentIndex - 1 : AVAILABLE_VOICES.length - 1;
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : ELEVEN_LABS_VOICES.length - 1;
     setCurrentIndex(newIndex);
-    setSelectedVoice(AVAILABLE_VOICES[newIndex].id);
+    setSelectedVoice(ELEVEN_LABS_VOICES[newIndex].voice_id);
   };
 
   const handleNext = () => {
-    const newIndex = currentIndex < AVAILABLE_VOICES.length - 1 ? currentIndex + 1 : 0;
+    const newIndex = currentIndex < ELEVEN_LABS_VOICES.length - 1 ? currentIndex + 1 : 0;
     setCurrentIndex(newIndex);
-    setSelectedVoice(AVAILABLE_VOICES[newIndex].id);
+    setSelectedVoice(ELEVEN_LABS_VOICES[newIndex].voice_id);
   };
 
-  const playVoiceSample = (voiceId: string) => {
+  const playVoiceSample = async (voiceId: string) => {
     if (playingVoice === voiceId) {
       setPlayingVoice(null);
-      // Stop any playing audio
+      elevenLabsService.current.stop();
       return;
     }
     
     setPlayingVoice(voiceId);
-    // Simulate audio playback
-    setTimeout(() => {
+    setSampleError(null);
+    
+    try {
+      const voiceIndex = ELEVEN_LABS_VOICES.findIndex(v => v.voice_id === voiceId);
+      const success = await elevenLabsService.current.speakSample(voiceIndex);
+      
+      if (!success) {
+        setSampleError("Sample unavailable");
+      }
+      
+      setTimeout(() => {
+        setPlayingVoice(null);
+      }, 4000);
+    } catch (error) {
+      console.error('Error playing voice sample:', error);
+      setSampleError("Sample unavailable");
       setPlayingVoice(null);
-    }, 3000);
+    }
   };
 
   const handleConfirm = () => {
     onVoiceSelect(selectedVoice);
   };
 
-  const currentVoice = AVAILABLE_VOICES[currentIndex];
+  const currentVoice = ELEVEN_LABS_VOICES[currentIndex];
 
   return (
     <div className={cn(
@@ -220,17 +185,17 @@ export const VoiceSelection: React.FC<VoiceSelectionProps> = ({
             {/* Sample play button */}
             <div className="flex justify-center mb-6">
               <Button
-                onClick={() => playVoiceSample(currentVoice.id)}
+                onClick={() => playVoiceSample(currentVoice.voice_id)}
                 variant="outline"
                 className={cn(
                   "rounded-full px-6 py-2 transition-all duration-300 hover:scale-105",
                   darkMode 
                     ? "border-slate-600 text-slate-300 hover:bg-slate-800 hover:border-slate-500" 
                     : "border-gray-300 text-gray-700 hover:bg-gray-100 hover:border-gray-400",
-                  playingVoice === currentVoice.id && "animate-pulse"
+                  playingVoice === currentVoice.voice_id && "animate-pulse"
                 )}
               >
-                {playingVoice === currentVoice.id ? (
+                {playingVoice === currentVoice.voice_id ? (
                   <>
                     <Pause size={16} className="mr-2" />
                     Playing...
@@ -244,9 +209,16 @@ export const VoiceSelection: React.FC<VoiceSelectionProps> = ({
               </Button>
             </div>
 
+            {/* Error message */}
+            {sampleError && (
+              <div className="text-center mb-4">
+                <p className="text-red-500 text-sm">{sampleError}</p>
+              </div>
+            )}
+
             {/* Voice indicators */}
             <div className="flex justify-center gap-2 mb-6">
-              {AVAILABLE_VOICES.map((_, index) => (
+              {ELEVEN_LABS_VOICES.map((_, index) => (
                 <div
                   key={index}
                   className={cn(
@@ -288,6 +260,16 @@ export const VoiceSelection: React.FC<VoiceSelectionProps> = ({
               <Mic size={16} className="mr-2" />
               Choose {currentVoice.name}
             </Button>
+          </div>
+
+          {/* Info message */}
+          <div className="text-center">
+            <p className={cn(
+              "text-xs",
+              darkMode ? "text-slate-400" : "text-gray-500"
+            )}>
+              You can change this anytime in Settings
+            </p>
           </div>
         </CardContent>
       </Card>

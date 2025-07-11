@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Phone, PhoneOff, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -30,7 +31,47 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
   const [transcript, setTranscript] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [showResponse, setShowResponse] = useState(false);
+  const [recognitionSupported, setRecognitionSupported] = useState(false);
   const animationRef = useRef<number>();
+  const recognitionRef = useRef<SpeechRecognition | null>(null);
+
+  // Check speech recognition support
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      setRecognitionSupported(true);
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = true;
+      recognitionRef.current.lang = 'en-US';
+
+      recognitionRef.current.onresult = (event) => {
+        let finalTranscript = '';
+        let interimTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
+        }
+
+        setTranscript(finalTranscript || interimTranscript);
+
+        if (finalTranscript) {
+          onSendMessage(finalTranscript);
+          setTranscript('');
+        }
+      };
+
+      recognitionRef.current.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        setTranscript('');
+      };
+    }
+  }, [onSendMessage]);
 
   // Generate realistic audio visualization data
   useEffect(() => {
@@ -60,36 +101,26 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
     };
   }, [isListening, isProcessing]);
 
-  // Simulate transcript updates
-  useEffect(() => {
-    if (isListening) {
-      const phrases = [
-        "I'm feeling a bit anxious today...",
-        "Can you help me understand my emotions?",
-        "I had a difficult conversation with someone close to me.",
-        "How can I manage stress better?"
-      ];
-      const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-      
-      let currentText = '';
-      let index = 0;
-      
-      const typeText = () => {
-        if (index < randomPhrase.length && isListening) {
-          currentText += randomPhrase[index];
-          setTranscript(currentText);
-          index++;
-          setTimeout(typeText, 50 + Math.random() * 100);
-        }
-      };
-      
-      setTimeout(typeText, 1000);
-    } else {
-      setTranscript('');
+  // Handle listening toggle
+  const handleToggleListening = () => {
+    if (!recognitionSupported) {
+      console.warn('Speech recognition not supported');
+      return;
     }
-  }, [isListening]);
 
-  // Simulate AI response
+    if (isListening) {
+      recognitionRef.current?.stop();
+    } else {
+      try {
+        recognitionRef.current?.start();
+      } catch (error) {
+        console.error('Failed to start speech recognition:', error);
+      }
+    }
+    onToggleListening();
+  };
+
+  // Simulate AI response for demo
   useEffect(() => {
     if (isProcessing && transcript) {
       const responses = [
@@ -175,7 +206,7 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
                 "text-sm",
                 darkMode ? "text-slate-400" : "text-gray-500"
               )}>
-                {isListening ? "Listening..." : isProcessing ? "AI is thinking..." : "Ready to chat"}
+                {isListening ? "Listening..." : isProcessing ? "Analyzing..." : "Ready to chat"}
               </p>
             </div>
           </div>
@@ -282,8 +313,8 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
         {/* Control buttons */}
         <div className="flex justify-center gap-6">
           <Button
-            onClick={onToggleListening}
-            disabled={isProcessing}
+            onClick={handleToggleListening}
+            disabled={isProcessing || !recognitionSupported}
             className={cn(
               "w-20 h-20 rounded-full transition-all duration-300",
               "hover:scale-110 shadow-2xl backdrop-blur-sm",
@@ -322,9 +353,21 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
                     ? "bg-green-500"
                     : "bg-gray-400"
             )} />
-            {isListening ? "Listening to you..." : isProcessing ? "AI is responding..." : voiceEnabled ? "Ready to chat" : "Voice disabled"}
+            {isListening ? "Listening to you..." : isProcessing ? "AI is analyzing..." : voiceEnabled ? "Ready to chat" : "Voice disabled"}
           </div>
         </div>
+
+        {/* Not supported message */}
+        {!recognitionSupported && (
+          <div className="text-center mt-4">
+            <p className={cn(
+              "text-xs text-red-500",
+              darkMode ? "text-red-400" : "text-red-600"
+            )}>
+              Speech recognition not supported in this browser
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
 import { ElevenLabsService, ELEVEN_LABS_VOICES } from "@/utils/elevenLabsUtils";
 import { getSystemPrompt, detectEmotion, getOpenAITitlePrompt } from "@/utils/sentimentUtils";
@@ -173,7 +173,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         setChatTitleGenerated(false);
       }
     }
-  }, [activeChat]);
+  }, [activeChat, userData]);
 
   // Save messages when they change and update chat title only after user has sent a message
   useEffect(() => {
@@ -199,7 +199,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   // Initialize voice services
   useEffect(() => {
+    // Initialize ElevenLabs with user's selected voice
+    const savedVoice = localStorage.getItem('ruvo_selected_voice');
     elevenLabsService.current = new ElevenLabsService();
+    
+    if (savedVoice && elevenLabsService.current) {
+      elevenLabsService.current.setVoice(savedVoice);
+    }
     
     speechRecognition.current = new SpeechRecognitionService({
       onSpeechStart: () => setIsListening(true),
@@ -235,7 +241,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         speechSynthesis.current.stop();
       }
     };
-  }, []);
+  }, [currentVoiceIndex]);
 
   // Check API connection on load
   useEffect(() => {
@@ -315,6 +321,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       const success = elevenLabsService.current.setVoiceByIndex(index);
       if (success) {
         setCurrentVoiceIndex(index);
+        // Save voice selection
+        localStorage.setItem('ruvo_selected_voice', ELEVEN_LABS_VOICES[index].voice_id);
         toast({
           title: "Voice Changed",
           description: `Voice set to ${ELEVEN_LABS_VOICES[index].name}`
@@ -391,12 +399,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   const handleVoiceMessage = async (message: string) => {
     setIsProcessingVoice(true);
-    setInput(message);
-    await sendMessage();
+    
+    // Add user message to chat
+    const userMessage = {
+      role: "user" as const,
+      content: message.trim()
+    };
+    setMessages(prev => [...prev, userMessage]);
+    
+    // Send to OpenAI and get response
+    await sendMessageToAI(userMessage);
     setIsProcessingVoice(false);
   };
-  
-  // Remove internal voice toggle since it's now handled by parent
 
   const speakMessage = async (text: string) => {
     if (!voiceEnabled) return;
@@ -540,30 +554,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       setIsLoading(false);
     }, 1000);
   };
-  
-  const sendMessage = async () => {
-    if ((input.trim() === "" && !selectedFile) || isLoading) return;
-    
-    if (selectedFile) {
-      await handleFileSend();
-      return;
-    }
 
-    const userMessage = {
-      role: "user" as const,
-      content: input.trim()
-    };
-    setMessages(prev => [...prev, userMessage]);
-    setInput("");
+  const sendMessageToAI = async (userMessage: Message) => {
     setIsLoading(true);
-    
-    if (isListening) {
-      speechRecognition.current?.stop();
-    }
-    
-    if (speechSynthesis.current) {
-      speechSynthesis.current.stop();
-    }
     
     if (fallbackMode) {
       simulateFallbackResponse(userMessage.content);
@@ -573,9 +566,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     try {
       console.log("Sending message to OpenAI API");
       
-      // Get the appropriate system prompt based on sentiment analysis
-      const systemPrompt = getSystemPrompt(userMessage.content);
-      console.log("Using system prompt based on emotional state:", systemPrompt.substring(0, 50) + "...");
+      // Get the appropriate system prompt based on sentiment analysis and user data
+      const systemPrompt = getSystemPrompt(userMessage.content, userData);
+      console.log("Using system prompt based on emotional state and user data:", systemPrompt.substring(0, 50) + "...");
       
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -644,6 +637,32 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       setIsLoading(false);
     }
   };
+  
+  const sendMessage = async () => {
+    if ((input.trim() === "" && !selectedFile) || isLoading) return;
+    
+    if (selectedFile) {
+      await handleFileSend();
+      return;
+    }
+
+    const userMessage = {
+      role: "user" as const,
+      content: input.trim()
+    };
+    setMessages(prev => [...prev, userMessage]);
+    setInput("");
+    
+    if (isListening) {
+      speechRecognition.current?.stop();
+    }
+    
+    if (speechSynthesis.current) {
+      speechSynthesis.current.stop();
+    }
+    
+    await sendMessageToAI(userMessage);
+  };
 
   return (
     <div className={cn(
@@ -697,17 +716,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         onOpenVoiceConversation={openVoiceConversation}
       />
 
-        <EnhancedVoiceConversation
-          isOpen={isVoiceConversationOpen}
-          onClose={closeVoiceConversation}
-          darkMode={darkMode}
-          isListening={isListening}
-          onToggleListening={handleVoiceToggle}
-          isProcessing={isProcessingVoice}
-          onSendMessage={handleVoiceMessage}
-          voiceEnabled={voiceEnabled}
-          onToggleVoice={onToggleVoice}
-        />
+      <EnhancedVoiceConversation
+        isOpen={isVoiceConversationOpen}
+        onClose={closeVoiceConversation}
+        darkMode={darkMode}
+        isListening={isListening}
+        onToggleListening={handleVoiceToggle}
+        isProcessing={isProcessingVoice}
+        onSendMessage={handleVoiceMessage}
+        voiceEnabled={voiceEnabled}
+        onToggleVoice={onToggleVoice}
+      />
     </div>
   );
 };

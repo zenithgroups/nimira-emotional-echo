@@ -5,20 +5,18 @@ export interface ElevenLabsVoiceOption {
   voice_id: string;
   name: string;
   gender: 'male' | 'female';
+  description: string;
+  avatar: string;
 }
 
 // Top premium voices from ElevenLabs with distinct characteristics
 export const ELEVEN_LABS_VOICES: ElevenLabsVoiceOption[] = [
-  { voice_id: "9BWtsMINqrJLrRacOk9x", name: "Aria", gender: "female" },
-  { voice_id: "CwhRBWXzGAHq8TQ4Fs17", name: "Roger", gender: "male" },
-  { voice_id: "EXAVITQu4vr4xnSDxMaL", name: "Sarah", gender: "female" },
-  { voice_id: "JBFqnCBsd6RMkjVDRZzb", name: "George", gender: "male" },
-  { voice_id: "TX3LPaxmHKxFdv7VOQHJ", name: "Liam", gender: "male" },
-  { voice_id: "XB0fDUnXU5powFXDhCwa", name: "Charlotte", gender: "female" },
-  { voice_id: "Xb7hH8MSUJpSbSDYk0k2", name: "Alice", gender: "female" },
-  { voice_id: "bIHbv24MWmeRgasZH58o", name: "Will", gender: "male" },
-  { voice_id: "iP95p4xoKVk53GoZ742B", name: "Chris", gender: "male" },
-  { voice_id: "pFZP5JQG7iQjIQuC4Bku", name: "Lily", gender: "female" },
+  { voice_id: "9BWtsMINqrJLrRacOk9x", name: "Aria", gender: "female", description: "Warm and empathetic", avatar: "👩‍🦰" },
+  { voice_id: "EXAVITQu4vr4xnSDxMaL", name: "Sarah", gender: "female", description: "Gentle and caring", avatar: "👩‍🦱" },
+  { voice_id: "XB0fDUnXU5powFXDhCwa", name: "Charlotte", gender: "female", description: "Friendly and supportive", avatar: "👩‍🦳" },
+  { voice_id: "JBFqnCBsd6RMkjVDRZzb", name: "George", gender: "male", description: "Calm and reassuring", avatar: "👨‍🦰" },
+  { voice_id: "TX3LPaxmHKxFdv7VOQHJ", name: "Liam", gender: "male", description: "Understanding and patient", avatar: "👨‍🦱" },
+  { voice_id: "bIHbv24MWmeRgasZH58o", name: "Will", gender: "male", description: "Encouraging and wise", avatar: "👨‍🦳" },
 ];
 
 // Default API key - can be overridden if needed
@@ -79,7 +77,6 @@ export class ElevenLabsService {
   }
 
   public async speak(text: string): Promise<boolean> {
-    // Stop any currently playing audio
     this.stop();
     
     try {
@@ -102,8 +99,7 @@ export class ElevenLabsService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('ElevenLabs API error:', errorData);
+        console.error('ElevenLabs API error:', response.status);
         return false;
       }
 
@@ -134,7 +130,7 @@ export class ElevenLabsService {
     const voice = this.getSelectedVoice();
     if (!voice) return false;
     
-    const sampleText = `Hello, I'm ${voice.name}. How can I help you today?`;
+    const sampleText = `Hello, I'm ${voice.name}. I'm here to support you and listen to whatever you'd like to share today. How are you feeling?`;
     return this.speak(sampleText);
   }
 }

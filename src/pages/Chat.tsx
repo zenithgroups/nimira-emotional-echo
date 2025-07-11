@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import ChatInterface from "@/components/ChatInterface";
 import { ChatSidebar } from "@/components/chat/ChatSidebar";
@@ -46,24 +47,34 @@ const ChatPage: React.FC = () => {
   useEffect(() => {
     const savedUserData = localStorage.getItem('ruvo_user_data');
     const savedVoice = localStorage.getItem('ruvo_selected_voice');
+    const savedVoiceEnabled = localStorage.getItem('ruvo_voice_enabled');
     
     if (savedUserData) {
-      setUserData(JSON.parse(savedUserData));
+      const parsedUserData = JSON.parse(savedUserData);
+      setUserData(parsedUserData);
       setIsOnboarded(true);
+      console.log('Loaded user data:', parsedUserData);
     }
     
     if (savedVoice) {
       setSelectedVoice(savedVoice);
+      console.log('Loaded selected voice:', savedVoice);
+    }
+
+    if (savedVoiceEnabled !== null) {
+      setVoiceEnabled(savedVoiceEnabled === 'true');
     }
   }, []);
 
   const handleOnboardingComplete = (data: UserData) => {
+    console.log('Onboarding completed with data:', data);
     setUserData(data);
     localStorage.setItem('ruvo_user_data', JSON.stringify(data));
     setShowVoiceSelection(true);
   };
 
   const handleVoiceSelect = (voiceId: string) => {
+    console.log('Voice selected:', voiceId);
     setSelectedVoice(voiceId);
     localStorage.setItem('ruvo_selected_voice', voiceId);
     setShowVoiceSelection(false);
@@ -141,10 +152,12 @@ const ChatPage: React.FC = () => {
   };
 
   const toggleVoiceOutput = () => {
-    setVoiceEnabled(!voiceEnabled);
+    const newVoiceEnabled = !voiceEnabled;
+    setVoiceEnabled(newVoiceEnabled);
+    localStorage.setItem('ruvo_voice_enabled', String(newVoiceEnabled));
     toast({
-      title: voiceEnabled ? "Voice Output Disabled" : "Voice Output Enabled",
-      description: voiceEnabled ? "Responses will not be read aloud." : "Responses will be read aloud."
+      title: newVoiceEnabled ? "Voice Output Enabled" : "Voice Output Disabled",
+      description: newVoiceEnabled ? "AI responses will be read aloud." : "AI responses will not be read aloud."
     });
   };
   
