@@ -33,7 +33,7 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
   const [showResponse, setShowResponse] = useState(false);
   const [recognitionSupported, setRecognitionSupported] = useState(false);
   const animationRef = useRef<number>();
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<any>(null);
 
   // Check speech recognition support and initialize
   useEffect(() => {
@@ -43,7 +43,7 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
       setRecognitionSupported(true);
       
       try {
-        const recognition = new SpeechRecognitionConstructor() as SpeechRecognition;
+        const recognition = new SpeechRecognitionConstructor() as any;
         recognition.continuous = false;
         recognition.interimResults = true;
         recognition.lang = 'en-US';
