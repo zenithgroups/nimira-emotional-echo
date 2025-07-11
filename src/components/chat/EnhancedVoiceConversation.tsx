@@ -35,41 +35,52 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
   const animationRef = useRef<number>();
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
-  // Check speech recognition support
+  // Check speech recognition support and initialize
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
+    const SpeechRecognitionConstructor = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    
+    if (SpeechRecognitionConstructor) {
       setRecognitionSupported(true);
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = 'en-US';
+      
+      try {
+        const recognition = new SpeechRecognitionConstructor() as SpeechRecognition;
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
 
-      recognitionRef.current.onresult = (event) => {
-        let finalTranscript = '';
-        let interimTranscript = '';
+        recognition.onresult = (event) => {
+          let finalTranscript = '';
+          let interimTranscript = '';
 
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const transcript = event.results[i][0].transcript;
-          if (event.results[i].isFinal) {
-            finalTranscript += transcript;
-          } else {
-            interimTranscript += transcript;
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+              finalTranscript += transcript;
+            } else {
+              interimTranscript += transcript;
+            }
           }
-        }
 
-        setTranscript(finalTranscript || interimTranscript);
+          setTranscript(finalTranscript || interimTranscript);
 
-        if (finalTranscript) {
-          onSendMessage(finalTranscript);
+          if (finalTranscript) {
+            onSendMessage(finalTranscript);
+            setTranscript('');
+          }
+        };
+
+        recognition.onerror = (event) => {
+          console.error('Speech recognition error:', event.error);
           setTranscript('');
-        }
-      };
+        };
 
-      recognitionRef.current.onerror = (event) => {
-        console.error('Speech recognition error:', event.error);
-        setTranscript('');
-      };
+        recognitionRef.current = recognition;
+      } catch (error) {
+        console.error('Failed to initialize speech recognition:', error);
+        setRecognitionSupported(false);
+      }
+    } else {
+      setRecognitionSupported(false);
     }
   }, [onSendMessage]);
 
@@ -103,16 +114,16 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
 
   // Handle listening toggle
   const handleToggleListening = () => {
-    if (!recognitionSupported) {
+    if (!recognitionSupported || !recognitionRef.current) {
       console.warn('Speech recognition not supported');
       return;
     }
 
     if (isListening) {
-      recognitionRef.current?.stop();
+      recognitionRef.current.stop();
     } else {
       try {
-        recognitionRef.current?.start();
+        recognitionRef.current.start();
       } catch (error) {
         console.error('Failed to start speech recognition:', error);
       }
@@ -155,7 +166,6 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
       {/* Ambient background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-violet-900/10 via-transparent to-orange-900/10" />
       
-      {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(40)].map((_, i) => (
           <div
@@ -182,7 +192,6 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
           ? "bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95" 
           : "bg-gradient-to-br from-white/95 via-gray-50/90 to-white/95"
       )}>
-        {/* Header with controls */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className={cn(
@@ -212,7 +221,6 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
           </div>
           
           <div className="flex items-center gap-2">
-            {/* Voice toggle */}
             <Button
               variant="ghost"
               size="sm"
@@ -227,7 +235,6 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
               {voiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
             </Button>
             
-            {/* Close button */}
             <Button
               variant="ghost"
               size="sm"
@@ -244,7 +251,6 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
           </div>
         </div>
 
-        {/* Enhanced waveform visualization */}
         <div className="flex items-center justify-center h-40 mb-8">
           <div className="flex items-end justify-center gap-1 h-full w-full max-w-sm">
             {audioData.map((value, index) => (
@@ -272,7 +278,6 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
           </div>
         </div>
 
-        {/* Transcript display */}
         {transcript && (
           <div className={cn(
             "mb-6 p-5 rounded-2xl backdrop-blur-sm transition-all duration-500",
@@ -288,7 +293,6 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
           </div>
         )}
 
-        {/* AI Response display */}
         {showResponse && aiResponse && (
           <div className={cn(
             "mb-6 p-5 rounded-2xl backdrop-blur-sm transition-all duration-500",
@@ -310,7 +314,6 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
           </div>
         )}
 
-        {/* Control buttons */}
         <div className="flex justify-center gap-6">
           <Button
             onClick={handleToggleListening}
@@ -325,7 +328,6 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
               "border-2 border-white/20"
             )}
           >
-            {/* Pulsing ring when active */}
             {(isListening || isProcessing) && (
               <div className="absolute inset-0 rounded-full border-2 border-white/40 animate-ping" />
             )}
@@ -334,7 +336,6 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
           </Button>
         </div>
 
-        {/* Status indicator */}
         <div className="text-center mt-6">
           <div className={cn(
             "inline-flex items-center gap-3 px-4 py-2 rounded-full text-xs font-medium",
@@ -357,7 +358,6 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
           </div>
         </div>
 
-        {/* Not supported message */}
         {!recognitionSupported && (
           <div className="text-center mt-4">
             <p className={cn(
