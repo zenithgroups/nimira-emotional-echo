@@ -409,6 +409,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     
     // Send to OpenAI and get response
     await sendMessageToAI(userMessage);
+    
     setIsProcessingVoice(false);
   };
 
@@ -555,12 +556,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }, 1000);
   };
 
-  const sendMessageToAI = async (userMessage: Message) => {
+  const sendMessageToAI = async (userMessage: Message): Promise<string | null> => {
     setIsLoading(true);
     
     if (fallbackMode) {
       simulateFallbackResponse(userMessage.content);
-      return;
+      return null;
     }
     
     try {
@@ -607,7 +608,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         content: assistantMessage
       }]);
       
-      speakMessage(assistantMessage);
+      // Auto-speak if voice is enabled and called from voice conversation
+      if (voiceEnabled && isProcessingVoice && elevenLabsService.current) {
+        await elevenLabsService.current.speak(assistantMessage);
+      }
       
       if (fallbackMode) {
         setFallbackMode(false);
@@ -616,6 +620,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           description: "Successfully connected to OpenAI API. Enjoy your conversation!"
         });
       }
+      
+      return assistantMessage;
     } catch (error) {
       console.error("Error sending message to OpenAI API:", error);
       if (!fallbackMode) {
@@ -633,13 +639,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       }]);
       
       speakMessage(errorMessage);
+      return null;
     } finally {
       setIsLoading(false);
     }
   };
   
-  const sendMessage = async () => {
-    if ((input.trim() === "" && !selectedFile) || isLoading) return;
+  const sendMessage = async (e?: React.FormEvent, messageContent?: string) => {
+    if (e) e.preventDefault();
+    
+    const messageToSend = messageContent || input.trim();
+    if (!messageToSend && !selectedFile) return;
     
     if (selectedFile) {
       await handleFileSend();
@@ -668,8 +678,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     <div className={cn(
       "flex flex-col h-full w-full relative overflow-hidden",
       darkMode 
-        ? "bg-gradient-to-br from-slate-800 to-slate-900 text-white" 
-        : "bg-gradient-to-br from-white/40 to-ruvo-50/30 backdrop-blur-sm"
+        ? "bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95" 
+        : "bg-gradient-to-br from-white/95 via-gray-50/90 to-white/95"
     )}>
       <ChatHeader
         darkMode={darkMode}

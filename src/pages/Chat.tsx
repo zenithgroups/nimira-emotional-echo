@@ -123,16 +123,18 @@ const ChatPage: React.FC = () => {
       if (processedHistory.length > 0 && !activeChat) {
         setActiveChat(processedHistory[0].id);
       }
-    } else {
-      // Initialize with the first chat
-      const initialChat = {
-        id: 'chat_' + Date.now(),
-        title: 'New conversation',
-        timestamp: new Date(),
-      };
-      setChatHistory([initialChat]);
-      setActiveChat(initialChat.id);
-      localStorage.setItem('chatHistory', JSON.stringify([initialChat]));
+    } else if (!activeChat) {
+      // Only initialize with first chat if user is onboarded and no active chat
+      if (isOnboarded) {
+        const initialChat = {
+          id: 'chat_' + Date.now(),
+          title: 'New conversation',
+          timestamp: new Date(),
+        };
+        setChatHistory([initialChat]);
+        setActiveChat(initialChat.id);
+        localStorage.setItem('chatHistory', JSON.stringify([initialChat]));
+      }
     }
     
     if (savedDarkMode) {
