@@ -133,18 +133,20 @@ Remember: You're not just answering questions - you're having a real conversatio
       this.options.onSpeechStart?.();
       
       // Use ElevenLabs for speech synthesis
-      const success = await this.elevenLabsService.speak(text, () => {
-        // Called when speech ends
-        this.options.onSpeechEnd?.();
-      });
+      const success = await this.elevenLabsService.speak(text);
       
       if (!success) {
         throw new Error('Failed to generate speech');
       }
+
+      // Wait for speech to complete
+      // Note: ElevenLabs speak method should handle the audio playback completion
       
     } catch (error) {
       console.error('Speech synthesis error:', error);
       this.options.onError?.('Failed to speak response');
+    } finally {
+      // Always trigger speech end event
       this.options.onSpeechEnd?.();
     }
   }

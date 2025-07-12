@@ -144,7 +144,6 @@ export default {
       backgroundImage: {
         'hero-gradient': 'linear-gradient(45deg, #9B87F5, #7E69AB, #D3E4FD)',
         'dark-gradient': 'linear-gradient(135deg, #0F172A, #1E293B, #334155)',
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],

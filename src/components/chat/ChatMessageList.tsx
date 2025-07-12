@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChatMessage } from "./ChatMessage";
@@ -34,16 +33,9 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = ({
   // Auto-scroll to bottom when messages change
   useEffect(() => {
     if (scrollAreaRef.current) {
-      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-      if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      }
+      const scrollContainer = scrollAreaRef.current;
+      scrollContainer.scrollTop = scrollContainer.scrollHeight;
     }
-  }, [messages]);
-
-  // Log messages for debugging
-  useEffect(() => {
-    console.log('ChatMessageList: Messages updated', messages.length, messages);
   }, [messages]);
 
   return (
@@ -72,7 +64,7 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = ({
       <div className="flex flex-col gap-8 max-w-4xl mx-auto relative z-10">
         {messages.map((message, index) => (
           <div 
-            key={`message-${index}-${message.role}-${message.content.slice(0, 20)}`}
+            key={index}
             className="opacity-0 animate-fade-in"
             style={{ animationDelay: `${index * 0.1}s` }}
           >

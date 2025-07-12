@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
 import { ElevenLabsService, ELEVEN_LABS_VOICES } from "@/utils/elevenLabsUtils";
@@ -11,7 +11,7 @@ import { ChatMessageList } from "./chat/ChatMessageList";
 import { ChatInputForm } from "./chat/ChatInputForm";
 import { ConnectionAlert } from "./chat/ConnectionAlert";
 import { EnhancedVoiceConversation } from "./chat/EnhancedVoiceConversation";
-import { ImmersiveVoiceAssistant } from "./voice/ImmersiveVoiceAssistant";
+import { ContinuousVoiceAssistant } from "./voice/ContinuousVoiceAssistant";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -73,61 +73,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const { toast } = useToast();
   const apiUrl = "https://api.openai.com/v1/chat/completions";
   const apiKey = "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";
-
-  // Memoize the initial message to prevent re-creation
-  const initialMessage = useCallback(() => ({
-    role: "assistant" as const,
-    content: userData 
-      ? `Hi ${userData.nickname || userData.name}! How are you feeling today?`
-      : "Hi there! How are you feeling today?"
-  }), [userData]);
-
-  // Load saved messages for the active chat
-  useEffect(() => {
-    if (activeChat) {
-      const savedMessages = localStorage.getItem(`messages_${activeChat}`);
-      if (savedMessages) {
-        try {
-          const parsedMessages = JSON.parse(savedMessages);
-          setMessages(parsedMessages);
-          setChatTitleGenerated(true);
-        } catch (error) {
-          console.error('Error parsing saved messages:', error);
-          setMessages([initialMessage()]);
-          setChatTitleGenerated(false);
-        }
-      } else {
-        setMessages([initialMessage()]);
-        setChatTitleGenerated(false);
-      }
-    }
-  }, [activeChat, initialMessage]);
-
-  // Save messages when they change and update chat title only after user has sent a message
-  useEffect(() => {
-    if (activeChat && messages.length > 0) {
-      // Prevent saving empty or invalid messages
-      const validMessages = messages.filter(msg => msg.content && msg.content.trim());
-      if (validMessages.length > 0) {
-        localStorage.setItem(`messages_${activeChat}`, JSON.stringify(validMessages));
-        
-        // Update chat title based on first user message if not already done
-        const userMessages = validMessages.filter(msg => msg.role === "user");
-        if (userMessages.length > 0 && !chatTitleGenerated) {
-          const firstUserMessage = userMessages[0].content;
-          
-          // Use OpenAI to generate a title
-          generateOpenAIChatTitle(firstUserMessage).then(title => {
-            updateChatTitle(activeChat, title, validMessages[validMessages.length - 1].content);
-            setChatTitleGenerated(true);
-          });
-        } else if (userMessages.length > 0) {
-          // Just update the last message
-          updateChatTitle(activeChat, undefined, validMessages[validMessages.length - 1].content);
-        }
-      }
-    }
-  }, [messages, activeChat, updateChatTitle, chatTitleGenerated]);
 
   // Generate smarter chat title using OpenAI
   const generateOpenAIChatTitle = async (userMessage: string): Promise<string> => {
@@ -212,62 +157,84 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
   };
 
-  // Initialize voice services - memoized to prevent re-initialization
+  // Load saved messages for the active chat
   useEffect(() => {
-    let isActive = true;
-    
-    const initializeServices = () => {
-      if (!isActive) return;
-
-      try {
-        // Initialize ElevenLabs with user's selected voice
-        const savedVoice = localStorage.getItem('ruvo_selected_voice');
-        elevenLabsService.current = new ElevenLabsService();
-        
-        if (savedVoice && elevenLabsService.current) {
-          elevenLabsService.current.setVoice(savedVoice);
-        }
-        
-        speechRecognition.current = new SpeechRecognitionService({
-          onSpeechStart: () => isActive && setIsListening(true),
-          onSpeechEnd: () => isActive && setIsListening(false),
-          onResult: (text) => {
-            if (isActive) {
-              setInput(prev => prev + text);
-            }
-          },
-          onError: (error) => {
-            console.error("Speech recognition error:", error);
-            if (isActive) {
-              setIsListening(false);
-              toast({
-                title: "Voice Recognition Error",
-                description: `Error: ${error}. Please try again.`,
-                variant: "destructive",
-              });
-            }
-          }
-        });
-        
-        speechSynthesis.current = new SpeechSynthesisService();
-        
-        const recognitionSupported = speechRecognition.current.isRecognitionSupported();
-        if (isActive) {
-          setSpeechRecognitionSupported(recognitionSupported);
-        }
-        
-        if (elevenLabsService.current) {
-          elevenLabsService.current.setVoiceByIndex(currentVoiceIndex);
-        }
-      } catch (error) {
-        console.error('Error initializing voice services:', error);
+    if (activeChat) {
+      const savedMessages = localStorage.getItem(`messages_${activeChat}`);
+      if (savedMessages) {
+        setMessages(JSON.parse(savedMessages));
+        setChatTitleGenerated(true);
+      } else {
+        setMessages([{
+          role: "assistant",
+          content: userData 
+            ? `Hi ${userData.nickname || userData.name}! How are you feeling today?`
+            : "Hi there! How are you feeling today?"
+        }]);
+        setChatTitleGenerated(false);
       }
-    };
+    }
+  }, [activeChat, userData]);
 
-    initializeServices();
+  // Save messages when they change and update chat title only after user has sent a message
+  useEffect(() => {
+    if (activeChat && messages.length > 0) {
+      localStorage.setItem(`messages_${activeChat}`, JSON.stringify(messages));
+      
+      // Update chat title based on first user message if not already done
+      const userMessages = messages.filter(msg => msg.role === "user");
+      if (userMessages.length > 0 && !chatTitleGenerated) {
+        const firstUserMessage = userMessages[0].content;
+        
+        // Use OpenAI to generate a title
+        generateOpenAIChatTitle(firstUserMessage).then(title => {
+          updateChatTitle(activeChat, title, messages[messages.length - 1].content);
+          setChatTitleGenerated(true);
+        });
+      } else if (userMessages.length > 0) {
+        // Just update the last message
+        updateChatTitle(activeChat, undefined, messages[messages.length - 1].content);
+      }
+    }
+  }, [messages, activeChat, updateChatTitle, chatTitleGenerated]);
+
+  // Initialize voice services
+  useEffect(() => {
+    // Initialize ElevenLabs with user's selected voice
+    const savedVoice = localStorage.getItem('ruvo_selected_voice');
+    elevenLabsService.current = new ElevenLabsService();
+    
+    if (savedVoice && elevenLabsService.current) {
+      elevenLabsService.current.setVoice(savedVoice);
+    }
+    
+    speechRecognition.current = new SpeechRecognitionService({
+      onSpeechStart: () => setIsListening(true),
+      onSpeechEnd: () => setIsListening(false),
+      onResult: (text) => {
+        setInput(prev => prev + text);
+      },
+      onError: (error) => {
+        console.error("Speech recognition error:", error);
+        setIsListening(false);
+        toast({
+          title: "Voice Recognition Error",
+          description: `Error: ${error}. Please try again.`,
+          variant: "destructive",
+        });
+      }
+    });
+    
+    speechSynthesis.current = new SpeechSynthesisService();
+    
+    const recognitionSupported = speechRecognition.current.isRecognitionSupported();
+    setSpeechRecognitionSupported(recognitionSupported);
+    
+    if (elevenLabsService.current) {
+      elevenLabsService.current.setVoiceByIndex(currentVoiceIndex);
+    }
     
     return () => {
-      isActive = false;
       if (speechRecognition.current) {
         speechRecognition.current.stop();
       }
@@ -275,7 +242,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         speechSynthesis.current.stop();
       }
     };
-  }, [currentVoiceIndex, toast]); // Removed unnecessary dependencies
+  }, [currentVoiceIndex]);
 
   // Check API connection on load
   useEffect(() => {
@@ -461,18 +428,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     // Signal that speaking has started
     onSpeakingChange(true);
     
-    try {
-      if (elevenLabsService.current) {
-        await elevenLabsService.current.speak(text);
-      } else if (speechSynthesis.current) {
-        speechSynthesis.current.speak(text);
-      }
-    } catch (error) {
-      console.error('Error speaking message:', error);
-    } finally {
-      // Signal that speaking has ended
-      onSpeakingChange(false);
+    if (elevenLabsService.current) {
+      await elevenLabsService.current.speak(text);
+    } else if (speechSynthesis.current) {
+      speechSynthesis.current.speak(text);
     }
+    
+    // Signal that speaking has ended
+    onSpeakingChange(false);
   };
 
   const playMessageVoice = async (text: string, messageIndex: number) => {
@@ -491,18 +454,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     setPlayingMessageIndex(messageIndex);
     onSpeakingChange(true);
     
-    try {
-      if (elevenLabsService.current) {
-        await elevenLabsService.current.speak(text);
-      } else if (speechSynthesis.current) {
-        speechSynthesis.current.speak(text);
-      }
-    } catch (error) {
-      console.error('Error playing message voice:', error);
-    } finally {
-      setPlayingMessageIndex(null);
-      onSpeakingChange(false);
+    if (elevenLabsService.current) {
+      await elevenLabsService.current.speak(text);
+    } else if (speechSynthesis.current) {
+      speechSynthesis.current.speak(text);
     }
+    
+    setPlayingMessageIndex(null);
+    onSpeakingChange(false);
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -653,7 +612,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       const data = await response.json();
       console.log("OpenAI API response data:", data);
       const assistantMessage = data.choices?.[0]?.message?.content || "I'm having trouble responding right now. Can we try again?";
-      
       setMessages(prev => [...prev, {
         role: "assistant",
         content: assistantMessage
@@ -789,9 +747,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         onToggleVoice={onToggleVoice}
       />
 
-      <ImmersiveVoiceAssistant
+      <ContinuousVoiceAssistant
         isOpen={isContinuousVoiceOpen}
         onClose={closeContinuousVoiceConversation}
+        darkMode={darkMode}
         userData={userData}
         selectedVoiceId={ELEVEN_LABS_VOICES[currentVoiceIndex]?.voice_id}
       />
