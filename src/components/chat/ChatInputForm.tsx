@@ -79,7 +79,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
             value={input} 
             onChange={e => setInput(e.target.value)} 
             className={cn(
-              "w-full min-h-[52px] max-h-[120px] resize-none pr-[140px] rounded-2xl text-sm transition-all duration-300",
+              "w-full min-h-[52px] max-h-[120px] resize-none pr-[180px] rounded-2xl text-sm transition-all duration-300",
               "border-2 focus:border-violet-400/50 focus:ring-4 focus:ring-violet-400/10",
               darkMode 
                 ? "bg-slate-800/80 backdrop-blur-xl border-slate-600/50 text-white placeholder:text-slate-400" 
@@ -111,34 +111,53 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
             </button>
             
             {speechRecognitionSupported && (
-              <button 
-                type="button" 
-                className={cn(
-                  "relative p-3 rounded-full transition-all duration-300 hover:scale-110",
-                  "group overflow-hidden",
-                  "bg-gradient-to-r from-violet-500 to-orange-400 text-white",
-                  "shadow-lg hover:shadow-xl hover:shadow-violet-500/30",
-                  "backdrop-blur-sm border border-white/20",
-                  "before:absolute before:inset-0 before:bg-gradient-to-r before:from-violet-600 before:to-orange-500",
-                  "before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
-                )}
-                onClick={onOpenVoiceConversation || toggleListening}
-                title="Start voice conversation"
-              >
-                <div className="relative z-10 flex items-center justify-center">
-                  <MicIcon size={16} className="text-white" />
-                  
-                  {/* Pulsing ring effect */}
-                  <div className={cn(
-                    "absolute inset-0 rounded-full border-2 border-white/40",
-                    "animate-ping opacity-75"
-                  )} />
-                  <div className={cn(
-                    "absolute inset-0 rounded-full border border-white/60",
-                    "animate-pulse"
-                  )} />
-                </div>
-              </button>
+              <>
+                <button 
+                  type="button" 
+                  className={cn(
+                    "relative p-2.5 rounded-full transition-all duration-300 hover:scale-110",
+                    "group overflow-hidden",
+                    "bg-gradient-to-r from-violet-500 to-orange-400 text-white",
+                    "shadow-lg hover:shadow-xl hover:shadow-violet-500/30",
+                    "backdrop-blur-sm border border-white/20",
+                    "before:absolute before:inset-0 before:bg-gradient-to-r before:from-violet-600 before:to-orange-500",
+                    "before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300"
+                  )}
+                  onClick={onOpenVoiceConversation}
+                  title="Start continuous voice conversation"
+                >
+                  <div className="relative z-10 flex items-center justify-center">
+                    <MicIcon size={16} className="text-white" />
+                    
+                    {/* Pulsing ring effect */}
+                    <div className={cn(
+                      "absolute inset-0 rounded-full border-2 border-white/40",
+                      "animate-ping opacity-75"
+                    )} />
+                    <div className={cn(
+                      "absolute inset-0 rounded-full border border-white/60",
+                      "animate-pulse"
+                    )} />
+                  </div>
+                </button>
+                
+                <button 
+                  type="button" 
+                  className={cn(
+                    "relative p-2.5 rounded-full transition-all duration-300 hover:scale-110",
+                    "bg-gradient-to-r from-green-500 to-green-600 text-white",
+                    "shadow-lg hover:shadow-xl hover:shadow-green-500/30",
+                    "backdrop-blur-sm border border-white/20"
+                  )}
+                  onClick={toggleListening}
+                  title="Quick voice input"
+                >
+                  <Mic size={16} />
+                  {isListening && (
+                    <div className="absolute inset-0 rounded-full border-2 border-white/40 animate-ping" />
+                  )}
+                </button>
+              </>
             )}
             
             <button 

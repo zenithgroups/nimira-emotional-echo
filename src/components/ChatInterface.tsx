@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceUtils";
@@ -12,6 +11,7 @@ import { ChatMessageList } from "./chat/ChatMessageList";
 import { ChatInputForm } from "./chat/ChatInputForm";
 import { ConnectionAlert } from "./chat/ConnectionAlert";
 import { EnhancedVoiceConversation } from "./chat/EnhancedVoiceConversation";
+import { ContinuousVoiceAssistant } from "./chat/ContinuousVoiceAssistant";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -58,6 +58,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [currentVoiceIndex, setCurrentVoiceIndex] = useState(selectedVoiceIndex);
   const [voicePopoverOpen, setVoicePopoverOpen] = useState(false);
   const [isVoiceConversationOpen, setIsVoiceConversationOpen] = useState(false);
+  const [isContinuousVoiceOpen, setIsContinuousVoiceOpen] = useState(false);
   const [isProcessingVoice, setIsProcessingVoice] = useState(false);
   
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -359,6 +360,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         });
       }
     }
+  };
+
+  const openContinuousVoiceConversation = () => {
+    setIsContinuousVoiceOpen(true);
+  };
+
+  const closeContinuousVoiceConversation = () => {
+    setIsContinuousVoiceOpen(false);
   };
 
   const openVoiceConversation = () => {
@@ -723,7 +732,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         toggleListening={toggleListening}
         isListening={isListening}
         speechRecognitionSupported={speechRecognitionSupported}
-        onOpenVoiceConversation={openVoiceConversation}
+        onOpenVoiceConversation={openContinuousVoiceConversation}
       />
 
       <EnhancedVoiceConversation
@@ -736,6 +745,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         onSendMessage={handleVoiceMessage}
         voiceEnabled={voiceEnabled}
         onToggleVoice={onToggleVoice}
+      />
+
+      <ContinuousVoiceAssistant
+        isOpen={isContinuousVoiceOpen}
+        onClose={closeContinuousVoiceConversation}
+        darkMode={darkMode}
+        userData={userData}
+        selectedVoiceId={ELEVEN_LABS_VOICES[currentVoiceIndex]?.voice_id}
       />
     </div>
   );
