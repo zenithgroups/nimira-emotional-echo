@@ -11,7 +11,7 @@ import { ChatMessageList } from "./chat/ChatMessageList";
 import { ChatInputForm } from "./chat/ChatInputForm";
 import { ConnectionAlert } from "./chat/ConnectionAlert";
 import { EnhancedVoiceConversation } from "./chat/EnhancedVoiceConversation";
-import { ContinuousVoiceAssistant } from "./chat/ContinuousVoiceAssistant";
+import { ContinuousVoiceAssistant } from "./voice/ContinuousVoiceAssistant";
 
 interface Message {
   role: "user" | "assistant" | "system";
