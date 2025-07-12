@@ -26,7 +26,7 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = ({
   darkMode,
   fallbackMode,
   playingMessageIndex,
-  playMessageVoice
+  playMessageVoice,
 }) => {
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -39,12 +39,15 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = ({
   }, [messages]);
 
   return (
-    <ScrollArea className={cn(
-      "flex-1 px-6 py-8 overflow-y-auto relative",
-      darkMode 
-        ? "bg-gradient-to-b from-slate-900/50 via-slate-800/30 to-slate-900/50" 
-        : "bg-gradient-to-b from-gray-50/50 via-white/30 to-gray-50/50"
-    )} ref={scrollAreaRef}>
+    <ScrollArea
+      className={cn(
+        "flex-1 px-6 py-8 overflow-y-auto relative",
+        darkMode
+          ? "bg-gradient-to-b from-slate-900/50 via-slate-800/30 to-slate-900/50"
+          : "bg-gradient-to-b from-gray-50/50 via-white/30 to-gray-50/50"
+      )}
+      ref={scrollAreaRef}
+    >
       {/* Ambient background */}
       <div className="particles absolute inset-0">
         {[...Array(12)].map((_, i) => (
@@ -52,23 +55,23 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = ({
             key={i}
             className="particle"
             style={{
-              left: `${10 + (i * 8)}%`,
+              left: `${10 + i * 8}%`,
               top: `${20 + (i % 3) * 30}%`,
               animationDelay: `${i * 0.8}s`,
-              opacity: 0.4
+              opacity: 0.4,
             }}
           />
         ))}
       </div>
 
-      <div className="flex flex-col gap-8 max-w-4xl mx-auto relative z-10">
+      <div className="flex flex-col gap-4 w-full px-4 sm:px-8 relative z-10">
         {messages.map((message, index) => (
-          <div 
+          <div
             key={index}
-            className="opacity-0 animate-fade-in"
+            className="animate-fade-in"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <ChatMessage 
+            <ChatMessage
               {...message}
               index={index}
               darkMode={darkMode}
@@ -80,21 +83,25 @@ export const ChatMessageList: React.FC<ChatMessageListProps> = ({
         ))}
         {isLoading && (
           <div className="flex gap-3 items-start animate-fade-in">
-            <div className={cn(
-              "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
-              "ai-avatar speaking",
-              darkMode 
-                ? "bg-gradient-to-br from-violet-600 to-violet-800" 
-                : "bg-gradient-to-br from-violet-500 to-violet-700"
-            )}>
+            <div
+              className={cn(
+                "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0",
+                "ai-avatar speaking",
+                darkMode
+                  ? "bg-gradient-to-br from-violet-600 to-violet-800"
+                  : "bg-gradient-to-br from-violet-500 to-violet-700"
+              )}
+            >
               <Bot size={14} className="text-white" />
             </div>
-            <div className={cn(
-              "p-4 rounded-2xl rounded-bl-sm backdrop-blur-xl",
-              darkMode 
-                ? "chat-bubble-assistant" 
-                : "chat-bubble-assistant-light"
-            )}>
+            <div
+              className={cn(
+                "p-4 rounded-2xl rounded-bl-sm backdrop-blur-xl",
+                darkMode
+                  ? "chat-bubble-assistant"
+                  : "chat-bubble-assistant-light"
+              )}
+            >
               <div className="typing-indicator">
                 <div className="typing-dot"></div>
                 <div className="typing-dot"></div>
