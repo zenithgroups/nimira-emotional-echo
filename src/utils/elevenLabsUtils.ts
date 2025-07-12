@@ -76,7 +76,7 @@ export class ElevenLabsService {
     }
   }
 
-  public async speak(text: string): Promise<boolean> {
+  public async speak(text: string, onComplete?: () => void): Promise<boolean> {
     this.stop();
     
     try {
@@ -100,6 +100,7 @@ export class ElevenLabsService {
 
       if (!response.ok) {
         console.error('ElevenLabs API error:', response.status);
+        onComplete?.();
         return false;
       }
 
@@ -112,12 +113,14 @@ export class ElevenLabsService {
       audio.onended = () => {
         URL.revokeObjectURL(audioUrl);
         this.currentAudio = null;
+        onComplete?.();
       };
       
       await audio.play();
       return true;
     } catch (error) {
       console.error('Failed to generate speech with ElevenLabs:', error);
+      onComplete?.();
       return false;
     }
   }
