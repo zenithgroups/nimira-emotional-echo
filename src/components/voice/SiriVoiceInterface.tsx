@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { VoiceRecognitionService } from '@/services/VoiceRecognitionService';
 import { ConversationManager } from '@/services/ConversationManager';
 import { useToast } from '@/hooks/use-toast';
+import { AnimatedVoiceSphere } from './AnimatedVoiceSphere';
 
 interface SiriVoiceInterfaceProps {
   isOpen: boolean;
@@ -254,49 +255,20 @@ export const SiriVoiceInterface: React.FC<SiriVoiceInterfaceProps> = ({
       
       {/* Main interactive sphere */}
       <div 
-        className="relative cursor-pointer"
+        className="relative flex items-center justify-center"
         onClick={!isActive ? startVoiceSession : undefined}
       >
-        <div
-          className={cn(
-            "w-64 h-64 rounded-full transition-all duration-300 ease-out",
-            "bg-gradient-to-br from-blue-600/40 via-purple-600/40 to-pink-600/40",
-            "backdrop-blur-sm border border-white/10",
-            sphereAnimation.glow,
-            state === 'listening' && audioLevel > 10 ? 'animate-pulse' : '',
-            state === 'processing' ? 'animate-pulse' : '',
-            state === 'speaking' ? 'animate-pulse' : ''
-          )}
-          style={{
-            transform: `scale(${sphereAnimation.scale})`,
-            opacity: sphereAnimation.opacity,
-          }}
-        >
-          {/* Inner glow effect */}
-          <div className="absolute inset-4 rounded-full bg-gradient-to-br from-white/20 to-transparent" />
-          
-          {/* Dynamic waveform effect for listening state */}
-          {state === 'listening' && audioLevel > 5 && (
-            <div className="absolute inset-0 rounded-full">
-              {[...Array(6)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute inset-0 rounded-full border border-blue-400/30"
-                  style={{
-                    transform: `scale(${1 + (audioLevel * 0.02 * (i + 1))})`,
-                    opacity: 0.6 - (i * 0.1),
-                    animationDelay: `${i * 100}ms`
-                  }}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        <AnimatedVoiceSphere
+          state={state}
+          audioLevel={audioLevel}
+          onClick={!isActive ? startVoiceSession : undefined}
+        />
 
         {/* Tap hint for idle state */}
         {!isActive && state === 'idle' && (
-          <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 text-center">
-            <p className="text-white/60 text-sm font-medium">Tap to speak</p>
+          <div className="absolute -bottom-20 left-1/2 transform -translate-x-1/2 text-center">
+            <p className="text-white/80 text-lg font-medium mb-2">Tap to speak</p>
+            <p className="text-white/50 text-sm">Hold a natural conversation</p>
           </div>
         )}
       </div>
