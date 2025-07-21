@@ -11,7 +11,7 @@ import { ChatMessageList } from "./chat/ChatMessageList";
 import { ChatInputForm } from "./chat/ChatInputForm";
 import { ConnectionAlert } from "./chat/ConnectionAlert";
 import { EnhancedVoiceConversation } from "./chat/EnhancedVoiceConversation";
-import { ContinuousVoiceAssistant } from "./voice/ContinuousVoiceAssistant";
+import { SiriVoiceInterface } from "./voice/SiriVoiceInterface";
 
 interface Message {
   role: "user" | "assistant" | "system";
@@ -747,10 +747,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         onToggleVoice={onToggleVoice}
       />
 
-      <ContinuousVoiceAssistant
+      <SiriVoiceInterface
         isOpen={isContinuousVoiceOpen}
         onClose={closeContinuousVoiceConversation}
-        darkMode={darkMode}
         userData={userData}
         selectedVoiceId={ELEVEN_LABS_VOICES[currentVoiceIndex]?.voice_id}
       />

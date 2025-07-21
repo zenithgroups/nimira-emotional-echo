@@ -88,13 +88,14 @@ export class ElevenLabsService {
         },
         body: JSON.stringify({
           text: text,
-          model_id: "eleven_multilingual_v2",
+          model_id: "eleven_turbo_v2_5", // Faster model for lower latency
           voice_settings: {
-            similarity_boost: 0.75,
-            stability: 0.5,
-            style: 0.0,
+            similarity_boost: 0.8,
+            stability: 0.4, // Slightly lower for faster processing
+            style: 0.2,
             use_speaker_boost: true
-          }
+          },
+          optimize_streaming_latency: 4 // Maximum optimization for speed
         })
       });
 
