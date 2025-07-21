@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { ArrowLeft, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { VoiceRecognitionService } from '@/services/VoiceRecognitionService';
 import { ConversationManager } from '@/services/ConversationManager';
@@ -253,6 +254,14 @@ export const SiriVoiceInterface: React.FC<SiriVoiceInterfaceProps> = ({
       {/* Subtle background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900" />
       
+      {/* Back button - top left */}
+      <button
+        onClick={stopVoiceSession}
+        className="absolute top-8 left-8 w-12 h-12 rounded-full bg-white/10 border border-white/20 text-white/80 hover:bg-white/20 hover:text-white transition-all duration-200 flex items-center justify-center backdrop-blur-sm"
+      >
+        <ArrowLeft size={20} />
+      </button>
+      
       {/* Main interactive sphere */}
       <div 
         className="relative flex items-center justify-center"
@@ -286,16 +295,13 @@ export const SiriVoiceInterface: React.FC<SiriVoiceInterfaceProps> = ({
         </div>
       )}
 
-      {/* Exit button - bottom right */}
+      {/* Exit button - bottom right (only when active) */}
       {isActive && (
         <button
           onClick={stopVoiceSession}
-          className="absolute bottom-8 right-8 w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 transition-all duration-200"
+          className="absolute bottom-8 right-8 w-14 h-14 rounded-full bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30 transition-all duration-200 flex items-center justify-center backdrop-blur-sm"
         >
-          <div className="w-6 h-6 mx-auto">
-            <div className="w-full h-0.5 bg-current rotate-45 translate-y-3" />
-            <div className="w-full h-0.5 bg-current -rotate-45 translate-y-2.5" />
-          </div>
+          <X size={24} />
         </button>
       )}
     </div>
