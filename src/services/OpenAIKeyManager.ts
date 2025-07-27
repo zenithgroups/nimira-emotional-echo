@@ -25,19 +25,25 @@ export class OpenAIKeyManager {
 
   private loadUsageFromStorage(): void {
     try {
+      // Clear any corrupted localStorage data first
       const stored = localStorage.getItem(this.STORAGE_KEY);
       if (stored) {
         const data = JSON.parse(stored);
-        this.keyUsage = new Map(Object.entries(data).map(([key, usage]: [string, any]) => [
-          key,
-          {
-            ...usage,
-            lastUsed: new Date(usage.lastUsed)
-          }
-        ]));
+        // Validate the stored data structure
+        if (typeof data === 'object' && data !== null) {
+          this.keyUsage = new Map(Object.entries(data).map(([key, usage]: [string, any]) => [
+            key,
+            {
+              ...usage,
+              lastUsed: new Date(usage.lastUsed || 0)
+            }
+          ]));
+        }
       }
     } catch (error) {
-      console.warn('Failed to load API key usage from storage:', error);
+      console.warn('Failed to load API key usage from storage, resetting:', error);
+      localStorage.removeItem(this.STORAGE_KEY);
+      this.keyUsage.clear();
     }
   }
 
@@ -66,10 +72,12 @@ export class OpenAIKeyManager {
   public getCurrentKey(): string {
     const availableKey = this.getNextAvailableKey();
     if (!availableKey) {
+      console.log('All API keys exhausted, resetting counters');
       // Reset all counters if all keys are exhausted
       this.resetAllCounters();
       return this.apiKeys[0];
     }
+    console.log(`Using API key ending in: ...${availableKey.slice(-6)}`);
     return availableKey;
   }
 
@@ -147,6 +155,7 @@ export class OpenAIKeyManager {
     // Try up to all available keys
     for (let attempt = 0; attempt < this.apiKeys.length; attempt++) {
       const apiKey = this.getCurrentKey();
+      console.log(`API attempt ${attempt + 1}/${this.apiKeys.length} with key ending in ...${apiKey.slice(-6)}`);
       
       try {
         const response = await fetch(url, {
@@ -163,8 +172,8 @@ export class OpenAIKeyManager {
         }
 
         // Handle rate limit or quota exceeded
-        if (response.status === 429 || response.status === 403) {
-          console.warn(`API key exhausted, switching to next key`);
+        if (response.status === 429 || response.status === 403 || response.status === 401) {
+          console.warn(`API key invalid/exhausted (${response.status}), switching to next key`);
           this.markKeyAsInvalid(apiKey);
           continue;
         }

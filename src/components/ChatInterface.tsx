@@ -5,6 +5,7 @@ import { ElevenLabsService, ELEVEN_LABS_VOICES } from "@/utils/elevenLabsUtils";
 import { getSystemPrompt, detectEmotion, getOpenAITitlePrompt } from "@/utils/sentimentUtils";
 import { cn } from "@/lib/utils";
 import { openAIKeyManager } from "@/services/OpenAIKeyManager";
+import "@/utils/keyReset";
 
 // Import refactored components 
 import { ChatHeader } from "./chat/ChatHeader";
