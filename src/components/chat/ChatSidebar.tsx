@@ -114,7 +114,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-orange-400 flex items-center justify-center overflow-hidden">
               <img 
                 src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
-                alt="Ruvo Logo" 
+                alt="EMVO Logo" 
                 className={cn(
                   "h-full w-full object-contain p-2", 
                   darkMode ? "invert" : "" 
@@ -125,7 +125,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
               <h1 className={cn(
                 "text-xl font-bold",
                 darkMode ? "text-white" : "text-gray-900"
-              )}>Ruvo</h1>
+              )}>EMVO</h1>
               <p className={cn(
                 "text-xs",
                 darkMode ? "text-slate-400" : "text-gray-500"

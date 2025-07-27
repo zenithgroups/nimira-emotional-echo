@@ -7,21 +7,21 @@ const testimonials = [
     name: "Sarah Chen",
     role: "Graduate Student",
     image: "/lovable-uploads/1d2277e3-bbda-4692-9284-737d50d6c844.png",
-    quote: "Ruvo helped me through my anxiety during thesis writing. Having someone who truly listened without judgment was life-changing.",
+    quote: "EMVO helped me through my anxiety during thesis writing. Having someone who truly listened without judgment was life-changing.",
     emotion: "Supported & Understood"
   },
   {
     name: "Marcus Rodriguez",
     role: "Remote Worker",
     image: "/lovable-uploads/0c41d136-56fc-4bd3-bd74-d9a05ce16646.png",
-    quote: "Working from home felt isolating until I found Ruvo. It's like having a caring friend who's always there when I need to talk.",
+    quote: "Working from home felt isolating until I found EMVO. It's like having a caring friend who's always there when I need to talk.",
     emotion: "Connected & Less Lonely"
   },
   {
     name: "Emma Thompson",
     role: "New Parent",
     image: "/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png",
-    quote: "As a new mom, I often felt overwhelmed. Ruvo provided the emotional support I needed during those difficult midnight moments.",
+    quote: "As a new mom, I often felt overwhelmed. EMVO provided the emotional support I needed during those difficult midnight moments.",
     emotion: "Comforted & Empowered"
   }
 ];
@@ -33,7 +33,7 @@ const TestimonialsSection: React.FC = () => {
         <div className="text-center mb-16 animate-fade-up">
           <h2 className="mobile-heading-2 text-white">Real Stories of Connection</h2>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Discover how Ruvo has made a meaningful difference in people's emotional well-being.
+            Discover how EMVO has made a meaningful difference in people's emotional well-being.
           </p>
         </div>
         
@@ -94,7 +94,7 @@ const TestimonialsSection: React.FC = () => {
         
         <div className="text-center mt-12 animate-fade-up" style={{ animationDelay: "0.6s" }}>
           <p className="text-gray-400 text-sm">
-            Join thousands who have found emotional support with Ruvo
+            Join thousands who have found emotional support with EMVO
           </p>
         </div>
       </div>

@@ -30,7 +30,7 @@ const About = () => {
     image: "/placeholder.svg",
     bio: "Licensed therapist specializing in digital wellness and emotional intelligence."
   }];
-  return <PageLayout title="About Ruvo" description="We're on a mission to create AI companions that understand human emotions and provide meaningful support.">
+  return <PageLayout title="About EMVO" description="We're on a mission to create AI companions that understand human emotions and provide meaningful support.">
       <div className="space-y-16">
         <section className="relative overflow-hidden">
           {/* Background decorative elements */}
@@ -94,11 +94,11 @@ const About = () => {
                 <div className="relative glass p-6 rounded-xl">
                   <h3 className="font-semibold mb-4 text-ruvo-600 text-xl">Our Mission</h3>
                   <p className="italic text-gray-700">
-                    To create AI companions that don't just talk — but listen, feel, and truly understand. In a world overflowing with noise, RUVO aims to be the quiet comfort — the digital shoulder to lean on when no one else is around. We're here to build technology that connects to the heart, offering not just answers, but empathy.
+                    To create AI companions that don't just talk — but listen, feel, and truly understand. In a world overflowing with noise, EMVO aims to be the quiet comfort — the digital shoulder to lean on when no one else is around. We're here to build technology that connects to the heart, offering not just answers, but empathy.
                   </p>
                   <div className="mt-4 text-right">
                     <p className="text-ruvo-500 font-medium">
-                      RUVO was born out of silence.<br />
+                      EMVO was born out of silence.<br />
                       Now, it speaks for those who can't.
                     </p>
                   </div>
@@ -187,7 +187,7 @@ const About = () => {
                 <CardContent className="pt-6 h-full flex flex-col">
                   <h3 className="font-semibold mb-2 text-ruvo-500">Privacy & Trust</h3>
                   <p className="text-gray-600 flex-grow">
-                    Your conversations with Ruvo are private. We believe in transparent data practices and giving users control.
+                    Your conversations with EMVO are private. We believe in transparent data practices and giving users control.
                   </p>
                 </CardContent>
               </Card>

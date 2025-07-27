@@ -50,7 +50,7 @@ const HeroSection: React.FC = () => {
             </h1>
 
             <p className="text-lg text-gray-300 max-w-md leading-relaxed font-light">
-              Experience the future of emotional AI with Ruvo - your intelligent companion that understands, feels, and responds with genuine empathy.
+              Experience the future of emotional AI with EMVO - your intelligent companion that understands, feels, and responds with genuine empathy.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">

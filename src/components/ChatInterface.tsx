@@ -201,7 +201,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   // Initialize voice services
   useEffect(() => {
     // Initialize ElevenLabs with user's selected voice
-    const savedVoice = localStorage.getItem('ruvo_selected_voice');
+    const savedVoice = localStorage.getItem('emvo_selected_voice');
     elevenLabsService.current = new ElevenLabsService();
     
     if (savedVoice && elevenLabsService.current) {
@@ -323,7 +323,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       if (success) {
         setCurrentVoiceIndex(index);
         // Save voice selection
-        localStorage.setItem('ruvo_selected_voice', ELEVEN_LABS_VOICES[index].voice_id);
+        localStorage.setItem('emvo_selected_voice', ELEVEN_LABS_VOICES[index].voice_id);
         toast({
           title: "Voice Changed",
           description: `Voice set to ${ELEVEN_LABS_VOICES[index].name}`

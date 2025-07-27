@@ -71,7 +71,7 @@ const BetaSignupSection: React.FC = () => {
       
       toast({
         title: "Something went wrong",
-        description: `${errorMessage} If the issue persists, contact support at info@ruvoai.com directly.`,
+        description: `${errorMessage} If the issue persists, contact support at info@emvoai.com directly.`,
         variant: "destructive",
       });
     } finally {
@@ -86,7 +86,7 @@ const BetaSignupSection: React.FC = () => {
           <div className="text-center mb-10">
             <h2 className="mobile-heading-3 text-white">Join Our Early Access Beta</h2>
             <p className="text-gray-300">
-              Be among the first to experience Ruvo and help shape the future of AI companionship.
+              Be among the first to experience EMVO and help shape the future of AI companionship.
             </p>
           </div>
           

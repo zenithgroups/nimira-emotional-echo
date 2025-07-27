@@ -197,7 +197,7 @@ export const ContinuousVoiceAssistant: React.FC<ContinuousVoiceAssistantProps> =
       case 'thinking':
         return "Processing your message...";
       case 'speaking':
-        return "RUVO is speaking...";
+        return "EMVO is speaking...";
       case 'stopped':
         return "Conversation stopped";
       case 'error':
@@ -271,7 +271,7 @@ export const ContinuousVoiceAssistant: React.FC<ContinuousVoiceAssistantProps> =
             )}>
               <img 
                 src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
-                alt="RUVO AI" 
+                alt="EMVO AI" 
                 className="h-10 w-10 object-contain invert" 
               />
             </div>
@@ -279,7 +279,7 @@ export const ContinuousVoiceAssistant: React.FC<ContinuousVoiceAssistantProps> =
               <h2 className={cn(
                 "text-2xl font-bold bg-gradient-to-r from-violet-600 to-orange-500 bg-clip-text text-transparent"
               )}>
-                RUVO Voice Assistant
+                EMVO Voice Assistant
               </h2>
               <p className={cn("text-sm", getStateColor())}>
                 {getStateMessage()}
@@ -361,7 +361,7 @@ export const ContinuousVoiceAssistant: React.FC<ContinuousVoiceAssistantProps> =
                     />
                   </div>
                   <div>
-                    <p className="text-xs font-medium opacity-60 mb-1">RUVO:</p>
+                    <p className="text-xs font-medium opacity-60 mb-1">EMVO:</p>
                     <p className={cn("text-sm leading-relaxed", darkMode ? "text-slate-100" : "text-gray-800")}>
                       {currentResponse}
                     </p>
@@ -470,7 +470,7 @@ export const ContinuousVoiceAssistant: React.FC<ContinuousVoiceAssistantProps> =
               "text-xs opacity-60",
               darkMode ? "text-slate-400" : "text-gray-500"
             )}>
-              Click the mic to start a hands-free conversation with RUVO
+              Click the mic to start a hands-free conversation with EMVO
             </p>
           </div>
         )}

@@ -8,11 +8,11 @@ const Footer: React.FC = () => {
   
   const handleSocialClick = (platform: string) => {
     if (platform === "Instagram") {
-      window.open("https://www.instagram.com/ruvo.ai", "_blank");
+      window.open("https://www.instagram.com/emvo.ai", "_blank");
     } else {
       toast({
         title: `${platform} coming soon`,
-        description: `Follow us on ${platform} for updates about Ruvo.`,
+        description: `Follow us on ${platform} for updates about EMVO.`,
       });
     }
   };
@@ -37,12 +37,14 @@ const Footer: React.FC = () => {
                   <div className="w-10 h-10 flex items-center justify-center mr-3 group-hover:scale-110 transition-all duration-300">
                     <img 
                       src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
-                      alt="Ruvo Logo" 
-                      className="h-6 w-auto brightness-0 invert" 
+                      alt="EMVO Logo" 
+                      className="h-8 w-auto brightness-0 invert" 
+                      onClick={() => window.location.href = '/'}
+                      style={{ cursor: 'pointer' }}
                     />
                   </div>
-                  <span className="text-2xl font-bold text-white group-hover:text-orange-300 transition-all duration-300">
-                    Ruvo
+                  <span className="text-2xl font-bold text-white group-hover:text-orange-400 transition-colors duration-300">
+                    EMVO
                   </span>
                 </Link>
               </div>
@@ -73,7 +75,7 @@ const Footer: React.FC = () => {
                 <button 
                   onClick={() => handleSocialClick("Instagram")}
                   className="p-3 rounded-xl bg-white/5 text-gray-400 hover:text-orange-400 hover:bg-white/10 border border-white/10 hover:border-orange-400/30 transition-all duration-300 hover:scale-110"
-                  aria-label="Visit Ruvo on Instagram"
+                  aria-label="Visit EMVO on Instagram"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
@@ -117,7 +119,7 @@ const Footer: React.FC = () => {
           
           <div className="pt-8 border-t border-white/20">
             <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className="text-gray-500 text-sm mb-4 md:mb-0">&copy; {currentYear} Ruvo AI. All rights reserved.</p>
+              <p className="text-gray-500 text-sm mb-4 md:mb-0">&copy; {currentYear} EMVO AI. All rights reserved.</p>
               <div className="flex space-x-8">
                 <Link to="/privacy-policy" className="text-gray-500 text-sm hover:text-orange-400 transition-colors duration-300">Privacy Policy</Link>
                 <Link to="/terms" className="text-gray-500 text-sm hover:text-orange-400 transition-colors duration-300">Terms of Service</Link>

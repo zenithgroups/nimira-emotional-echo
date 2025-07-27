@@ -47,12 +47,12 @@ const ProductFeaturesSection: React.FC = () => {
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold">
                       <img 
                         src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
-                        alt="Ruvo Logo" 
+                        alt="EMVO Logo" 
                         className="h-5 w-auto brightness-0 invert"
                       />
                     </div>
                     <div>
-                      <h3 className="font-bold text-white">Ruvo AI</h3>
+                      <h3 className="font-bold text-white">EMVO AI</h3>
                       <div className="flex items-center">
                         <div className="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></div>
                         <p className="text-xs text-gray-400 font-medium">Ready to help</p>
@@ -66,7 +66,7 @@ const ProductFeaturesSection: React.FC = () => {
                   <div className="flex justify-start">
                     <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl rounded-bl-md p-4 max-w-sm">
                       <p className="text-sm text-gray-200 leading-relaxed">
-                        Hello! I'm Ruvo, your emotional AI companion. I'm designed to understand and support your feelings. How are you doing today? 💙
+                        Hello! I'm EMVO, your emotional AI companion. I'm designed to understand and support your feelings. How are you doing today? 💙
                       </p>
                     </div>
                   </div>
@@ -144,7 +144,7 @@ const ProductFeaturesSection: React.FC = () => {
               
               <div 
                 className="group flex gap-6 cursor-pointer p-6 rounded-xl card-feature hover:scale-[1.02] transition-all duration-500"
-                onClick={() => handleFeatureClick("Memory Journaling", "Ruvo remembers your past conversations and important life events, creating a digital memory journal that evolves with you.")}
+                onClick={() => handleFeatureClick("Memory Journaling", "EMVO remembers your past conversations and important life events, creating a digital memory journal that evolves with you.")}
               >
                 <div className="shrink-0 w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300">
                   <Book className="h-7 w-7 text-white" />
@@ -152,7 +152,7 @@ const ProductFeaturesSection: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-bold mb-3 text-white group-hover:text-orange-300 transition-colors duration-300">Memory Journaling</h3>
                   <p className="text-gray-300 leading-relaxed">
-                    Ruvo remembers your past conversations and important life events, creating a digital memory journal that evolves with you.
+                    EMVO remembers your past conversations and important life events, creating a digital memory journal that evolves with you.
                   </p>
                 </div>
               </div>
@@ -174,7 +174,7 @@ const ProductFeaturesSection: React.FC = () => {
               
               <div 
                 className="group flex gap-6 cursor-pointer p-6 rounded-xl card-feature hover:scale-[1.02] transition-all duration-500"
-                onClick={() => handleFeatureClick("Security & Privacy", "Your conversations with Ruvo are encrypted and private, with transparent data practices and user control.")}
+                onClick={() => handleFeatureClick("Security & Privacy", "Your conversations with EMVO are encrypted and private, with transparent data practices and user control.")}
               >
                 <div className="shrink-0 w-16 h-16 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300">
                   <Shield className="h-7 w-7 text-white" />
@@ -182,7 +182,7 @@ const ProductFeaturesSection: React.FC = () => {
                 <div>
                   <h3 className="text-xl font-bold mb-3 text-white group-hover:text-orange-300 transition-colors duration-300">Secure, Private by Design</h3>
                   <p className="text-gray-300 leading-relaxed">
-                    Your conversations with Ruvo are encrypted and private, with transparent data practices and user control.
+                    Your conversations with EMVO are encrypted and private, with transparent data practices and user control.
                   </p>
                 </div>
               </div>
