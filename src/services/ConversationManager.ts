@@ -1,6 +1,6 @@
 
 import { ElevenLabsService } from '@/utils/elevenLabsUtils';
-import { openAIKeyManager } from './OpenAIKeyManager';
+import { openAIService } from './OpenAIService';
 
 interface ConversationOptions {
   userData?: any;
@@ -101,26 +101,13 @@ Remember: You're not just answering questions - you're having a real conversatio
 
   private async getOpenAIResponse(): Promise<string | null> {
     try {
-      const response = await openAIKeyManager.makeOpenAIRequest(this.apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
-          messages: this.conversationHistory,
-          temperature: 0.7,
-          max_tokens: 150, // Keep responses concise for voice
-        })
+      const response = await openAIService.makeRequest(this.conversationHistory, {
+        model: "gpt-4o-mini",
+        temperature: 0.7,
+        max_tokens: 150, // Keep responses concise for voice
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error?.message || 'OpenAI API error');
-      }
-
-      const data = await response.json();
-      return data.choices?.[0]?.message?.content || null;
+      return response.choices?.[0]?.message?.content || null;
     } catch (error) {
       console.error('OpenAI API error:', error);
       throw error;
