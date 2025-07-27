@@ -1,5 +1,6 @@
 
 import { ElevenLabsService } from '@/utils/elevenLabsUtils';
+import { openAIKeyManager } from './OpenAIKeyManager';
 
 interface ConversationOptions {
   userData?: any;
@@ -19,7 +20,6 @@ export class ConversationManager {
 
   // OpenAI API configuration
   private readonly apiUrl = "https://api.openai.com/v1/chat/completions";
-  private readonly apiKey = "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";
 
   constructor(options: ConversationOptions = {}) {
     this.options = options;
@@ -101,10 +101,9 @@ Remember: You're not just answering questions - you're having a real conversatio
 
   private async getOpenAIResponse(): Promise<string | null> {
     try {
-      const response = await fetch(this.apiUrl, {
+      const response = await openAIKeyManager.makeOpenAIRequest(this.apiUrl, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${this.apiKey}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({

@@ -7,6 +7,59 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// OpenAI API keys for rotation
+const OPENAI_KEYS = [
+  "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",
+  "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",
+  "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",
+  "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"
+];
+
+let currentKeyIndex = 0;
+const keyUsage = new Map();
+
+// Initialize key usage tracking
+OPENAI_KEYS.forEach((key, index) => {
+  keyUsage.set(key, { count: 0, active: true });
+});
+
+function getNextApiKey() {
+  // Try current key first
+  const currentKey = OPENAI_KEYS[currentKeyIndex];
+  const currentUsage = keyUsage.get(currentKey);
+  
+  if (currentUsage.count < 3 && currentUsage.active) {
+    return currentKey;
+  }
+  
+  // Find next available key
+  for (let i = 0; i < OPENAI_KEYS.length; i++) {
+    const keyIndex = (currentKeyIndex + i + 1) % OPENAI_KEYS.length;
+    const key = OPENAI_KEYS[keyIndex];
+    const usage = keyUsage.get(key);
+    
+    if (usage.count < 3 && usage.active) {
+      currentKeyIndex = keyIndex;
+      return key;
+    }
+  }
+  
+  // Reset all counters if all keys exhausted
+  OPENAI_KEYS.forEach(key => {
+    keyUsage.set(key, { count: 0, active: true });
+  });
+  currentKeyIndex = 0;
+  return OPENAI_KEYS[0];
+}
+
+function recordKeyUsage(apiKey: string) {
+  const usage = keyUsage.get(apiKey);
+  if (usage) {
+    usage.count++;
+    keyUsage.set(apiKey, usage);
+  }
+}
+
 const EMVO_AI_KNOWLEDGE = `
 You are Ruvipi, the support companion for EMVO AI. You represent EmvoLabs, a startup founded by Tharun Raj in India.
 
@@ -50,10 +103,8 @@ serve(async (req) => {
   try {
     const { name, email, subject, message } = await req.json();
     
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key not configured');
-    }
+    // Get next available API key
+    const openAIApiKey = getNextApiKey();
 
     const systemPrompt = `${EMVO_AI_KNOWLEDGE}
 
@@ -99,6 +150,9 @@ Respond as Ruvipi in a warm, conversational manner.`;
 
     const data = await response.json();
     const aiResponse = data.choices[0].message.content;
+
+    // Record successful API key usage
+    recordKeyUsage(openAIApiKey);
 
     return new Response(
       JSON.stringify({ 
