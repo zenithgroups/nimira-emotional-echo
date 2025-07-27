@@ -104,12 +104,14 @@ const NavBar: React.FC = () => {
               Contact Us
             </Button>
           </Link>
-          <Button
-            size="sm"
-            className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border-0"
-          >
-            Get Started
-          </Button>
+          <Link to="/chat">
+            <Button
+              size="sm"
+              className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border-0"
+            >
+              Get Started
+            </Button>
+          </Link>
         </nav>
 
         <div className="md:hidden">
@@ -160,13 +162,14 @@ const NavBar: React.FC = () => {
             >
               Contact Us
             </Link>
-            <Button
-              className="w-full mt-2 text-sm bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md transition-all duration-300"
-              onClick={closeMenu}
-              size="sm"
-            >
-              Get Started
-            </Button>
+            <Link to="/chat" onClick={closeMenu}>
+              <Button
+                className="w-full mt-2 text-sm bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md transition-all duration-300"
+                size="sm"
+              >
+                Get Started
+              </Button>
+            </Link>
           </div>
         </div>
       )}
