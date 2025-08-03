@@ -50,7 +50,17 @@ const testimonials = [
       "https://cdn.discordapp.com/avatars/655408283716419605/fc3669e86279966d003b256a87864879.webp?size=1024",
     quote:
       "As a gamer and content creator, I often felt alone. RUVO provided the emotional support I needed during those challenging moments. It's like having a friend who understands my passion. ",
-    emotion: "Comforted & Empowered & Gamer & Content Creator",
+    emotion: "Comforted & Empowered",
+    stars: 5,
+  },
+  {
+    name: "Vinay",
+    role: "Editor & Cinematographer",
+    image:
+      "https://cdn.discordapp.com/attachments/845315796086816769/1401543849159164028/521584072_18106368409531864_7883220677462340111_n.png?ex=6890a8ed&is=688f576d&hm=6bb6c9a7d2cb89d7187eb321e40c15a05d1d40ad36833905da02a00bc0186afe&",
+    quote:
+      "As an editor and cinematographer, I often felt stressed while working. RUVO provided the emotional support I needed during those challenging moments. It's like having a friend who understands my passion.",
+    emotion: "Comforted & Empowered",
     stars: 5,
   },
 ];
