@@ -14,7 +14,7 @@ const testimonials = [
     stars: 5,
   },
   {
-    name: "Shijo Papachan",
+    name: "Shijo Pappachan",
     role: "Remote Worker",
     image:
       "https://cdn.discordapp.com/attachments/845315796086816769/1401489057883623465/420029682_1482558092301481_3446357695992101498_n.png?ex=689075e5&is=688f2465&hm=3148761c50be32b07e38c093e3f7f7a902e6137413754880b464701bf7a9c102&",
