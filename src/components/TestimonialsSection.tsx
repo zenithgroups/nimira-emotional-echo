@@ -33,16 +33,16 @@ const testimonials = [
     emotion: "Comforted & Empowered",
     stars: 5,
   },
-  // {
-  //   name: "Gautham Shenoy",
-  //   role: "Race ist",
-  //   image:
-  //     "https://cdn.discordapp.com/attachments/845315796086816769/1401489057313456201/300066826_1134848987118984_9105715242084007516_n.png?ex=689075e5&is=688f2465&hm=11972507b9d1775df1742bddccdc951ca53c8893e34a6901648bc4b3a8435b7f&",
-  //   quote:
-  //     "As a race ist enthusiast, I often felt misunderstood. RUVO provided the emotional support I needed during those challenging moments.",
-  //   emotion: "Comforted & Empowered & Race ist",
-  //   stars: 1,
-  // },
+  {
+    name: "Gautham Shenoy",
+    role: "Race Enthusiast",
+    image:
+      "https://cdn.discordapp.com/attachments/845315796086816769/1401489057313456201/300066826_1134848987118984_9105715242084007516_n.png?ex=689075e5&is=688f2465&hm=11972507b9d1775df1742bddccdc951ca53c8893e34a6901648bc4b3a8435b7f&",
+    quote:
+      "As a race enthusiast, I often felt misunderstood. RUVO provided the emotional support I needed during those challenging moments.",
+    emotion: "Comforted & Empowered & Race Enthusiast",
+    stars: 4,
+  },
 ];
 
 const TestimonialsSection: React.FC = () => {
