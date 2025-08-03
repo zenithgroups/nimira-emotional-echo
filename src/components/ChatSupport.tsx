@@ -1,12 +1,11 @@
-
-import React, { useState, useRef, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Bot, User, Send, X } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/integrations/supabase/client';
+import React, { useState, useRef, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Bot, User, Send, X } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: string;
@@ -23,19 +22,20 @@ interface ChatSupportProps {
 const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      content: "Hello! I'm Ruvipi, your EMVO AI support companion. I'm here to help you understand how our emotionally intelligent AI can support your journey. How can I assist you today?",
+      id: "1",
+      content:
+        "Hello! I'm Ruvipi, your RUVO AI support companion. I'm here to help you understand how our emotionally intelligent AI can support your journey. How can I assist you today?",
       isUser: false,
-      timestamp: new Date()
-    }
+      timestamp: new Date(),
+    },
   ]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -45,14 +45,14 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
   // Prevent background scrolling when modal is open
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
 
     // Cleanup on unmount
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -63,56 +63,62 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
       id: Date.now().toString(),
       content: inputMessage,
       isUser: true,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
+    setMessages((prev) => [...prev, userMessage]);
+    setInputMessage("");
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('ai-support', {
+      const { data, error } = await supabase.functions.invoke("ai-support", {
         body: {
-          name: 'Chat User',
-          email: 'chat@example.com',
-          subject: 'chat',
-          message: inputMessage
-        }
+          name: "Chat User",
+          email: "chat@example.com",
+          subject: "chat",
+          message: inputMessage,
+        },
       });
 
       if (error) throw error;
 
       // Clean up the AI response by removing any formal signatures
-      let cleanResponse = data.response || data.fallbackResponse || "I'm sorry, I'm having trouble responding right now. Please try again.";
-      
+      let cleanResponse =
+        data.response ||
+        data.fallbackResponse ||
+        "I'm sorry, I'm having trouble responding right now. Please try again.";
+
       // Remove various signature patterns
-      cleanResponse = cleanResponse.replace(/^Subject:\s*[^:]*:?\s*/i, '');
-      cleanResponse = cleanResponse.replace(/Best regards,[\s\S]*$/i, '');
-      cleanResponse = cleanResponse.replace(/Sincerely,[\s\S]*$/i, '');
-      cleanResponse = cleanResponse.replace(/Thank you,[\s\S]*$/i, '');
-      cleanResponse = cleanResponse.replace(/\[Your Name\][\s\S]*$/i, '');
-      cleanResponse = cleanResponse.replace(/Customer Support Team[\s\S]*$/i, '');
-      cleanResponse = cleanResponse.replace(/EmvoLabs[\s\S]*$/i, '');
-      cleanResponse = cleanResponse.replace(/^Hi Chat User,?\s*/i, '');
-      
+      cleanResponse = cleanResponse.replace(/^Subject:\s*[^:]*:?\s*/i, "");
+      cleanResponse = cleanResponse.replace(/Best regards,[\s\S]*$/i, "");
+      cleanResponse = cleanResponse.replace(/Sincerely,[\s\S]*$/i, "");
+      cleanResponse = cleanResponse.replace(/Thank you,[\s\S]*$/i, "");
+      cleanResponse = cleanResponse.replace(/\[Your Name\][\s\S]*$/i, "");
+      cleanResponse = cleanResponse.replace(
+        /Customer Support Team[\s\S]*$/i,
+        ""
+      );
+      cleanResponse = cleanResponse.replace(/EmvoLabs[\s\S]*$/i, "");
+      cleanResponse = cleanResponse.replace(/^Hi Chat User,?\s*/i, "");
+
       // Remove any trailing signatures or formal closings
-      cleanResponse = cleanResponse.replace(/\n\n.*Team.*$/s, '');
+      cleanResponse = cleanResponse.replace(/\n\n.*Team.*$/s, "");
       cleanResponse = cleanResponse.trim();
 
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: cleanResponse,
         isUser: false,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
 
-      setMessages(prev => [...prev, aiMessage]);
+      setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error("Error sending message:", error);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again.",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -120,7 +126,7 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -137,9 +143,14 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
               <Bot className="h-4 w-4 text-white" />
             </div>
-            Ruvipi - EMVO AI Support
+            Ruvipi - RUVO AI Support
           </CardTitle>
-          <Button variant="ghost" size="sm" onClick={onClose} className="hover:bg-white/50">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="hover:bg-white/50"
+          >
             <X className="h-4 w-4" />
           </Button>
         </CardHeader>
@@ -149,13 +160,15 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+                  className={`flex ${
+                    message.isUser ? "justify-end" : "justify-start"
+                  }`}
                 >
                   <div
                     className={`max-w-[85%] rounded-lg p-3 ${
                       message.isUser
-                        ? 'bg-blue-600 text-white ml-2'
-                        : 'bg-gray-50 text-gray-900 border mr-2'
+                        ? "bg-blue-600 text-white ml-2"
+                        : "bg-gray-50 text-gray-900 border mr-2"
                     }`}
                   >
                     <div className="flex items-start gap-2">
@@ -168,11 +181,13 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
                         <User className="h-4 w-4 mt-0.5 text-white flex-shrink-0" />
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
+                        <p className="text-sm whitespace-pre-wrap break-words">
+                          {message.content}
+                        </p>
                         <span className="text-xs opacity-70 mt-1 block">
-                          {message.timestamp.toLocaleTimeString([], { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
+                          {message.timestamp.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
                           })}
                         </span>
                       </div>
@@ -189,8 +204,14 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
                       </div>
                       <div className="flex gap-1">
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.1s" }}
+                        ></div>
+                        <div
+                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          style={{ animationDelay: "0.2s" }}
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -205,12 +226,12 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask me about EMVO AI..."
+                placeholder="Ask me about RUVO AI..."
                 disabled={isLoading}
                 className="flex-1"
               />
-              <Button 
-                onClick={sendMessage} 
+              <Button
+                onClick={sendMessage}
                 disabled={!inputMessage.trim() || isLoading}
                 size="sm"
                 className="bg-blue-600 hover:bg-blue-700"

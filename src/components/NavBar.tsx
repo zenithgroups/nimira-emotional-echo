@@ -57,7 +57,7 @@ const NavBar: React.FC = () => {
             <div className="w-10 h-10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300">
               <img
                 src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png"
-                alt="EMVO Logo"
+                alt="RUVO Logo"
                 className={cn(
                   "h-8 w-auto transition-all duration-300",
                   darkMode ? "brightness-0 invert" : "brightness-0"
@@ -65,7 +65,7 @@ const NavBar: React.FC = () => {
               />
             </div>
             <span className="text-2xl font-bold text-white transition-all duration-300">
-              EMVO
+              RUVO
             </span>
           </Link>
         </div>

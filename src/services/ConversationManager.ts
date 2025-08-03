@@ -1,6 +1,5 @@
-
-import { ElevenLabsService } from '@/utils/elevenLabsUtils';
-import { openAIService } from './OpenAIService';
+import { ElevenLabsService } from "@/utils/elevenLabsUtils";
+import { openAIService } from "./OpenAIService";
 
 interface ConversationOptions {
   userData?: any;
@@ -13,7 +12,7 @@ interface ConversationOptions {
 
 export class ConversationManager {
   private elevenLabsService: ElevenLabsService;
-  private conversationHistory: Array<{role: string, content: string}> = [];
+  private conversationHistory: Array<{ role: string; content: string }> = [];
   private options: ConversationOptions;
   private audioEnabled: boolean = true;
   private currentAudio: HTMLAudioElement | null = null;
@@ -24,7 +23,7 @@ export class ConversationManager {
   constructor(options: ConversationOptions = {}) {
     this.options = options;
     this.elevenLabsService = new ElevenLabsService();
-    
+
     if (options.voiceId) {
       this.elevenLabsService.setVoice(options.voiceId);
     }
@@ -34,9 +33,10 @@ export class ConversationManager {
   }
 
   private initializeConversation() {
-    const userName = this.options.userData?.nickname || this.options.userData?.name || 'there';
-    
-    const systemPrompt = `You are EMVO, a compassionate AI voice assistant designed to provide emotional support and meaningful conversations. 
+    const userName =
+      this.options.userData?.nickname || this.options.userData?.name || "there";
+
+    const systemPrompt = `You are RUVO, a compassionate AI voice assistant designed to provide emotional support and meaningful conversations.
 
 Key traits:
 - Warm, empathetic, and genuinely caring
@@ -54,10 +54,12 @@ You're currently talking with ${userName}. This is a continuous voice conversati
 
 Remember: You're not just answering questions - you're having a real conversation with someone who may need emotional support or just wants to chat.`;
 
-    this.conversationHistory = [{
-      role: 'system',
-      content: systemPrompt
-    }];
+    this.conversationHistory = [
+      {
+        role: "system",
+        content: systemPrompt,
+      },
+    ];
   }
 
   public async processUserInput(userInput: string): Promise<void> {
@@ -65,19 +67,19 @@ Remember: You're not just answering questions - you're having a real conversatio
 
     // Add user message to history
     this.conversationHistory.push({
-      role: 'user',
-      content: userInput
+      role: "user",
+      content: userInput,
     });
 
     try {
       // Get response from OpenAI
       const response = await this.getOpenAIResponse();
-      
+
       if (response) {
         // Add AI response to history
         this.conversationHistory.push({
-          role: 'assistant',
-          content: response
+          role: "assistant",
+          content: response,
         });
 
         // Notify about the response
@@ -94,22 +96,27 @@ Remember: You're not just answering questions - you're having a real conversatio
         }
       }
     } catch (error) {
-      console.error('Error processing user input:', error);
-      this.options.onError?.('Failed to process your message. Please try again.');
+      console.error("Error processing user input:", error);
+      this.options.onError?.(
+        "Failed to process your message. Please try again."
+      );
     }
   }
 
   private async getOpenAIResponse(): Promise<string | null> {
     try {
-      const response = await openAIService.makeRequest(this.conversationHistory, {
-        model: "gpt-4o-mini",
-        temperature: 0.7,
-        max_tokens: 150, // Keep responses concise for voice
-      });
+      const response = await openAIService.makeRequest(
+        this.conversationHistory,
+        {
+          model: "gpt-4o-mini",
+          temperature: 0.7,
+          max_tokens: 150, // Keep responses concise for voice
+        }
+      );
 
       return response.choices?.[0]?.message?.content || null;
     } catch (error) {
-      console.error('OpenAI API error:', error);
+      console.error("OpenAI API error:", error);
       throw error;
     }
   }
@@ -117,20 +124,19 @@ Remember: You're not just answering questions - you're having a real conversatio
   private async speakResponse(text: string): Promise<void> {
     try {
       this.options.onSpeechStart?.();
-      
+
       // Use ElevenLabs for speech synthesis
       const success = await this.elevenLabsService.speak(text);
-      
+
       if (!success) {
-        throw new Error('Failed to generate speech');
+        throw new Error("Failed to generate speech");
       }
 
       // Wait for speech to complete
       // Note: ElevenLabs speak method should handle the audio playback completion
-      
     } catch (error) {
-      console.error('Speech synthesis error:', error);
-      this.options.onError?.('Failed to speak response');
+      console.error("Speech synthesis error:", error);
+      this.options.onError?.("Failed to speak response");
     } finally {
       // Always trigger speech end event
       this.options.onSpeechEnd?.();
@@ -142,10 +148,10 @@ Remember: You're not just answering questions - you're having a real conversatio
       this.currentAudio.pause();
       this.currentAudio = null;
     }
-    
+
     // Stop ElevenLabs audio
     this.elevenLabsService.stop();
-    
+
     // Trigger speech end event
     this.options.onSpeechEnd?.();
   }
@@ -158,8 +164,8 @@ Remember: You're not just answering questions - you're having a real conversatio
     this.initializeConversation();
   }
 
-  public getConversationHistory(): Array<{role: string, content: string}> {
-    return this.conversationHistory.filter(msg => msg.role !== 'system');
+  public getConversationHistory(): Array<{ role: string; content: string }> {
+    return this.conversationHistory.filter((msg) => msg.role !== "system");
   }
 
   public cleanup(): void {
