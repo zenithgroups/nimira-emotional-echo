@@ -29,20 +29,20 @@ const testimonials = [
     image:
       "https://cdn.discordapp.com/attachments/845315796086816769/1401489056755351592/107420249_117503146467013_4840947142096743881_n.png?ex=689075e5&is=688f2465&hm=ca65120d457eded0b32988e602d83cb68a493c40b37c6530d3e503e019886f26&",
     quote:
-      "As a new mom, I often felt overwhelmed. RUVO provided the emotional support I needed during those difficult midnight moments.",
+      "As a new Dad, I often felt overwhelmed. RUVO provided the emotional support I needed during those difficult midnight moments.",
     emotion: "Comforted & Empowered",
     stars: 5,
   },
-  {
-    name: "Gautham Shenoy",
-    role: "Race ist",
-    image:
-      "https://cdn.discordapp.com/attachments/845315796086816769/1401489057313456201/300066826_1134848987118984_9105715242084007516_n.png?ex=689075e5&is=688f2465&hm=11972507b9d1775df1742bddccdc951ca53c8893e34a6901648bc4b3a8435b7f&",
-    quote:
-      "As a race ist enthusiast, I often felt misunderstood. RUVO provided the emotional support I needed during those challenging moments.",
-    emotion: "Comforted & Empowered & Race ist",
-    stars: 1,
-  },
+  // {
+  //   name: "Gautham Shenoy",
+  //   role: "Race ist",
+  //   image:
+  //     "https://cdn.discordapp.com/attachments/845315796086816769/1401489057313456201/300066826_1134848987118984_9105715242084007516_n.png?ex=689075e5&is=688f2465&hm=11972507b9d1775df1742bddccdc951ca53c8893e34a6901648bc4b3a8435b7f&",
+  //   quote:
+  //     "As a race ist enthusiast, I often felt misunderstood. RUVO provided the emotional support I needed during those challenging moments.",
+  //   emotion: "Comforted & Empowered & Race ist",
+  //   stars: 1,
+  // },
 ];
 
 const TestimonialsSection: React.FC = () => {
