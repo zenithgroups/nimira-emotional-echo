@@ -40,12 +40,12 @@ const AboutSection: React.FC = () => {
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md overflow-hidden">
                   <img
                     src="/lovable-uploads/e71e166c-04d8-40d0-a9d1-92b058c6bab9.png"
-                    alt="Tharun Raj Shade"
+                    alt="Tharun Raj"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div>
-                  <p className="font-semibold text-white">Tharun Raj Shade</p>
+                  <p className="font-semibold text-white">Tharun Raj</p>
                   <p className="text-sm text-gray-400">Founder & CEO</p>
                 </div>
               </div>
