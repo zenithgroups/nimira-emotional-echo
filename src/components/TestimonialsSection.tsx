@@ -47,7 +47,7 @@ const testimonials = [
     name: "Girish",
     role: "Gamer & Content Creator",
     image:
-      "https://cdn.discordapp.com/attachments/845315796086816769/1401489057313456201/300066826_1134848987118984_9105715242084007516_n.png?ex=689075e5&is=688f2465&hm=11972507b9d1775df1742bddccdc951ca53c8893e34a6901648bc4b3a8435b7f&",
+      "https://cdn.discordapp.com/avatars/655408283716419605/fc3669e86279966d003b256a87864879.webp?size=1024",
     quote:
       "As a gamer and content creator, I often felt alone. RUVO provided the emotional support I needed during those challenging moments. It's like having a friend who understands my passion. ",
     emotion: "Comforted & Empowered & Gamer & Content Creator",
