@@ -1,7 +1,7 @@
 import React from "react";
 import { MessageSquare, Book, Smile, Shield } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import Tooltip from "./misc/ToolTip";
+import Tooltip from "./misc/Tooltip";
 const ProductFeaturesSection: React.FC = () => {
   const { toast } = useToast();
 
