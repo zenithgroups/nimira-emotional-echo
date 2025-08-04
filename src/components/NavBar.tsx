@@ -3,10 +3,13 @@ import { Menu, X, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import UserProfile from "@/components/UserProfile";
 
 const NavBar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  const { user, loading } = useAuth();
 
   // Effect to detect system color scheme preference
   useEffect(() => {
@@ -104,14 +107,20 @@ const NavBar: React.FC = () => {
               Contact Us
             </Button>
           </Link>
-          <Link to="/chat">
-            <Button
-              size="sm"
-              className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border-0"
-            >
-              Get Started
-            </Button>
-          </Link>
+          {!loading && (
+            user ? (
+              <UserProfile variant="dropdown" />
+            ) : (
+              <Link to="/auth">
+                <Button
+                  size="sm"
+                  className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border-0"
+                >
+                  Sign In
+                </Button>
+              </Link>
+            )
+          )}
         </nav>
 
         <div className="md:hidden">
@@ -162,14 +171,22 @@ const NavBar: React.FC = () => {
             >
               Contact Us
             </Link>
-            <Link to="/chat" onClick={closeMenu}>
-              <Button
-                className="w-full mt-2 text-sm bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md transition-all duration-300"
-                size="sm"
-              >
-                Get Started
-              </Button>
-            </Link>
+            {!loading && (
+              user ? (
+                <div className="px-3 py-2">
+                  <UserProfile variant="dropdown" />
+                </div>
+              ) : (
+                <Link to="/auth" onClick={closeMenu}>
+                  <Button
+                    className="w-full mt-2 text-sm bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md transition-all duration-300"
+                    size="sm"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+              )
+            )}
           </div>
         </div>
       )}

@@ -1,9 +1,21 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 import TrueFocus from "./misc/TrueFocus";
 
 const HeroSection: React.FC = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, loading } = useAuth();
+
+  const handleGetStarted = () => {
+    if (user) {
+      navigate('/chat');
+    } else {
+      navigate('/auth');
+    }
+  };
 
   const handleLearnMore = () => {
     const featuresSection = document.getElementById("features");
@@ -81,11 +93,12 @@ const HeroSection: React.FC = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <a
-                href="/chat"
-                className="group inline-flex items-center justify-center px-6 py-3 gradient-button-pulse text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 text-sm"
+              <button
+                onClick={handleGetStarted}
+                disabled={loading}
+                className="group inline-flex items-center justify-center px-6 py-3 gradient-button-pulse text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <span>Get Started</span>
+                <span>{loading ? 'Loading...' : user ? 'Start Chatting' : 'Get Started'}</span>
                 <svg
                   className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
                   fill="none"
@@ -99,7 +112,7 @@ const HeroSection: React.FC = () => {
                     d="M9 5l7 7-7 7"
                   />
                 </svg>
-              </a>
+              </button>
               <button
                 onClick={handleLearnMore}
                 className="group inline-flex items-center justify-center px-6 py-3 dark-button text-white rounded-lg transition-all duration-300 hover:scale-105 text-sm"
