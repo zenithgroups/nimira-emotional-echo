@@ -162,18 +162,13 @@ const About = () => {
                     Our Mission
                   </h3>
                   <p className="italic text-gray-700">
-                    To create AI companions that don't just talk — but listen,
-                    feel, and truly understand. In a world overflowing with
-                    noise, RUVO aims to be the quiet comfort — the digital
-                    shoulder to lean on when no one else is around. We're here
-                    to build technology that connects to the heart, offering not
-                    just answers, but empathy.
+                    To create AI companions that truly understand human emotions and provide meaningful, personalized support. RUVO bridges the gap between advanced artificial intelligence and genuine human care, offering 24/7 emotional companionship that adapts to your unique needs, personality, and communication style.
                   </p>
                   <div className="mt-4 text-right">
                     <p className="text-ruvo-500 font-medium">
-                      RUVO was born out of silence.
+                      "Technology should enhance human connection, not replace it."
                       <br />
-                      Now, it speaks for those who can't.
+                      — RUVO's Core Philosophy
                     </p>
                   </div>
                 </div>

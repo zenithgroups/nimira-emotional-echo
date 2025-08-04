@@ -78,10 +78,10 @@ const NavBar: React.FC = () => {
             Home
           </button>
           <button
-            onClick={() => scrollToSection("about")}
+            onClick={() => scrollToSection("how-it-works")}
             className="text-sm font-medium text-gray-300 hover:text-blue-300 transition-all duration-300 hover:scale-105"
           >
-            About
+            How It Works
           </button>
           <button
             onClick={() => scrollToSection("features")}
@@ -90,10 +90,10 @@ const NavBar: React.FC = () => {
             Features
           </button>
           <button
-            onClick={() => scrollToSection("how-it-works")}
+            onClick={() => scrollToSection("about")}
             className="text-sm font-medium text-gray-300 hover:text-blue-300 transition-all duration-300 hover:scale-105"
           >
-            How It Works
+            About
           </button>
           <Link to="/contact">
             <Button
@@ -138,10 +138,10 @@ const NavBar: React.FC = () => {
               Home
             </button>
             <button
-              onClick={() => scrollToSection("about")}
+              onClick={() => scrollToSection("how-it-works")}
               className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-blue-800/50 hover:text-blue-300 transition-all duration-300"
             >
-              About
+              How It Works
             </button>
             <button
               onClick={() => scrollToSection("features")}
@@ -150,10 +150,10 @@ const NavBar: React.FC = () => {
               Features
             </button>
             <button
-              onClick={() => scrollToSection("how-it-works")}
+              onClick={() => scrollToSection("about")}
               className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-blue-800/50 hover:text-blue-300 transition-all duration-300"
             >
-              How It Works
+              About
             </button>
             <Link
               to="/contact"

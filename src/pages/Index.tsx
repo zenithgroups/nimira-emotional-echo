@@ -34,13 +34,21 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-black">
       <NavBar />
-      <HeroSection />
+      <div id="home">
+        <HeroSection />
+      </div>
       <div className="bg-black">
-        <HowItWorksSection />
-        <ProductFeaturesSection />
+        <div id="how-it-works">
+          <HowItWorksSection />
+        </div>
+        <div id="features">
+          <ProductFeaturesSection />
+        </div>
         <TestimonialsSection />
         <BetaSignupSection />
-        <AboutSection />
+        <div id="about">
+          <AboutSection />
+        </div>
       </div>
       <Footer />
     </div>
