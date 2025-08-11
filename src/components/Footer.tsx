@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
 
   const handleSocialClick = (platform: string) => {
     if (platform === "Instagram") {
-      window.open("https://www.instagram.com/emvo.ai", "_blank");
+      window.open("https://www.instagram.com/ruvolabs?igsh=MTM5cnVzaTExajkwaw==", "_blank");
     } else {
       toast({
         title: `${platform} coming soon`,
