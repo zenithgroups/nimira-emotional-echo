@@ -18,7 +18,7 @@ serve(async (req) => {
       throw new Error('OpenAI API key not configured. Please add OPENAI_API_KEY to your Supabase secrets.');
     }
 
-    const { messages, model = 'gpt-4o-mini', temperature = 0.7, max_tokens = 1000 } = await req.json();
+    const { messages, model = 'gpt-5-2025-08-07', temperature, max_tokens, max_completion_tokens } = await req.json();
 
     console.log('Making OpenAI request with model:', model);
 
@@ -31,8 +31,9 @@ serve(async (req) => {
       body: JSON.stringify({
         model,
         messages,
-        temperature,
-        max_tokens
+        ...(temperature !== undefined && { temperature }),
+        ...(max_tokens && { max_tokens }),
+        ...(max_completion_tokens && { max_completion_tokens })
       }),
     });
 

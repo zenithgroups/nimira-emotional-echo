@@ -8,9 +8,10 @@ export class OpenAIService {
       const { data, error } = await supabase.functions.invoke('openai-chat', {
         body: {
           messages,
-          model: options.model || 'gpt-4o-mini',
-          temperature: options.temperature || 0.7,
-          max_tokens: options.max_tokens || 1000
+          model: options.model || 'gpt-5-2025-08-07',
+          temperature: options.temperature,
+          max_tokens: options.max_tokens,
+          max_completion_tokens: options.max_completion_tokens || 1000
         }
       });
 
@@ -31,7 +32,10 @@ export class OpenAIService {
       const response = await this.makeRequest([
         { role: 'system', content: 'Generate a short, descriptive title for this conversation (max 5 words)' },
         { role: 'user', content: messages.map(m => m.content).join('\n').slice(0, 200) }
-      ], { max_tokens: 20 });
+      ], { 
+        model: 'gpt-5-2025-08-07',
+        max_completion_tokens: 20 
+      });
 
       return response.choices?.[0]?.message?.content || 'New Conversation';
     } catch (error) {

@@ -238,7 +238,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       }, {
         role: "user",
         content: "Hello"
-      }], { max_tokens: 5 });
+      }], { 
+        model: "gpt-5-2025-08-07",
+        max_completion_tokens: 5 
+      });
       
       console.log("API connection check response:", response);
       setFallbackMode(false);
@@ -542,7 +545,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       const systemPrompt = getSystemPrompt(userMessage.content, userData);
       console.log("Using system prompt based on emotional state and user data:", systemPrompt.substring(0, 50) + "...");
       
-      const response = await openAIService.makeRequest([{
+      const data = await openAIService.makeRequest([{
         role: "system",
         content: systemPrompt
       }, ...messages.map(msg => ({
@@ -552,18 +555,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         role: userMessage.role,
         content: userMessage.content
       }], {
-        model: "gpt-4o-mini",
-        temperature: 0.7,
-        max_tokens: 300
+        model: "gpt-5-2025-08-07",
+        max_completion_tokens: 300
       });
       
-      console.log("OpenAI API response status:", response.status);
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("OpenAI API error:", errorData);
-        throw new Error(`Error ${response.status}: ${errorData.error?.message || 'Unknown error'}`);
-      }
-      const data = await response.json();
       console.log("OpenAI API response data:", data);
       const assistantMessage = data.choices?.[0]?.message?.content || "I'm having trouble responding right now. Can we try again?";
       setMessages(prev => [...prev, {
