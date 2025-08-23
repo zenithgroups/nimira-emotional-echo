@@ -17,9 +17,6 @@ export class ConversationManager {
   private audioEnabled: boolean = true;
   private currentAudio: HTMLAudioElement | null = null;
 
-  // OpenAI API configuration
-  private readonly apiUrl = "https://api.openai.com/v1/chat/completions";
-  private readonly apiKey = "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";
 
   constructor(options: ConversationOptions = {}) {
     this.options = options;
@@ -101,27 +98,21 @@ Remember: You're not just answering questions - you're having a real conversatio
 
   private async getOpenAIResponse(): Promise<string | null> {
     try {
-      const response = await fetch(this.apiUrl, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${this.apiKey}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-mini",
+      const { supabase } = await import('@/integrations/supabase/client');
+      
+      const { data, error } = await supabase.functions.invoke('openai-chat', {
+        body: {
           messages: this.conversationHistory,
-          temperature: 0.7,
-          max_tokens: 150, // Keep responses concise for voice
-        })
+          model: "gpt-5-2025-08-07",
+          max_completion_tokens: 150, // Keep responses concise for voice
+        }
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error?.message || 'OpenAI API error');
+      if (error) {
+        throw new Error(error.message || 'OpenAI API error');
       }
 
-      const data = await response.json();
-      return data.choices?.[0]?.message?.content || null;
+      return data?.choices?.[0]?.message?.content || null;
     } catch (error) {
       console.error('OpenAI API error:', error);
       throw error;

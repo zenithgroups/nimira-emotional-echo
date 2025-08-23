@@ -1,5 +1,8 @@
 
-project_id = "default"
+project_id = "uqowomhiomozgrtfsjpk"
 
 [functions.ai-support]
 verify_jwt = false
+
+[functions.openai-chat]
+verify_jwt = true
