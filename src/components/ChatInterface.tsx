@@ -4,7 +4,6 @@ import { SpeechRecognitionService, SpeechSynthesisService } from "@/utils/voiceU
 import { ElevenLabsService, ELEVEN_LABS_VOICES } from "@/utils/elevenLabsUtils";
 import { getSystemPrompt, detectEmotion, getOpenAITitlePrompt } from "@/utils/sentimentUtils";
 import { cn } from "@/lib/utils";
-import { openAIService } from "@/services/OpenAIService";
 
 // Import refactored components 
 import { ChatHeader } from "./chat/ChatHeader";
@@ -72,16 +71,37 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [playingMessageIndex, setPlayingMessageIndex] = useState<number | null>(null);
   
   const { toast } = useToast();
+  const apiUrl = "https://api.openai.com/v1/chat/completions";
+  const apiKey = "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";
 
   // Generate smarter chat title using OpenAI
   const generateOpenAIChatTitle = async (userMessage: string): Promise<string> => {
     try {
-      const response = await openAIService.generateTitle([{
-        role: "user",
-        content: getOpenAITitlePrompt(userMessage)
-      }]);
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [{
+            role: "user",
+            content: getOpenAITitlePrompt(userMessage)
+          }],
+          temperature: 0.7,
+          max_tokens: 50
+        })
+      });
       
-      return response || generateFallbackChatTitle(userMessage);
+      if (!response.ok) {
+        console.error("Error generating chat title:", response.status);
+        return generateFallbackChatTitle(userMessage);
+      }
+      
+      const data = await response.json();
+      const title = data.choices?.[0]?.message?.content?.trim() || "New conversation";
+      return title;
     } catch (error) {
       console.error("Error generating chat title:", error);
       return generateFallbackChatTitle(userMessage);
@@ -232,20 +252,35 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const checkApiConnection = async () => {
     try {
       console.log("Checking OpenAI API connection");
-      const response = await openAIService.makeRequest([{
-        role: "system",
-        content: "This is a connection test."
-      }, {
-        role: "user",
-        content: "Hello"
-      }], { 
-        model: "gpt-5-2025-08-07",
-        max_completion_tokens: 5 
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [{
+            role: "system",
+            content: "This is a connection test."
+          }, {
+            role: "user",
+            content: "Hello"
+          }],
+          max_tokens: 5
+        })
       });
-      
-      console.log("API connection check response:", response);
-      setFallbackMode(false);
-      console.log("OpenAI API connection successful");
+      console.log("API connection check response:", response.status);
+      const data = await response.json();
+      console.log("API connection check data:", data);
+      if (response.ok) {
+        setFallbackMode(false);
+        console.log("OpenAI API connection successful");
+      } else {
+        console.log("OpenAI API connection failed with status:", response.status);
+        console.log("Error message:", data.error?.message);
+        setFallbackMode(true);
+      }
     } catch (error) {
       console.error("OpenAI API connection check failed:", error);
       setFallbackMode(true);
@@ -545,20 +580,36 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       const systemPrompt = getSystemPrompt(userMessage.content, userData);
       console.log("Using system prompt based on emotional state and user data:", systemPrompt.substring(0, 50) + "...");
       
-      const data = await openAIService.makeRequest([{
-        role: "system",
-        content: systemPrompt
-      }, ...messages.map(msg => ({
-        role: msg.role,
-        content: msg.content
-      })), {
-        role: userMessage.role,
-        content: userMessage.content
-      }], {
-        model: "gpt-5-2025-08-07",
-        max_completion_tokens: 300
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [{
+            role: "system",
+            content: systemPrompt
+          }, ...messages.map(msg => ({
+            role: msg.role,
+            content: msg.content
+          })), {
+            role: userMessage.role,
+            content: userMessage.content
+          }],
+          temperature: 0.7,
+          max_tokens: 300
+        })
       });
       
+      console.log("OpenAI API response status:", response.status);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("OpenAI API error:", errorData);
+        throw new Error(`Error ${response.status}: ${errorData.error?.message || 'Unknown error'}`);
+      }
+      const data = await response.json();
       console.log("OpenAI API response data:", data);
       const assistantMessage = data.choices?.[0]?.message?.content || "I'm having trouble responding right now. Can we try again?";
       setMessages(prev => [...prev, {

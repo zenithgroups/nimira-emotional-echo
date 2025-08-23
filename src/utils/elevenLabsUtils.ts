@@ -88,15 +88,14 @@ export class ElevenLabsService {
         },
         body: JSON.stringify({
           text: text,
-          model_id: "eleven_turbo_v2", // Fastest model for minimal latency
+          model_id: "eleven_turbo_v2_5", // Faster model for lower latency
           voice_settings: {
-            similarity_boost: 0.9,
-            stability: 0.3, // Lower for faster processing
-            style: 0.1,
+            similarity_boost: 0.8,
+            stability: 0.4, // Slightly lower for faster processing
+            style: 0.2,
             use_speaker_boost: true
           },
-          optimize_streaming_latency: 4, // Maximum optimization for speed
-          output_format: "mp3_22050_32" // Lower quality for faster processing
+          optimize_streaming_latency: 4 // Maximum optimization for speed
         })
       });
 
@@ -109,44 +108,15 @@ export class ElevenLabsService {
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
       
-      // Preload and configure for minimal delay
-      audio.preload = 'auto';
-      audio.crossOrigin = 'anonymous';
-      
       this.currentAudio = audio;
       
-      return new Promise((resolve) => {
-        audio.oncanplaythrough = async () => {
-          try {
-            await audio.play();
-            resolve(true);
-          } catch (error) {
-            console.error('Audio play error:', error);
-            resolve(false);
-          }
-        };
-        
-        audio.onended = () => {
-          URL.revokeObjectURL(audioUrl);
-          this.currentAudio = null;
-        };
-
-        audio.onerror = () => {
-          console.error('Audio loading error');
-          URL.revokeObjectURL(audioUrl);
-          this.currentAudio = null;
-          resolve(false);
-        };
-
-        // Fallback timeout
-        setTimeout(() => {
-          if (audio.readyState >= 2) { // HAVE_CURRENT_DATA
-            audio.play().then(() => resolve(true)).catch(() => resolve(false));
-          } else {
-            resolve(false);
-          }
-        }, 1000);
-      });
+      audio.onended = () => {
+        URL.revokeObjectURL(audioUrl);
+        this.currentAudio = null;
+      };
+      
+      await audio.play();
+      return true;
     } catch (error) {
       console.error('Failed to generate speech with ElevenLabs:', error);
       return false;

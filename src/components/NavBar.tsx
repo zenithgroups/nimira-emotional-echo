@@ -3,13 +3,10 @@ import { Menu, X, Sun, Moon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useAuth } from "@/contexts/AuthContext";
-import UserProfile from "@/components/UserProfile";
 
 const NavBar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState<boolean>(false);
-  const { user, loading } = useAuth();
 
   // Effect to detect system color scheme preference
   useEffect(() => {
@@ -60,7 +57,7 @@ const NavBar: React.FC = () => {
             <div className="w-10 h-10 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform duration-300">
               <img
                 src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png"
-                alt="RUVO Logo"
+                alt="EMVO Logo"
                 className={cn(
                   "h-8 w-auto transition-all duration-300",
                   darkMode ? "brightness-0 invert" : "brightness-0"
@@ -68,7 +65,7 @@ const NavBar: React.FC = () => {
               />
             </div>
             <span className="text-2xl font-bold text-white transition-all duration-300">
-              RUVO
+              EMVO
             </span>
           </Link>
         </div>
@@ -81,10 +78,10 @@ const NavBar: React.FC = () => {
             Home
           </button>
           <button
-            onClick={() => scrollToSection("how-it-works")}
+            onClick={() => scrollToSection("about")}
             className="text-sm font-medium text-gray-300 hover:text-blue-300 transition-all duration-300 hover:scale-105"
           >
-            How It Works
+            About
           </button>
           <button
             onClick={() => scrollToSection("features")}
@@ -93,10 +90,10 @@ const NavBar: React.FC = () => {
             Features
           </button>
           <button
-            onClick={() => scrollToSection("about")}
+            onClick={() => scrollToSection("how-it-works")}
             className="text-sm font-medium text-gray-300 hover:text-blue-300 transition-all duration-300 hover:scale-105"
           >
-            About
+            How It Works
           </button>
           <Link to="/contact">
             <Button
@@ -107,20 +104,12 @@ const NavBar: React.FC = () => {
               Contact Us
             </Button>
           </Link>
-          {!loading && (
-            user ? (
-              <UserProfile variant="dropdown" />
-            ) : (
-              <Link to="/auth">
-                <Button
-                  size="sm"
-                  className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border-0"
-                >
-                  Sign In
-                </Button>
-              </Link>
-            )
-          )}
+          <Button
+            size="sm"
+            className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border-0"
+          >
+            Get Started
+          </Button>
         </nav>
 
         <div className="md:hidden">
@@ -147,10 +136,10 @@ const NavBar: React.FC = () => {
               Home
             </button>
             <button
-              onClick={() => scrollToSection("how-it-works")}
+              onClick={() => scrollToSection("about")}
               className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-blue-800/50 hover:text-blue-300 transition-all duration-300"
             >
-              How It Works
+              About
             </button>
             <button
               onClick={() => scrollToSection("features")}
@@ -159,10 +148,10 @@ const NavBar: React.FC = () => {
               Features
             </button>
             <button
-              onClick={() => scrollToSection("about")}
+              onClick={() => scrollToSection("how-it-works")}
               className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:bg-blue-800/50 hover:text-blue-300 transition-all duration-300"
             >
-              About
+              How It Works
             </button>
             <Link
               to="/contact"
@@ -171,22 +160,13 @@ const NavBar: React.FC = () => {
             >
               Contact Us
             </Link>
-            {!loading && (
-              user ? (
-                <div className="px-3 py-2">
-                  <UserProfile variant="dropdown" />
-                </div>
-              ) : (
-                <Link to="/auth" onClick={closeMenu}>
-                  <Button
-                    className="w-full mt-2 text-sm bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md transition-all duration-300"
-                    size="sm"
-                  >
-                    Sign In
-                  </Button>
-                </Link>
-              )
-            )}
+            <Button
+              className="w-full mt-2 text-sm bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-md transition-all duration-300"
+              onClick={closeMenu}
+              size="sm"
+            >
+              Get Started
+            </Button>
           </div>
         </div>
       )}

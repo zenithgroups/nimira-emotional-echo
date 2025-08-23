@@ -1,3 +1,4 @@
+
 import React from "react";
 import { MessageCircle, Brain, Heart, Clock } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -5,28 +6,24 @@ import { useToast } from "@/components/ui/use-toast";
 const features = [
   {
     icon: <MessageCircle className="h-8 w-8 text-blue-400" />,
-    title: "Talk to RUVO 24/7",
-    description:
-      "Your AI companion is available anytime you need someone to talk to, offering support day and night.",
+    title: "Talk to EMVO 24/7",
+    description: "Your AI companion is available anytime you need someone to talk to, offering support day and night."
   },
   {
     icon: <Brain className="h-8 w-8 text-blue-400" />,
     title: "Stores Meaningful Memories",
-    description:
-      "RUVO remembers your important moments, preferences, and conversations to provide personalized support.",
+    description: "EMVO remembers your important moments, preferences, and conversations to provide personalized support."
   },
   {
     icon: <Heart className="h-8 w-8 text-blue-400" />,
     title: "Offers Emotional Comfort",
-    description:
-      "Designed to provide empathetic responses and emotional support when you need it most.",
+    description: "Designed to provide empathetic responses and emotional support when you need it most."
   },
   {
     icon: <Clock className="h-8 w-8 text-blue-400" />,
     title: "AI That Learns You Over Time",
-    description:
-      "The more you interact with RUVO, the better it understands your needs, preferences, and communication style.",
-  },
+    description: "The more you interact with EMVO, the better it understands your needs, preferences, and communication style."
+  }
 ];
 
 const HowItWorksSection: React.FC = () => {
@@ -48,17 +45,16 @@ const HowItWorksSection: React.FC = () => {
     <section id="how-it-works" className="section-spacing bg-black relative">
       <div className="container-custom relative z-10">
         <div className="text-center mb-16 animate-fade-up">
-          <h2 className="mobile-heading-2 text-white">How RUVO Works</h2>
+          <h2 className="mobile-heading-2 text-white">How EMVO Works</h2>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Experience the power of emotional AI designed to support your
-            well-being through intelligent, empathetic interaction.
+            Experience the power of emotional AI designed to support your well-being through intelligent, empathetic interaction.
           </p>
         </div>
-
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <div
-              key={index}
+            <div 
+              key={index} 
               className="card-feature flex flex-col items-center text-center cursor-pointer hover:translate-y-[-5px] transition-all duration-300 p-8 animate-fade-up"
               style={{ animationDelay: `${index * 0.1}s` }}
               onClick={() => {
@@ -69,41 +65,22 @@ const HowItWorksSection: React.FC = () => {
               }}
             >
               <div className="mb-6 p-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-                {React.cloneElement(feature.icon, {
-                  className: "h-8 w-8 text-blue-400",
-                })}
+                {React.cloneElement(feature.icon, { className: "h-8 w-8 text-blue-400" })}
               </div>
-              <h3 className="text-xl font-semibold mb-4 text-white">
-                {feature.title}
-              </h3>
-              <p className="text-gray-300 leading-relaxed">
-                {feature.description}
-              </p>
+              <h3 className="text-xl font-semibold mb-4 text-white">{feature.title}</h3>
+              <p className="text-gray-300 leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>
-
-        <div
-          className="mt-16 text-center animate-fade-up"
-          style={{ animationDelay: "0.4s" }}
-        >
-          <button
-            onClick={handleExploreFeatures}
+        
+        <div className="mt-16 text-center animate-fade-up" style={{ animationDelay: "0.4s" }}>
+          <button 
+            onClick={handleExploreFeatures} 
             className="group inline-flex items-center justify-center px-6 py-3 gradient-button text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105"
           >
             <span>Explore More Features</span>
-            <svg
-              className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
+            <svg className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
         </div>

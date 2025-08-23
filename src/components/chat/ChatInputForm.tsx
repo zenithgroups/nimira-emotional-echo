@@ -104,10 +104,7 @@ export const ChatInputForm: React.FC<ChatInputFormProps> = ({
                   : "bg-gray-100/80 text-gray-600 hover:bg-gray-200/80 hover:text-gray-800",
                 "backdrop-blur-sm border border-white/10"
               )}
-              onClick={(e) => {
-                e.preventDefault();
-                handleFileButtonClick();
-              }}
+              onClick={handleFileButtonClick}
               title="Upload file"
             >
               <Paperclip size={16} />
