@@ -24,7 +24,7 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      content: "Hello! I'm Ruvipi, your EMVO AI support companion. I'm here to help you understand how our emotionally intelligent AI can support your journey. How can I assist you today?",
+      content: "Hello! I'm Ruvipi, your Ruvo AI support companion. I'm here to help you understand how our emotionally intelligent AI can support your journey. How can I assist you today?",
       isUser: false,
       timestamp: new Date()
     }
@@ -92,7 +92,7 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
       cleanResponse = cleanResponse.replace(/Thank you,[\s\S]*$/i, '');
       cleanResponse = cleanResponse.replace(/\[Your Name\][\s\S]*$/i, '');
       cleanResponse = cleanResponse.replace(/Customer Support Team[\s\S]*$/i, '');
-      cleanResponse = cleanResponse.replace(/EmvoLabs[\s\S]*$/i, '');
+      cleanResponse = cleanResponse.replace(/RuvoLabs[\s\S]*$/i, '');
       cleanResponse = cleanResponse.replace(/^Hi Chat User,?\s*/i, '');
       
       // Remove any trailing signatures or formal closings
@@ -137,7 +137,7 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
               <Bot className="h-4 w-4 text-white" />
             </div>
-            Ruvipi - EMVO AI Support
+            Ruvipi - Ruvo AI Support
           </CardTitle>
           <Button variant="ghost" size="sm" onClick={onClose} className="hover:bg-white/50">
             <X className="h-4 w-4" />
@@ -205,7 +205,7 @@ const ChatSupport: React.FC<ChatSupportProps> = ({ isOpen, onClose }) => {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask me about EMVO AI..."
+                placeholder="Ask me about Ruvo AI..."
                 disabled={isLoading}
                 className="flex-1"
               />

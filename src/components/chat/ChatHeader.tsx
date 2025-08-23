@@ -42,7 +42,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
       <div className="w-10 h-10 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-ruvo-400 to-ruvo-500 flex items-center justify-center text-white overflow-hidden ml-8 md:ml-0">
         <img 
           src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
-          alt="EMVO Logo" 
+          alt="Ruvo Logo" 
           className={cn(
             "h-full w-full object-contain p-2",
             darkMode ? "invert" : "" 
@@ -53,7 +53,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
         <h3 className={cn(
           "font-medium text-sm sm:text-base",
           darkMode ? "text-white" : "text-slate-800"
-        )}>EMVO AI</h3>
+        )}>Ruvo AI</h3>
         <p className={cn(
           "text-[10px] sm:text-xs",
           darkMode ? "text-slate-400" : "text-gray-500"

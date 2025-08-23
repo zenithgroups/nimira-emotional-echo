@@ -9,7 +9,7 @@ const AboutSection: React.FC = () => {
       <div className="container-custom relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12 animate-fade-up">
-            <h2 className="mobile-heading-2 text-white">About EMVO</h2>
+            <h2 className="mobile-heading-2 text-white">About Ruvo</h2>
             <p className="text-lg text-gray-300">
               Creating meaningful connections in a digital world
             </p>
@@ -19,7 +19,7 @@ const AboutSection: React.FC = () => {
             <div className="order-2 md:order-1 animate-slide-in-left">
               <h3 className="text-2xl font-bold mb-4 text-orange-300">Our Mission</h3>
               <p className="text-gray-300 mb-4 leading-relaxed">
-                At EMVO, we believe that technology should enhance human connection, not replace it. 
+                At Ruvo, we believe that technology should enhance human connection, not replace it. 
                 Our mission is to develop AI companions that provide genuine emotional support and understanding, 
                 helping to reduce loneliness and improve mental well-being in our increasingly digital world.
               </p>
@@ -56,7 +56,7 @@ const AboutSection: React.FC = () => {
                 <div className="absolute -left-5 -bottom-5 w-20 h-20 bg-blue-400/30 rounded-full blur-lg"></div>
                 <div className="card-glass p-6 rounded-2xl max-w-xs relative">
                   <p className="italic text-gray-300 mb-4 leading-relaxed">
-                    "We created EMVO to be more than just an AI – we wanted to build a companion 
+                    "We created Ruvo to be more than just an AI – we wanted to build a companion 
                     that truly understands the nuances of human emotion and can provide comfort and 
                     insight when you need it most."
                   </p>

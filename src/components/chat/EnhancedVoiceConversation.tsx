@@ -200,7 +200,7 @@ export const EnhancedVoiceConversation: React.FC<EnhancedVoiceConversationProps>
             )}>
               <img 
                 src="/lovable-uploads/aa075d0b-00d3-4c46-a600-501aec587b42.png" 
-                alt="EMVO AI" 
+                alt="Ruvo AI" 
                 className="h-8 w-8 object-contain invert" 
               />
             </div>

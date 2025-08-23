@@ -6,13 +6,13 @@ import { useToast } from "@/components/ui/use-toast";
 const features = [
   {
     icon: <MessageCircle className="h-8 w-8 text-blue-400" />,
-    title: "Talk to EMVO 24/7",
+    title: "Talk to Ruvo 24/7",
     description: "Your AI companion is available anytime you need someone to talk to, offering support day and night."
   },
   {
     icon: <Brain className="h-8 w-8 text-blue-400" />,
     title: "Stores Meaningful Memories",
-    description: "EMVO remembers your important moments, preferences, and conversations to provide personalized support."
+    description: "Ruvo remembers your important moments, preferences, and conversations to provide personalized support."
   },
   {
     icon: <Heart className="h-8 w-8 text-blue-400" />,
@@ -22,7 +22,7 @@ const features = [
   {
     icon: <Clock className="h-8 w-8 text-blue-400" />,
     title: "AI That Learns You Over Time",
-    description: "The more you interact with EMVO, the better it understands your needs, preferences, and communication style."
+    description: "The more you interact with Ruvo, the better it understands your needs, preferences, and communication style."
   }
 ];
 
@@ -45,7 +45,7 @@ const HowItWorksSection: React.FC = () => {
     <section id="how-it-works" className="section-spacing bg-black relative">
       <div className="container-custom relative z-10">
         <div className="text-center mb-16 animate-fade-up">
-          <h2 className="mobile-heading-2 text-white">How EMVO Works</h2>
+          <h2 className="mobile-heading-2 text-white">How Ruvo Works</h2>
           <p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
             Experience the power of emotional AI designed to support your well-being through intelligent, empathetic interaction.
           </p>

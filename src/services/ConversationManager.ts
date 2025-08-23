@@ -36,7 +36,7 @@ export class ConversationManager {
   private initializeConversation() {
     const userName = this.options.userData?.nickname || this.options.userData?.name || 'there';
     
-    const systemPrompt = `You are EMVO, a compassionate AI voice assistant designed to provide emotional support and meaningful conversations. 
+    const systemPrompt = `You are RUVO, a compassionate AI voice assistant designed to provide emotional support and meaningful conversations. 
 
 Key traits:
 - Warm, empathetic, and genuinely caring
